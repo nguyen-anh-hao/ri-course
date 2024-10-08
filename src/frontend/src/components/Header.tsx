@@ -20,7 +20,7 @@ const Header: React.FC = () => {
                     </Box>
                     <Box display="flex" alignItems="center" gap="16px">
                         <Button color="inherit" sx={{ color: 'black' }} href='/auth/sign-in'>Đăng nhập</Button>
-                        <Button color="inherit" sx={{ color: 'white', backgroundColor: 'black' }} href='auth/sign-up'>Đăng ký</Button>
+                        <Button color="inherit" sx={{ color: 'white', backgroundColor: 'black' }} href='/auth/sign-up'>Đăng ký</Button>
                     </Box>
                 </Toolbar>
             </Container>
