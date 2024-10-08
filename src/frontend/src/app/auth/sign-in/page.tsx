@@ -1,6 +1,7 @@
 'use client'
 import { Container, Box, Paper, Typography, TextField, Button, IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useRouter } from "next/navigation";
 import { useState } from 'react';
 
 export default function Home() {
@@ -13,6 +14,8 @@ export default function Home() {
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
     };
+
+    const router = useRouter();
 
     return (
         <Container component="main" maxWidth="xs">
@@ -70,7 +73,7 @@ export default function Home() {
                     </Button>
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 1 }}>
                         <Button
-                            href="/auth/sign-up"
+                            onClick={() => router.push('/auth/sign-up')}
                             color="inherit"
                             sx={{
                                 color: 'black',

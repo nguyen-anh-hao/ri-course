@@ -1,6 +1,7 @@
 'use client'
 import { Container, Box, Paper, Typography, TextField, Button, IconButton, InputAdornment, Divider } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useRouter } from 'next/navigation'
 import { useState } from 'react';
 
 export default function Home() {
@@ -13,6 +14,8 @@ export default function Home() {
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
     };
+
+    const router = useRouter();
 
     return (
         <Container component="main" maxWidth="xs">
@@ -98,7 +101,7 @@ export default function Home() {
                     </Divider>
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                         <Typography variant="body2">
-                            Đã có tài khoản? <Button href="/auth/sign-in" color="primary" sx={{ padding: 0, borderRadius: 1 }}>Đăng nhập</Button>
+                            Đã có tài khoản? <Button onClick={() => router.push('/auth/sign-in')} color="primary" sx={{ padding: 0, borderRadius: 1 }}>Đăng nhập</Button>
                         </Typography>
                     </Box>
                 </Box>
