@@ -11,7 +11,7 @@ const NavItem: React.FC<NavItemProps> = ({ text, isActive, style }) => {
     return (
         <div style={{ position: 'relative', display: 'inline-block', ...style }}>
             <Button
-                style={{
+                sx={{
                     borderRadius: '4px',
                     padding: '6px 12px',
                     color: 'black',
