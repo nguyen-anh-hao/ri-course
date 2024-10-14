@@ -1,10 +1,15 @@
-import { Container, Typography } from "@mui/material";
+'use client';
 
+import { Container, Typography } from "@mui/material";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Home() {
-  return (
-    <Container maxWidth="lg">
-      <Typography variant="h5">Hello World</Typography>
-    </Container>
-  );
+    const { user, logout } = useAuth();
+    console.log(user);
+
+    return (
+        <Container maxWidth="lg">
+            <Typography variant="h5">{user ? `Hello, ${user}` : "Guest"}</Typography>
+        </Container>
+    );
 }

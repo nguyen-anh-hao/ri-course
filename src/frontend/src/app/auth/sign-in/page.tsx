@@ -1,13 +1,22 @@
 'use client';
 
+// React and Next.js
+import { useState, ChangeEvent, FormEvent } from 'react';
+import { useRouter } from "next/navigation";
+
+// Material-UI components
 import { Container, Box, Paper, Typography, TextField, Button, IconButton, InputAdornment, Alert } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useRouter } from "next/navigation";
-import { useState, ChangeEvent, FormEvent } from 'react';
+
+// Axios
 import axios from 'axios';
 
-import { API_BASE_URL } from "@/config/config";
+// Config
+import { API_BASE_URL } from "@/config/apiConfig";
 import { errorMessages } from "@/config/errorMessages";
+
+// Context
+import { useAuth } from '@/context/AuthContext';
 
 export default function Home() {
     const [showPassword, setShowPassword] = useState(false);
@@ -16,14 +25,15 @@ export default function Home() {
     const [message, setMessage] = useState('');
     const [token, setToken] = useState('');
 
+    const { login } = useAuth();
     const router = useRouter();
 
     const handleTogglePasswordVisibility = () => {
         setShowPassword(prevState => !prevState);
     };
 
-    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
+    const handleMouseDownPassword = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
     };
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -33,8 +43,9 @@ export default function Home() {
             setMessage('Đăng nhập thành công!');
             setToken(response.data.access_token);
 
-            localStorage.setItem('token', response.data.access_token);
-            router.push('/');
+            login(username); // Save user information to context
+            localStorage.setItem('token', response.data.access_token); // Save token to local storage
+            router.push('/'); // Redirect to home page
 
         } catch (error: any) {
             const errorMessage = error.response?.data.message ?

@@ -1,14 +1,23 @@
-'use client'
+'use client';
+
+// React and Next.js
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+
+// Material-UI components
 import { Container, Box, Paper, Typography, TextField, Button, IconButton, InputAdornment, Divider } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useRouter } from 'next/navigation'
-import { useState } from 'react';
 
 export default function Home() {
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
+    };
+
+    const handleClickShowConfirmPassword = () => {
+        setShowConfirmPassword(!showConfirmPassword);
     };
 
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -67,17 +76,17 @@ export default function Home() {
                         required
                         fullWidth
                         label="Xác nhận mật khẩu"
-                        type={showPassword ? "text" : "password"}
+                        type={showConfirmPassword ? "text" : "password"}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
                                     <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={handleClickShowPassword}
+                                        aria-label="toggle confirm password visibility"
+                                        onClick={handleClickShowConfirmPassword}
                                         onMouseDown={handleMouseDownPassword}
                                         edge="end"
                                     >
-                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                                     </IconButton>
                                 </InputAdornment>
                             )
