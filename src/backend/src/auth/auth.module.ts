@@ -13,8 +13,8 @@ import { AuthController } from './auth.controller';
         UsersModule,
         PassportModule,
         JwtModule.register({
-                secret: configuration().security.jwt_secret,
-                signOptions: {
+            secret: configuration().security.jwt_secret,
+            signOptions: {
                 expiresIn: "60s",
             },
         }),
@@ -23,4 +23,4 @@ import { AuthController } from './auth.controller';
     exports: [AuthService],
     controllers: [AuthController],
 })
-export class AuthModule {}
+export class AuthModule { }
