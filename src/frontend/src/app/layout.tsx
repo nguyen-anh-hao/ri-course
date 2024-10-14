@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
+
 import { ThemeProvider } from '@mui/material/styles';
+import { Box } from "@mui/material";
+
 import theme from '../styles/theme';
+import '../styles/styles.css';
 
 import Header from "@/components/Header";
 
@@ -18,8 +22,15 @@ export default function RootLayout({
     <html lang="vi">
       <body>
         <ThemeProvider theme={theme}>
-          <Header />
-          {children}
+          <Box
+            sx={{
+              backgroundColor: 'background.default',
+              minHeight: '100vh'
+            }}
+          >
+            <Header />
+            {children}
+          </Box>
         </ThemeProvider>
       </body>
     </html>
