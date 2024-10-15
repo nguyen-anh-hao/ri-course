@@ -1,13 +1,18 @@
 'use client';
+
 import { createTheme, ThemeOptions } from '@mui/material/styles';
+import * as Colors from '@mui/material/colors';
 
 const themeOptions: ThemeOptions = {
     palette: {
         primary: {
-            main: '#ff9800',
+            main: Colors.yellow[900],
         },
         secondary: {
             main: '#f50057',
+        },
+        background: {
+            default: Colors.grey[100],
         },
     },
     components: {

@@ -1,13 +1,22 @@
 'use client'
 
+// React and Next.js
 import React from 'react';
-import { AppBar, Toolbar, Typography, Container, Box, Button } from '@mui/material';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import NavItem from './NavItem';
+import { useRouter } from 'next/navigation';
+
+// Material-UI components
+import { AppBar, Toolbar, Typography, Container, Box, Button } from '@mui/material';
+
+// Custom components
+import NavItem from '@/components/ui/NavItem';
+
+// Context
+import { useAuth } from '@/context/AuthContext';
 
 const Header: React.FC = () => {
     const router = useRouter()
+    const { user, logout } = useAuth();
 
     return (
         <AppBar position="static" style={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
@@ -26,10 +35,14 @@ const Header: React.FC = () => {
                         <NavItem text="Kỳ thi" />
                         <NavItem text="Diễn đàn" />
                     </Box>
-                    <Box display="flex" alignItems="center" gap="16px">
-                        <Button color="inherit" sx={{ color: 'black' }} onClick={() => router.push('/auth/sign-in')}>Đăng nhập</Button>
-                        <Button color="inherit" sx={{ color: 'white', backgroundColor: 'black' }} onClick={() => router.push('/auth/sign-up')}>Đăng ký</Button>
-                    </Box>
+                    {user ? ( // If user is logged in show logout button
+                        <Button color="inherit" sx={{ color: 'black' }} onClick={logout}>Đăng xuất</Button>
+                    ) : ( // If user is not logged in show login and register button
+                        <Box display="flex" alignItems="center" gap="16px">
+                            <Button color="inherit" sx={{ color: 'black' }} onClick={() => router.push('/auth/sign-in')}>Đăng nhập</Button>
+                            <Button color="inherit" sx={{ color: 'white', backgroundColor: 'black' }} onClick={() => router.push('/auth/sign-up')}>Đăng ký</Button>
+                        </Box>
+                    )}
                 </Toolbar>
             </Container>
         </AppBar>
