@@ -62,9 +62,9 @@ export default function Home() {
                 elevation={3}
                 sx={{
                     marginTop: 8,
+                    padding: 3,
                     display: 'flex',
                     flexDirection: 'column',
-                    padding: 3,
                     borderRadius: 2,
                 }}
             >
