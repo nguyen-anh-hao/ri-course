@@ -39,7 +39,7 @@ export default function Home() {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${API_BASE_URL}/auth/login`, { username, password });
+            const response = await axios.post(`${API_BASE_URL}/auth/signin`, { username, password });
             setMessage('Đăng nhập thành công!');
             setToken(response.data.access_token);
 
