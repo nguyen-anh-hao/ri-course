@@ -27,11 +27,13 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
                         <Box
                             sx={{
                                 backgroundColor: 'background.default',
-                                minHeight: '100vh'
+                                minHeight: '100vh',
                             }}
                         >
                             <Header />
-                            {children}
+                            <Box marginTop={4}>
+                                {children}
+                            </Box>
                         </Box>
                     </ThemeProvider>
                 </AuthProvider>
