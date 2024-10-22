@@ -20,7 +20,9 @@ export class UsersController {
         };
     }
     
-    @Get("all")
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Admin)
+    @Get("")
     findAll() {
         return this.usersService.findAll();
     }
@@ -32,7 +34,7 @@ export class UsersController {
     }
 
     @UseGuards(JwtAuthGuard, InfoUpdateGuard)
-    @Patch("me/change_info")
+    @Patch("me")
     changeInfo(@Request() req) {
         return this.usersService.updateOne(req.user.username, req.body);
     }
