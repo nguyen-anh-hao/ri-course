@@ -1,17 +1,9 @@
-import { PartialType } from "@nestjs/mapped-types";
-import { CreateUserDto } from "./create-user.dto";
-import { IsEmail, IsEmpty } from "class-validator";
+export class UpdateUserDto {    
+    username? : string;
 
-export class UpdateUserDto {
-    
-    @IsEmpty()
-    username : string;
+    password? : string;
 
-    @IsEmpty()
-    password : string;
+    fullname? : string;
 
-    fullname : string;
-
-    @IsEmail()
-    email : string;
+    email? : string;
 }

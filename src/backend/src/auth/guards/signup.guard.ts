@@ -8,7 +8,7 @@ import * as CryptoJS from "crypto-js";
 import configuration from "src/config/configuration";
 
 @Injectable()
-export class SignUpAuthGuard implements CanActivate {
+export class SignUpGuard implements CanActivate {
     constructor() { }
 
     verifySignUpToken(
