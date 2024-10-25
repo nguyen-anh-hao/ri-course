@@ -6,6 +6,7 @@ import { UsersModule } from "./users/users.module";
 import configuration from "./config/configuration";
 import { ConfigModule } from "@nestjs/config";
 import { CoursesModule } from "./courses/courses.module";
+import { EnrollmentsModule } from './enrollments/enrollments.module';
 
 @Module({
     imports: [
@@ -16,6 +17,7 @@ import { CoursesModule } from "./courses/courses.module";
             load: [configuration],
         }),
         CoursesModule,
+        EnrollmentsModule,
     ],
     controllers: [AppController],
     providers: [AppService],
