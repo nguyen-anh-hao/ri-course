@@ -2,18 +2,47 @@ import { Injectable } from "@nestjs/common";
 import { CreateCourseDto } from "./dto/create-course.dto";
 import { UpdateCourseDto } from "./dto/update-course.dto";
 
+export type Course = {
+	id: number;
+	title: string;
+    description: string;
+}
+
 @Injectable()
 export class CoursesService {
-    create(createCourseDto: CreateCourseDto) {
-        return "This action adds a new course";
+    courses: Course[] = [
+        {
+            id: 1,
+	        title: "Nhap mon lap trinh",
+            description: "Hoc cac kien thuc co ban",
+        },
+        {
+            id: 2,
+	        title: "Ky thuat lap trinh",
+            description: "Kien thuc vua",
+        },
+        {
+            id: 3,
+	        title: "DSA",
+            description: "Kien thuc nang cao",
+        }
+    ]
+    async create(createCourseDto: CreateCourseDto) {
+        const newCourse: Course = {
+            ...createCourseDto,
+            id: this.courses.length + 1,
+        };
+        await this.courses.push(newCourse);
+        console.log(newCourse);
+        return newCourse;
     }
 
-    findAll() {
-        return `This action returns all courses`;
+    async findAll() {
+        return this.courses;
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} course`;
+    async findOne(id: number) {
+        return this.courses.find((course)=>id===course.id);
     }
 
     update(id: number, updateCourseDto: UpdateCourseDto) {
