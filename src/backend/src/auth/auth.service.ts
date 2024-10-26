@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "src/users/users.service";
-import { SignInDto, SignUpDto } from "./dto";
+import { SignInDto, SignUpDto } from "./dtos";
 
 @Injectable()
 export class AuthService {
@@ -22,8 +22,8 @@ export class AuthService {
 
     async signin(user: SignInDto) {
         const payload = {
-            name: user.username,
-            sub: user.id,
+            username: user.username,
+            id: user.id,
             roles: user.roles,
         };
 

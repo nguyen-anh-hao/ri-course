@@ -1,10 +1,7 @@
-export const errorMessages: { [key: string]: string } = {
-    'Bad Request': 'Yêu cầu không hợp lệ!',
-    'Unauthorized': 'Tên đăng nhập hoặc mật khẩu không đúng!',
-    'Forbidden': 'Bạn bị chặn truy cập!',
-    'Not Found': 'Không tìm thấy tài nguyên!',
-    'Conflict': 'Dữ liệu bị trùng lặp hoặc xung đột!',
-    'Internal Server Error': 'Lỗi hệ thống!',
-    'Bad Gateway': 'Phản hồi từ máy chủ upstream không hợp lệ!',
-    'Service Unavailable': 'Dịch vụ không khả dụng, vui lòng thử lại sau!',
+export const errorMessages: { [key: number]: string } = {
+    400: 'Tên đăng nhập đã được sử dụng!',
+    401: 'Tên đăng nhập hoặc mật khẩu không đúng!',
+    403: 'Bạn bị chặn truy cập!',
+    404: 'Không tìm thấy tài nguyên!',
+    500: 'Lỗi hệ thống!',
 };
