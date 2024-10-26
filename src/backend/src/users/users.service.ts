@@ -18,7 +18,7 @@ export class UsersService {
             username: "user1",
             password: "$2b$11$iF.vIFWlXJdkhQCnDIrgxuC/VeD4CvI4qH9B5puZrr83My2NiKF2S",
             email: "user1@ricourse.com",
-            roles: ["Admin"],
+            roles: ["Learner"],
         },
         {
             id: 2,
@@ -32,14 +32,14 @@ export class UsersService {
             username: "user3",
             password: "$2b$11$fWN8U2inFKp9bxiXzLK7N.ZW7pKr2G/X1kA3ZWBJBFpN2nRtgluYC",
             email: "user3@ricourse.com",
-            roles: ["Admin"],
+            roles: ["Learner"],
         },
         {
             id: 4,
             username: "user4",
             password: "$2b$11$x33wC4RG7xiWWNDix8HABO4NK67XpOei9hIX/ZrAdrjdDCZnvasri",
             email: "user4@ricourse.com",
-            roles: ["Admin"],
+            roles: ["Learner"],
         },
         {
             id: 5,

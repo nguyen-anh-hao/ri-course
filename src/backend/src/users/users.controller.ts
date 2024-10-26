@@ -1,16 +1,15 @@
 import { Controller, Get, Patch, Request, UseGuards } from "@nestjs/common";
-import { Role } from "src/auth/role/role.enum";
-import { Roles } from "src/auth/role/roles.decorator";
-import { RolesGuard } from "src/auth/guards/roles.guard";
+import { Role, Roles } from "src/auth/role";
+import { RolesGuard, JwtAuthGuard } from "src/auth/guards";
+import { InfoUpdateGuard } from "src/users/guards";
 import { UsersService } from "./users.service";
-import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
-import { InfoUpdateGuard } from "src/auth/guards/info-update.guard";
 
+@UseGuards(JwtAuthGuard)
 @Controller("users")
 export class UsersController {
     constructor(private usersService: UsersService) {}
 
-    @UseGuards(JwtAuthGuard, RolesGuard)
+    @UseGuards(RolesGuard)
     @Roles(Role.Admin)
     @Get("test")
     hehe(@Request() req) {
@@ -20,20 +19,19 @@ export class UsersController {
         };
     }
     
-    @UseGuards(JwtAuthGuard, RolesGuard)
+    @UseGuards(RolesGuard)
     @Roles(Role.Admin)
     @Get("")
     findAll() {
         return this.usersService.findAll();
     }
 
-    @UseGuards(JwtAuthGuard)
     @Get("me")
     findMe(@Request() req) {
         return this.usersService.findOne(req.user.username);
     }
 
-    @UseGuards(JwtAuthGuard, InfoUpdateGuard)
+    @UseGuards(InfoUpdateGuard)
     @Patch("me")
     changeInfo(@Request() req) {
         return this.usersService.updateOne(req.user.username, req.body);
