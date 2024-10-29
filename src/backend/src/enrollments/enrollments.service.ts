@@ -1,17 +1,17 @@
-import { Injectable } from '@nestjs/common';
-import { CreateEnrollmentDto } from './dtos';
+import { Injectable } from "@nestjs/common";
+import { CreateEnrollmentDto } from "./dtos";
 
 export type Enrollment = {
-    userId: number,
-    courseId: number,
-    level?: number,
-}
+    userId: number;
+    courseId: number;
+    level?: number;
+};
 
 @Injectable()
 export class EnrollmentsService {
     constructor() {}
 
-    enrollments : Enrollment[] = [
+    enrollments: Enrollment[] = [
         {
             userId: 1,
             courseId: 1,
@@ -38,15 +38,19 @@ export class EnrollmentsService {
         },
     ];
 
-    async create(createEnrollmentDto : CreateEnrollmentDto) {
+    async create(createEnrollmentDto: CreateEnrollmentDto) {
         return await this.enrollments.push(createEnrollmentDto);
     }
 
-    async findByUserId(userId : number) {
-        return await this.enrollments.filter(enrollment => enrollment.userId === userId);
+    async findByUserId(userId: number) {
+        return await this.enrollments.filter(
+            (enrollment) => enrollment.userId === userId,
+        );
     }
 
-    async findByCourseId(courseId : number) {
-        return await this.enrollments.filter(enrollment => enrollment.courseId === courseId);
+    async findByCourseId(courseId: number) {
+        return await this.enrollments.filter(
+            (enrollment) => enrollment.courseId === courseId,
+        );
     }
 }
