@@ -5,10 +5,10 @@ import ChangePasswordForm from '../components/layout/ChangePasswordForm';
 const ChangePassword = () => {
     return (
         <Grid container spacing={2}>
-            <Grid item xs={3}>
+            <Grid item xs={12} md={3}>
                 <UserProfileMenu activeButton="password" />
             </Grid>
-            <Grid item xs={9}>
+            <Grid item xs={12} md={9}>
                 <ChangePasswordForm />
             </Grid>
         </Grid>

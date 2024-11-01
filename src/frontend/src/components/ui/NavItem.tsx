@@ -4,10 +4,11 @@ import Button from '@mui/material/Button';
 interface NavItemProps {
     text: string;
     isActive?: boolean;
+    onClick?: () => void;
     style?: React.CSSProperties;
 }
 
-const NavItem: React.FC<NavItemProps> = ({ text, isActive, style }) => {
+const NavItem: React.FC<NavItemProps> = ({ text, isActive, onClick, style }) => {
     return (
         <div style={{ position: 'relative', display: 'inline-block', ...style }}>
             <Button
@@ -17,6 +18,7 @@ const NavItem: React.FC<NavItemProps> = ({ text, isActive, style }) => {
                     color: 'black',
                     ...style
                 }}
+                onClick={onClick}
             >
                 {text}
             </Button>

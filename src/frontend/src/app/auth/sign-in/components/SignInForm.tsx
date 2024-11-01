@@ -24,7 +24,7 @@ const SignInForm: React.FC = () => {
     const [password, setPassword] = useState<string | null>(null);
     const [message, setMessage] = useState<string | null>(null);
     const router = useRouter();
-    const { login } = useAuth();
+    const { signin } = useAuth();
 
     const handleTogglePasswordVisibility = () => setShowPassword(!showPassword);
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => event.preventDefault();
@@ -36,7 +36,7 @@ const SignInForm: React.FC = () => {
             const response = await axios.post(`${config.API_BASE_URL}/auth/signin`, { username, password });
             setMessage('Đăng nhập thành công!');
 
-            login(username);                                           // Save user information to context
+            signin(username);                                          // Save user information to context
             localStorage.setItem('token', response.data.access_token); // Save token to local storage
             router.push('/');                                          // Redirect to home page
 

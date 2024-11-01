@@ -6,10 +6,10 @@ import UserProfileMenu from "./components/layout/UserProfileMenu";
 const ProfileInfo = () => {
     return (
         <Grid container spacing={2}>
-            <Grid item xs={3}>
+            <Grid item xs={12} md={3}>
                 <UserProfileMenu activeButton="profile" />
             </Grid>
-            <Grid item xs={9}>
+            <Grid item xs={12} md={9}>
                 <ProfileCard />
             </Grid>
         </Grid>

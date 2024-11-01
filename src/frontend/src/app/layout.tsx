@@ -9,6 +9,7 @@ import theme from '../styles/theme';
 
 // Custom components
 import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 // Provider
 import { AuthProvider } from '@/context/AuthContext';
@@ -26,14 +27,26 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
                     <ThemeProvider theme={theme}>
                         <Box
                             sx={{
-                                backgroundColor: 'background.default',
+                                display: 'flex',
+                                flexDirection: 'column',
                                 minHeight: '100vh',
+                                backgroundColor: 'background.default',
                             }}
                         >
-                            <Header />
-                            <Box marginTop={4}>
+                            <Header
+                                style={{
+                                    position: 'sticky',
+                                    top: 0,
+                                    zIndex: 1100,
+                                    backdropFilter: 'blur(10px)',
+                                    boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+                                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                                }}
+                            />
+                            <Box sx={{ flex: 1, my: 4 }}>
                                 {children}
                             </Box>
+                            <Footer />
                         </Box>
                     </ThemeProvider>
                 </AuthProvider>
