@@ -1,9 +1,9 @@
-export class UpdateUserDto {    
-    username? : string;
+export class UpdateUserDto {
+    username?: string;
 
-    password? : string;
+    password?: string;
 
-    fullname? : string;
+    fullname?: string;
 
-    email? : string;
+    email?: string;
 }

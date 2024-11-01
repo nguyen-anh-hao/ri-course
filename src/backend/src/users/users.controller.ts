@@ -18,7 +18,7 @@ export class UsersController {
             ...req.user,
         };
     }
-    
+
     @UseGuards(RolesGuard)
     @Roles(Role.Admin)
     @Get("")
