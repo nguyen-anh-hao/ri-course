@@ -7,7 +7,7 @@ interface ProfileLayoutProps {
 
 const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children }) => {
     return (
-        <Container maxWidth="lg">
+        <Container maxWidth='lg'>
             {children}
         </Container>
     );

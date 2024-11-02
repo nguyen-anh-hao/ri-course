@@ -5,11 +5,11 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 // Material-UI components
-import { Alert, Box, Button, Container, Divider, IconButton, InputAdornment, Paper, TextField, Typography } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Alert, Box, Button, Container, Divider, IconButton, InputAdornment, Paper, TextField, Typography } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 // Config
-import config from "@/config/config";
+import config from '@/config/config';
 
 // CryptoJS
 import CryptoJS from 'crypto-js';
@@ -18,7 +18,7 @@ import CryptoJS from 'crypto-js';
 import axios from 'axios';
 import { errorMessages } from '@/config/errorMessages';
 
-const SignUpForm: React.FC<{ userAgent: string }> = ({ userAgent }) => {
+const SignUpForm: React.FC<{ userAgent: string, secret: string }> = ({ userAgent, secret }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [username, setUsername] = useState<string | null>(null);
@@ -47,10 +47,10 @@ const SignUpForm: React.FC<{ userAgent: string }> = ({ userAgent }) => {
             return;
         }
         setPasswordMismatch(false);
-        const signupToken = token(5000, userAgent, config.SIGN_UP_SECRET);
+        const signupToken = token(5000, userAgent, secret);
         try {
             const response = await axios.post(`${config.API_BASE_URL}/auth/signup`, { username, password }, {
-                headers: { "Sign-Up-Token": signupToken },
+                headers: { 'Sign-Up-Token': signupToken },
             });
             setMessage('Đăng ký thành công!');
             router.push('/auth/sign-in');
@@ -64,9 +64,9 @@ const SignUpForm: React.FC<{ userAgent: string }> = ({ userAgent }) => {
     };
 
     return (
-        <Container component="main" maxWidth="xs">
-            <Paper elevation={3} sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', padding: 3, borderRadius: 2 }}>
-                <Typography component="h1" variant="h5">Đăng ký</Typography>
+        <Container component='main' maxWidth='xs'>
+            <Paper elevation={3} sx={{ marginTop: 3, display: 'flex', flexDirection: 'column', padding: 3, borderRadius: 2 }}>
+                <Typography component='h1' variant='h5'>Đăng ký</Typography>
 
                 {message && (
                     <Alert severity={message === 'Đăng ký thành công!' ? 'success' : 'error'} sx={{ mt: 2 }}>
@@ -74,28 +74,28 @@ const SignUpForm: React.FC<{ userAgent: string }> = ({ userAgent }) => {
                     </Alert>
                 )}
 
-                <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleSubmit}>
+                <Box component='form' noValidate sx={{ mt: 1 }} onSubmit={handleSubmit}>
                     <TextField
-                        margin="normal"
+                        margin='normal'
                         required
                         fullWidth
-                        label="Tên đăng nhập"
+                        label='Tên đăng nhập'
                         onChange={(e) => setUsername(e.target.value)}
                     />
                     <TextField
-                        margin="normal"
+                        margin='normal'
                         required
                         fullWidth
-                        label="Mật khẩu"
-                        type={showPassword ? "text" : "password"}
+                        label='Mật khẩu'
+                        type={showPassword ? 'text' : 'password'}
                         InputProps={{
                             endAdornment: (
-                                <InputAdornment position="end">
+                                <InputAdornment position='end'>
                                     <IconButton
-                                        aria-label="toggle password visibility"
+                                        aria-label='toggle password visibility'
                                         onClick={handleClickShowPassword}
                                         onMouseDown={handleMouseDownPassword}
-                                        edge="end"
+                                        edge='end'
                                     >
                                         {showPassword ? <VisibilityOff /> : <Visibility />}
                                     </IconButton>
@@ -105,19 +105,19 @@ const SignUpForm: React.FC<{ userAgent: string }> = ({ userAgent }) => {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     <TextField
-                        margin="normal"
+                        margin='normal'
                         required
                         fullWidth
-                        label="Xác nhận mật khẩu"
-                        type={showConfirmPassword ? "text" : "password"}
+                        label='Xác nhận mật khẩu'
+                        type={showConfirmPassword ? 'text' : 'password'}
                         InputProps={{
                             endAdornment: (
-                                <InputAdornment position="end">
+                                <InputAdornment position='end'>
                                     <IconButton
-                                        aria-label="toggle confirm password visibility"
+                                        aria-label='toggle confirm password visibility'
                                         onClick={handleClickShowConfirmPassword}
                                         onMouseDown={handleMouseDownPassword}
-                                        edge="end"
+                                        edge='end'
                                     >
                                         {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                                     </IconButton>
@@ -127,14 +127,14 @@ const SignUpForm: React.FC<{ userAgent: string }> = ({ userAgent }) => {
                         onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 1 }}>
-                        <Button type="submit" color="inherit" sx={{ color: 'white', backgroundColor: 'black' }}>Đăng ký tài khoản</Button>
+                        <Button type='submit' color='inherit' sx={{ color: 'white', backgroundColor: 'black' }}>Đăng ký tài khoản</Button>
                     </Box>
                     <Divider sx={{ mt: 2, mb: 2 }}>
-                        <Typography variant="caption">hoặc</Typography>
+                        <Typography variant='caption'>hoặc</Typography>
                     </Divider>
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Typography variant="body2">
-                            Đã có tài khoản? <Button onClick={() => router.push('/auth/sign-in')} color="primary" sx={{ padding: 0, borderRadius: 1 }}>Đăng nhập</Button>
+                        <Typography variant='body2'>
+                            Đã có tài khoản? <Button onClick={() => router.push('/auth/sign-in')} color='primary' sx={{ padding: 0, borderRadius: 1 }}>Đăng nhập</Button>
                         </Typography>
                     </Box>
                 </Box>

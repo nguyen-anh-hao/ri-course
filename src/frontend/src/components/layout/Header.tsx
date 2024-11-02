@@ -12,15 +12,12 @@ import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined
 
 // Custom components
 import NavItem from '@/components/ui/NavItem';
+import theme from '@/styles/theme';
 
 // Context
 import { useAuth } from '@/context/AuthContext';
 
-interface HeaderProps {
-    style?: React.CSSProperties;
-}
-
-const Header: React.FC<HeaderProps> = ({ style }) => {
+const Header: React.FC = () => {
     const router = useRouter();
     const { user, signout } = useAuth();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -41,45 +38,83 @@ const Header: React.FC<HeaderProps> = ({ style }) => {
     const handleLogout = () => {
         handleMenuClose();
         signout();
+        router.push('/');
     };
 
     return (
-        <AppBar style={style}>
+        <AppBar>
             <Container maxWidth={false}>
                 <Toolbar disableGutters>
-                    <Box display="flex" alignItems="center" flexGrow={1} gap="8px">
+                    <Box display='flex' alignItems='center' flexGrow={1} gap='8px'>
                         <Link href='/' passHref style={{ textDecoration: 'none' }}>
-                            <Box display="flex" alignItems="center" gap="16px" sx={{ padding: '0px 12px 0px 0px' }}>
-                                <img src="/logo.png" alt="Logo" style={{ width: '40px', height: '40px' }} />
-                                <Typography variant="h6" component="div" sx={{ color: 'black' }}>
+                            <Box display='flex' alignItems='center' gap='16px' sx={{ padding: '0px 12px 0px 0px' }}>
+                                <img src='/logo.png' alt='Logo' style={{ width: '40px', height: '40px' }} />
+                                <Typography variant='h6' component='div' sx={{ color: theme.palette.text.primary }}>
                                     RiCourse
                                 </Typography>
                             </Box>
                         </Link>
-                        <NavItem text="Khóa học" onClick={() => router.push('/all-courses')} />
-                        <NavItem text="Kỳ thi" />
-                        <NavItem text="Diễn đàn" />
+                        <NavItem text='Khóa học' isActive={true} onClick={() => router.push('/all-courses')} />
+                        <NavItem text='Kỳ thi' />
+                        <NavItem text='Diễn đàn' />
                     </Box>
                     {user ? (
                         <>
-                            <IconButton color="inherit">
+                            <IconButton sx={{ mx: 0.25 }}>
                                 <Brightness2OutlinedIcon />
                             </IconButton>
-                            <IconButton color="inherit">
+                            <IconButton sx={{ mx: 0.25 }}>
                                 <NotificationsOutlinedIcon />
                             </IconButton>
-                            <IconButton onClick={handleMenuOpen}>
-                                <Avatar alt="User Avatar" src="https://ui-avatars.com/api/?background=random" />
-                            </IconButton>
-                            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+                            <Avatar
+                                sx={{ mx: 0.5 }}
+                                onClick={handleMenuOpen}
+                                alt='User Avatar'
+                                style={{ cursor: 'pointer' }}
+                            >
+                                B
+                            </Avatar>
+
+                            <Menu
+                                anchorEl={anchorEl}
+                                open={Boolean(anchorEl)}
+                                onClose={handleMenuClose}
+                                PaperProps={{
+                                    style: {
+                                        marginTop: 16,
+                                    },
+                                }}
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'right',
+                                }}
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                            >
                                 <MenuItem onClick={handleProfileSelected}>Thông tin tài khoản</MenuItem>
-                                <MenuItem onClick={handleLogout} sx={{ color: '#d32f2f' }}>Đăng xuất</MenuItem>
+                                <MenuItem onClick={handleLogout} sx={{ color: theme.palette.error.main }}>Đăng xuất</MenuItem>
                             </Menu>
                         </>
                     ) : (
-                        <Box display="flex" alignItems="center" gap="16px">
-                            <Button color="inherit" sx={{ color: 'black' }} onClick={() => router.push('/auth/sign-in')}>Đăng nhập</Button>
-                            <Button color="inherit" sx={{ color: 'white', backgroundColor: 'black' }} onClick={() => router.push('/auth/sign-up')}>Đăng ký</Button>
+                        <Box display='flex' alignItems='center' gap='16px'>
+                            <Button
+                                variant='contained'
+                                onClick={() => router.push('/auth/sign-in')}
+                                sx={{
+                                    color: theme.palette.text.primary,
+                                    backgroundColor: 'transparent',
+                                }}
+                            >
+                                Đăng nhập
+                            </Button>
+                            <Button
+                                variant='contained'
+                                onClick={() => router.push('/auth/sign-up')}
+                            >
+                                Đăng ký
+                            </Button>
                         </Box>
                     )}
                 </Toolbar>

@@ -1,26 +1,20 @@
 import { Button, Typography } from '@mui/material';
+import theme from '@/styles/theme';
 
 interface UserProfileMenuButtonProps {
     text: string;
     isActive: boolean;
     onClick: () => void;
-    activeColor?: string;
     inactiveColor?: string;
 }
 
-const UserProfileMenuButton: React.FC<UserProfileMenuButtonProps> = ({
-    text,
-    isActive,
-    onClick,
-    activeColor = '#f57f17', // Màu active mặc định
-    inactiveColor = 'black', // Màu inactive mặc định
-}) => {
+const UserProfileMenuButton: React.FC<UserProfileMenuButtonProps> = ({ text, isActive, onClick, inactiveColor = theme.palette.text.primary }) => {
     return (
         <Button
             sx={{
                 px: 2,
                 py: 1,
-                bgcolor: isActive ? activeColor : 'transparent',
+                bgcolor: isActive ? theme.palette.primary.main : 'transparent',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'flex-start',
@@ -29,7 +23,7 @@ const UserProfileMenuButton: React.FC<UserProfileMenuButtonProps> = ({
             }}
             onClick={onClick}
         >
-            <Typography variant="body1" sx={{ color: isActive ? 'white' : inactiveColor }}>
+            <Typography variant='body1' sx={{ color: isActive ? theme.palette.common.black : inactiveColor }}>
                 {text}
             </Typography>
         </Button>

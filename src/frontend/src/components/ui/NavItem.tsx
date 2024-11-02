@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '@mui/material/Button';
+import theme from '@/styles/theme';
 
 interface NavItemProps {
     text: string;
@@ -15,7 +16,7 @@ const NavItem: React.FC<NavItemProps> = ({ text, isActive, onClick, style }) => 
                 sx={{
                     borderRadius: '4px',
                     padding: '6px 12px',
-                    color: 'black',
+                    color: theme.palette.text.secondary,
                     ...style
                 }}
                 onClick={onClick}
@@ -30,7 +31,7 @@ const NavItem: React.FC<NavItemProps> = ({ text, isActive, onClick, style }) => 
                         left: '10px',
                         right: '10px',
                         height: '3px',
-                        backgroundColor: '#ff9800',
+                        backgroundColor: theme.palette.primary.main,
                         borderRadius: '4px'
                     }}
                 />

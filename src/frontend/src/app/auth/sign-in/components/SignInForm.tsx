@@ -2,18 +2,18 @@
 
 // React and Next.js
 import { useState, ChangeEvent } from 'react';
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 
 // Material-UI components
-import { Container, Box, Paper, Typography, TextField, Button, IconButton, InputAdornment, Alert } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Container, Box, Paper, Typography, TextField, Button, IconButton, InputAdornment, Alert } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 // Axios
 import axios from 'axios';
 
 // Config
-import config from "@/config/config";
-import { errorMessages } from "@/config/errorMessages";
+import config from '@/config/config';
+import { errorMessages } from '@/config/errorMessages';
 
 // Context
 import { useAuth } from '@/context/AuthContext';
@@ -50,9 +50,9 @@ const SignInForm: React.FC = () => {
     };
 
     return (
-        <Container component="main" maxWidth="xs">
-            <Paper elevation={3} sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', padding: 3, borderRadius: 2 }}>
-                <Typography component="h1" variant="h5">Đăng nhập</Typography>
+        <Container component='main' maxWidth='xs'>
+            <Paper elevation={3} sx={{ marginTop: 3, display: 'flex', flexDirection: 'column', padding: 3, borderRadius: 2 }}>
+                <Typography component='h1' variant='h5'>Đăng nhập</Typography>
 
                 {message && (
                     <Alert severity={message === 'Đăng nhập thành công!' ? 'success' : 'error'} sx={{ mt: 2 }}>
@@ -60,28 +60,28 @@ const SignInForm: React.FC = () => {
                     </Alert>
                 )}
 
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                <Box component='form' onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                     <TextField
-                        margin="normal"
+                        margin='normal'
                         required
                         fullWidth
-                        label="Tên đăng nhập"
+                        label='Tên đăng nhập'
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
                     />
                     <TextField
-                        margin="normal"
+                        margin='normal'
                         required
                         fullWidth
-                        label="Mật khẩu"
-                        type={showPassword ? "text" : "password"}
+                        label='Mật khẩu'
+                        type={showPassword ? 'text' : 'password'}
                         InputProps={{
                             endAdornment: (
-                                <InputAdornment position="end">
+                                <InputAdornment position='end'>
                                     <IconButton
-                                        aria-label="toggle password visibility"
+                                        aria-label='toggle password visibility'
                                         onClick={handleTogglePasswordVisibility}
                                         onMouseDown={handleMouseDownPassword}
-                                        edge="end"
+                                        edge='end'
                                     >
                                         {showPassword ? <VisibilityOff /> : <Visibility />}
                                     </IconButton>
@@ -90,10 +90,10 @@ const SignInForm: React.FC = () => {
                         }}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                     />
-                    <Button variant="text" sx={{ padding: 0, borderRadius: 1 }}>Quên mật khẩu?</Button>
+                    <Button variant='text' sx={{ padding: 0, borderRadius: 1 }}>Quên mật khẩu?</Button>
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 1 }}>
-                        <Button onClick={() => router.push('/auth/sign-up')} color="inherit" sx={{ color: 'black' }}>Tạo tài khoản</Button>
-                        <Button type="submit" color="inherit" sx={{ color: 'white', backgroundColor: 'black' }}>Đăng nhập</Button>
+                        <Button onClick={() => router.push('/auth/sign-up')} color='inherit' sx={{ color: 'black' }}>Tạo tài khoản</Button>
+                        <Button type='submit' color='inherit' sx={{ color: 'white', backgroundColor: 'black' }}>Đăng nhập</Button>
                     </Box>
                 </Box>
             </Paper>

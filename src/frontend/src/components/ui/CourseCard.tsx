@@ -16,7 +16,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ name, mentor, progress }) => {
                 display: 'flex',
                 flexDirection: 'column',
                 borderRadius: 2,
-                overflow: "hidden"
+                overflow: 'hidden'
             }}
         >
             <Box
@@ -28,22 +28,22 @@ const CourseCard: React.FC<CourseCardProps> = ({ name, mentor, progress }) => {
                 }}
             >
                 <Skeleton
-                    variant="rectangular"
-                    width="100%"
-                    height="100%" // Chiều cao sẽ bằng 54% chiều rộng nhờ padding-top
+                    variant='rectangular'
+                    width='100%'
+                    height='100%' // Chiều cao sẽ bằng 54% chiều rộng nhờ padding-top
                     sx={{ position: 'absolute', top: 0, left: 0 }} // Đặt Skeleton ở vị trí chính xác
                 />
             </Box>
             <Box sx={{ px: 2, py: 1 }}>
-                <Typography variant="h6" component="h2">
+                <Typography variant='h6' component='h2'>
                     {name}
                 </Typography>
-                <Typography variant="body2" component="p">
+                <Typography variant='body2' component='p'>
                     Giáo viên: {mentor}
                 </Typography>
             </Box>
             {progress !== undefined && (
-                <LinearProgress variant="determinate" value={progress} />
+                <LinearProgress variant='determinate' value={progress} />
             )}
         </Paper>
     );
