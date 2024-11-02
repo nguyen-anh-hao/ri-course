@@ -1,6 +1,6 @@
 'use client';
 
-import { createTheme, ThemeOptions } from '@mui/material/styles';
+import { ThemeOptions } from '@mui/material/styles';
 import colors from './colors';
 
 const lightTheme: ThemeOptions = {
@@ -14,8 +14,8 @@ const lightTheme: ThemeOptions = {
             secondary: colors.light.text.secondary,
         },
         common: {
-            white: colors.common.white,
-            black: colors.common.black,
+            white: colors.light.common.white,
+            black: colors.light.common.black,
         },
         error: {
             main: colors.light.error.main,
@@ -41,7 +41,7 @@ const lightTheme: ThemeOptions = {
                 },
                 contained: {
                     backgroundColor: colors.light.secondary.main,
-                    color: colors.common.white,
+                    color: colors.light.common.white,
                     '&:hover': {
                         boxShadow: 'none',
                     },
@@ -71,8 +71,8 @@ const darkTheme: ThemeOptions = {
             secondary: colors.dark.text.secondary,
         },
         common: {
-            white: colors.common.white,
-            black: colors.common.black,
+            white: colors.dark.common.white,
+            black: colors.dark.common.black,
         },
         error: {
             main: colors.dark.error.main,
@@ -98,7 +98,7 @@ const darkTheme: ThemeOptions = {
                 },
                 contained: {
                     backgroundColor: colors.dark.secondary.main,
-                    color: colors.common.white,
+                    color: colors.dark.common.white,
                     '&:hover': {
                         boxShadow: 'none',
                     },
@@ -115,9 +115,6 @@ const darkTheme: ThemeOptions = {
             },
         },
     },
-}
+};
 
-const theme = createTheme(lightTheme);
-// const theme = createTheme(darkTheme);
-
-export default theme;
+export { lightTheme, darkTheme };

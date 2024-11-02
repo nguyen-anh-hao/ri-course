@@ -1,7 +1,5 @@
 import * as Colors from '@mui/material/colors';
-import { error } from 'console';
 
-// Hàm thêm độ trong suốt cho màu hex
 const addTransparent = (hex: string, opacity: number) => {
     if (hex.length === 4) {
         hex = `#${hex.slice(1).split('').map(char => char + char).join('')}`;
@@ -41,6 +39,10 @@ const originalColors = {
     info: {
         main: Colors.blue[500],
     },
+    common: {
+        white: Colors.common.white,
+        black: Colors.common.black,
+    },
 };
 
 const darkColors = {
@@ -52,7 +54,7 @@ const darkColors = {
     },
     background: {
         default: Colors.grey[900],
-        paper: addTransparent(Colors.grey[800], 0.8),
+        paper: addTransparent(Colors.grey[800], 0.6),
     },
     text: {
         primary: Colors.common.white,
@@ -70,19 +72,18 @@ const darkColors = {
     info: {
         main: Colors.blue[300],
     },
+    common: {
+        white: Colors.common.white,
+        black: Colors.common.black,
+    },
 };
 
-// Xuất colors
 const colors = {
     light: {
         ...originalColors,
     },
     dark: {
         ...darkColors,
-    },
-    common: {
-        white: Colors.common.white,
-        black: Colors.common.black,
     },
 };
 

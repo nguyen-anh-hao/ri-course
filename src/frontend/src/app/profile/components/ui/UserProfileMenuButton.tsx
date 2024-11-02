@@ -1,5 +1,5 @@
 import { Button, Typography } from '@mui/material';
-import theme from '@/styles/theme';
+import { useTheme } from '@/context/ThemeContext';
 
 interface UserProfileMenuButtonProps {
     text: string;
@@ -8,7 +8,14 @@ interface UserProfileMenuButtonProps {
     inactiveColor?: string;
 }
 
-const UserProfileMenuButton: React.FC<UserProfileMenuButtonProps> = ({ text, isActive, onClick, inactiveColor = theme.palette.text.primary }) => {
+
+const UserProfileMenuButton: React.FC<UserProfileMenuButtonProps> = ({ text, isActive, onClick, inactiveColor }) => {
+    const theme = useTheme().theme;
+
+    if (!inactiveColor) {
+        inactiveColor = theme.palette.text.primary;
+    }
+
     return (
         <Button
             sx={{

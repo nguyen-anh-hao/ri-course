@@ -127,14 +127,17 @@ const SignUpForm: React.FC<{ userAgent: string, secret: string }> = ({ userAgent
                         onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 1 }}>
-                        <Button type='submit' color='inherit' sx={{ color: 'white', backgroundColor: 'black' }}>Đăng ký tài khoản</Button>
+                        <Button type='submit' variant='contained'>Đăng ký tài khoản</Button>
                     </Box>
                     <Divider sx={{ mt: 2, mb: 2 }}>
                         <Typography variant='caption'>hoặc</Typography>
                     </Divider>
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                         <Typography variant='body2'>
-                            Đã có tài khoản? <Button onClick={() => router.push('/auth/sign-in')} color='primary' sx={{ padding: 0, borderRadius: 1 }}>Đăng nhập</Button>
+                            Đã có tài khoản? {' '}
+                            <Button variant='text' onClick={() => router.push('/auth/sign-in')} sx={{ padding: 0, borderRadius: 1 }}>
+                                Đăng nhập
+                            </Button>
                         </Typography>
                     </Box>
                 </Box>

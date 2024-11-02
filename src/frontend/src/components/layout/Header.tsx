@@ -12,13 +12,18 @@ import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined
 
 // Custom components
 import NavItem from '@/components/ui/NavItem';
-import theme from '@/styles/theme';
 
 // Context
 import { useAuth } from '@/context/AuthContext';
+import { useTheme } from '@/context/ThemeContext';
 
 const Header: React.FC = () => {
     const router = useRouter();
+
+    const theme = useTheme().theme;
+    const isDarkMode = useTheme().isDarkMode;
+    const toggleDarkMode = useTheme().toggleDarkMode;
+
     const { user, signout } = useAuth();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -48,8 +53,16 @@ const Header: React.FC = () => {
                     <Box display='flex' alignItems='center' flexGrow={1} gap='8px'>
                         <Link href='/' passHref style={{ textDecoration: 'none' }}>
                             <Box display='flex' alignItems='center' gap='16px' sx={{ padding: '0px 12px 0px 0px' }}>
-                                <img src='/logo.png' alt='Logo' style={{ width: '40px', height: '40px' }} />
-                                <Typography variant='h6' component='div' sx={{ color: theme.palette.text.primary }}>
+                                {isDarkMode ? (
+                                    <img src='/logo-dark.png' alt='Logo' style={{ width: '40px', height: '40px' }} />
+                                ) : (
+                                    <img src='/logo.png' alt='Logo' style={{ width: '40px', height: '40px' }} />
+                                )}
+                                <Typography
+                                    variant='h6'
+                                    component='div'
+                                    sx={{ color: theme.palette.text.primary }}
+                                >
                                     RiCourse
                                 </Typography>
                             </Box>
@@ -60,7 +73,7 @@ const Header: React.FC = () => {
                     </Box>
                     {user ? (
                         <>
-                            <IconButton sx={{ mx: 0.25 }}>
+                            <IconButton sx={{ mx: 0.25 }} onClick={() => toggleDarkMode()}>
                                 <Brightness2OutlinedIcon />
                             </IconButton>
                             <IconButton sx={{ mx: 0.25 }}>

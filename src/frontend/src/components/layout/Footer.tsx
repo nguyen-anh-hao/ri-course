@@ -4,15 +4,14 @@ import React from 'react';
 import { AppBar, Toolbar, Typography, Container, Box, Grid } from '@mui/material';
 import { LocationOn as LocationOnIcon, Phone as PhoneIcon, Email as EmailIcon } from '@mui/icons-material';
 import Link from 'next/link';
-import colors from '@/styles/colors';
 
 const Footer: React.FC = () => {
     return (
         <AppBar
             position='static'
             sx={{
-                backgroundColor: colors.common.black,
-                color: colors.common.white,
+                backgroundColor: 'black',
+                color: 'white',
                 top: 'auto',
                 bottom: 0,
                 boxShadow: 'none',
@@ -55,7 +54,7 @@ const Footer: React.FC = () => {
                                     <Link href='/auth/sign-up' passHref style={{ textDecoration: 'none' }}>
                                         <Typography
                                             variant='body2'
-                                            sx={{ mb: 2, py: 0.25, color: colors.common.white }}
+                                            sx={{ mb: 2, py: 0.25, color: 'white' }}
                                             component='span'
                                         >
                                             Khóa học
@@ -66,7 +65,7 @@ const Footer: React.FC = () => {
                                     <Link href='/auth/sign-up' passHref style={{ textDecoration: 'none' }}>
                                         <Typography
                                             variant='body2'
-                                            sx={{ mb: 2, py: 0.25, color: colors.common.white }}
+                                            sx={{ mb: 2, py: 0.25, color: 'white' }}
                                             component='span'
                                         >
                                             Kỳ thi
@@ -77,7 +76,7 @@ const Footer: React.FC = () => {
                                     <Link href='/auth/sign-up' passHref style={{ textDecoration: 'none' }}>
                                         <Typography
                                             variant='body2'
-                                            sx={{ mb: 2, py: 0.25, color: colors.common.white }}
+                                            sx={{ mb: 2, py: 0.25, color: 'white' }}
                                             component='span'
                                         >
                                             Diễn đàn

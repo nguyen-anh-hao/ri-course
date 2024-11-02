@@ -17,6 +17,7 @@ import { errorMessages } from '@/config/errorMessages';
 
 // Context
 import { useAuth } from '@/context/AuthContext';
+import { useTheme } from '@/context/ThemeContext';
 
 const SignInForm: React.FC = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -24,7 +25,8 @@ const SignInForm: React.FC = () => {
     const [password, setPassword] = useState<string | null>(null);
     const [message, setMessage] = useState<string | null>(null);
     const router = useRouter();
-    const { signin } = useAuth();
+    const signin = useAuth().signin;
+    const theme = useTheme().theme;
 
     const handleTogglePasswordVisibility = () => setShowPassword(!showPassword);
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => event.preventDefault();
@@ -92,8 +94,17 @@ const SignInForm: React.FC = () => {
                     />
                     <Button variant='text' sx={{ padding: 0, borderRadius: 1 }}>Quên mật khẩu?</Button>
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 1 }}>
-                        <Button onClick={() => router.push('/auth/sign-up')} color='inherit' sx={{ color: 'black' }}>Tạo tài khoản</Button>
-                        <Button type='submit' color='inherit' sx={{ color: 'white', backgroundColor: 'black' }}>Đăng nhập</Button>
+                        <Button
+                            onClick={() => router.push('/auth/sign-up')}
+                            variant='contained'
+                            sx={{
+                                color: theme.palette.text.primary,
+                                backgroundColor: 'transparent',
+                            }}
+                        >
+                            Tạo tài khoản
+                        </Button>
+                        <Button type='submit' variant='contained'>Đăng nhập</Button>
                     </Box>
                 </Box>
             </Paper>

@@ -4,8 +4,8 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Box, Paper, Typography, Button } from '@mui/material';
 import UserProfileMenuButton from '../ui/UserProfileMenuButton';
-import theme from '@/styles/theme';
 import { useAuth } from '@/context/AuthContext';
+import { useTheme } from '@/context/ThemeContext';
 
 interface UserProfileMenuProps {
     activeButton: string;
@@ -13,7 +13,8 @@ interface UserProfileMenuProps {
 
 const UserProfileMenu: React.FC<UserProfileMenuProps> = ({ activeButton }) => {
     const router = useRouter();
-    const { user, signout } = useAuth();
+    const theme = useTheme().theme;
+    const signout = useAuth().signout;
 
     const handleProfileButtonClick = () => { router.push('/profile'); }
     const handleChangePasswordButtonClick = () => { router.push('/profile/change-password'); }

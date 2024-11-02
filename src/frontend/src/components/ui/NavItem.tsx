@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '@mui/material/Button';
-import theme from '@/styles/theme';
+// import theme from '@/styles/theme';
+import { useTheme } from '@/context/ThemeContext';
 
 interface NavItemProps {
     text: string;
@@ -10,6 +11,8 @@ interface NavItemProps {
 }
 
 const NavItem: React.FC<NavItemProps> = ({ text, isActive, onClick, style }) => {
+    const theme = useTheme().theme;
+
     return (
         <div style={{ position: 'relative', display: 'inline-block', ...style }}>
             <Button

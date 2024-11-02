@@ -2,10 +2,7 @@
 import type { Metadata } from 'next';
 
 // Material-UI components
-import { ThemeProvider, Box } from '@mui/material';
-
-// Styles
-import theme from '../styles/theme';
+import { Box } from '@mui/material';
 
 // Custom components
 import Header from '@/components/layout/Header';
@@ -13,6 +10,7 @@ import Footer from '@/components/layout/Footer';
 
 // Provider
 import { AuthProvider } from '@/context/AuthContext';
+import { ThemeProvider } from '@/context/ThemeContext';
 
 export const metadata: Metadata = {
     title: 'RiCourse',
@@ -24,7 +22,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
         <html lang='vi'>
             <body style={{ margin: 0 }}>
                 <AuthProvider>
-                    <ThemeProvider theme={theme}>
+                    <ThemeProvider>
                         <Box
                             sx={{
                                 display: 'flex',
