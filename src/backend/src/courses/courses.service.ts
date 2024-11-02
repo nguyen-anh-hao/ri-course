@@ -3,30 +3,30 @@ import { CreateCourseDto } from "./dto/create-course.dto";
 import { UpdateCourseDto } from "./dto/update-course.dto";
 
 export type Course = {
-	id: number;
-	title: string;
+    id: number;
+    title: string;
     description: string;
-}
+};
 
 @Injectable()
 export class CoursesService {
     courses: Course[] = [
         {
             id: 1,
-	        title: "Nhap mon lap trinh",
+            title: "Nhap mon lap trinh",
             description: "Hoc cac kien thuc co ban",
         },
         {
             id: 2,
-	        title: "Ky thuat lap trinh",
+            title: "Ky thuat lap trinh",
             description: "Kien thuc vua",
         },
         {
             id: 3,
-	        title: "DSA",
+            title: "DSA",
             description: "Kien thuc nang cao",
-        }
-    ]
+        },
+    ];
     async create(createCourseDto: CreateCourseDto) {
         const newCourse: Course = {
             ...createCourseDto,
@@ -42,7 +42,7 @@ export class CoursesService {
     }
 
     async findOne(id: number) {
-        return this.courses.find((course)=>id===course.id);
+        return this.courses.find((course) => id === course.id);
     }
 
     update(id: number, updateCourseDto: UpdateCourseDto) {

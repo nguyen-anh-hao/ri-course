@@ -9,7 +9,7 @@ import { ChangePasswordDto } from "./dtos/change-password.dto";
 
 @Controller("auth")
 export class AuthController {
-    constructor(private authService: AuthService) { }
+    constructor(private authService: AuthService) {}
 
     @UseGuards(LocalAuthGuard)
     @Post("signin")
@@ -25,7 +25,7 @@ export class AuthController {
 
     @UseGuards(JwtAuthGuard, ChangePasswordGuard)
     @Post("change-password")
-    changePassword(@Body() body : ChangePasswordDto) {
+    changePassword(@Body() body: ChangePasswordDto) {
         return this.authService.changePassword(body);
     }
 }

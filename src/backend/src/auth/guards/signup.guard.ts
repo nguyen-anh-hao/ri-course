@@ -9,7 +9,7 @@ import configuration from "src/config/configuration";
 
 @Injectable()
 export class SignUpGuard implements CanActivate {
-    constructor() { }
+    constructor() {}
 
     verifySignUpToken(
         token: string,
@@ -44,7 +44,10 @@ export class SignUpGuard implements CanActivate {
         const userAgent = request.headers["user-agent"];
         const signUpSecret = configuration().security.signUpSecret;
 
-        if (this.verifySignUpToken(signUpToken, userAgent, signUpSecret) === false)
+        if (
+            this.verifySignUpToken(signUpToken, userAgent, signUpSecret) ===
+            false
+        )
             return false;
 
         return true;

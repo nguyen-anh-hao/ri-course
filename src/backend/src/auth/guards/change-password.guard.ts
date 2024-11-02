@@ -8,10 +8,10 @@ import { AuthService } from "../auth.service";
 
 @Injectable()
 export class ChangePasswordGuard implements CanActivate {
-    constructor(private readonly authService : AuthService) {}
+    constructor(private readonly authService: AuthService) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
-        const {user, body} = context.switchToHttp().getRequest();
+        const { user, body } = context.switchToHttp().getRequest();
         const usernameFromJWT = user.username;
         const requestUsername = body.username;
 
@@ -19,10 +19,12 @@ export class ChangePasswordGuard implements CanActivate {
             throw new UnauthorizedException();
 
         const oldPassword = body.oldPassword;
-        const realUser = await this.authService.validateUser(requestUsername, oldPassword);
-        if (realUser === null) 
-            throw new UnauthorizedException();
-        
-        return true;        
+        const realUser = await this.authService.validateUser(
+            requestUsername,
+            oldPassword,
+        );
+        if (realUser === null) throw new UnauthorizedException();
+
+        return true;
     }
 }

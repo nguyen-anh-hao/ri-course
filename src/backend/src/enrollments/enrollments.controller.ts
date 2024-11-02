@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post, Request, UseGuards } from "@nestjs/common";
+import {
+    Body,
+    Controller,
+    Get,
+    Post,
+    Request,
+    UseGuards,
+} from "@nestjs/common";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { EnrollmentsService } from "./enrollments.service";
 import { RolesGuard } from "src/auth/guards/roles.guard";
@@ -10,12 +17,12 @@ import { CreateEnrollmentDto } from "./dtos";
 @UseGuards(JwtAuthGuard)
 @Controller("enrollments")
 export class EnrollmentsController {
-    constructor(private readonly enrollmentsService : EnrollmentsService) {}
+    constructor(private readonly enrollmentsService: EnrollmentsService) {}
 
     @UseGuards(RolesGuard)
     @Roles(Role.Learner)
     @Post()
-    async create(@Body() createEnrollmentDto : CreateEnrollmentDto) {
+    async create(@Body() createEnrollmentDto: CreateEnrollmentDto) {
         return await this.enrollmentsService.create(createEnrollmentDto);
     }
 
@@ -25,11 +32,11 @@ export class EnrollmentsController {
     async findAll() {
         return await this.enrollmentsService.enrollments;
     }
-    
+
     @UseGuards(RolesGuard)
     @Roles(Role.Learner)
     @Get()
-    async findAllEnrolled(@Request() req : { user : User }) {
+    async findAllEnrolled(@Request() req: { user: User }) {
         return await this.enrollmentsService.findByUserId(req.user.id);
     }
 }

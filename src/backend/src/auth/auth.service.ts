@@ -14,12 +14,10 @@ export class AuthService {
 
     async validateUser(username: string, password: string) {
         const user = await this.usersService.findOne(username);
-        if (user == null)
-            return null;
+        if (user == null) return null;
 
         const isMatch = await bcrypt.compare(password, user.password);
-        if (isMatch)
-            return user;
+        if (isMatch) return user;
 
         return null;
     }
@@ -38,28 +36,28 @@ export class AuthService {
         };
     }
 
-    async signup(signUpDto : SignUpDto) {
-        const { username, password } = signUpDto; 
+    async signup(signUpDto: SignUpDto) {
+        const { username, password } = signUpDto;
 
         const isTaken = await this.usersService.isUsernameTaken(username);
         if (isTaken === true)
             throw new BadRequestException("Username is already taken");
 
         const hashedPassword = await bcrypt.hash(password, 11);
-        
+
         return await this.usersService.createOne({
             ...signUpDto,
-            password: hashedPassword
+            password: hashedPassword,
         });
     }
-    
-    async changePassword(changePasswordDto : ChangePasswordDto) {
+
+    async changePassword(changePasswordDto: ChangePasswordDto) {
         const { username, newPassword } = changePasswordDto;
 
         const hashedNewPassword = await bcrypt.hash(newPassword, 11);
 
         return await this.usersService.updateOne(username, {
-            password: hashedNewPassword
+            password: hashedNewPassword,
         });
     }
 }

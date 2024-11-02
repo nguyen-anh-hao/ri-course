@@ -1,1 +1,1 @@
-export * from "./info-update.guard"
+export * from "./info-update.guard";
