@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Request, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Patch, Query, Request, UseGuards } from "@nestjs/common";
 import { Role, Roles } from "src/auth/role";
 import { RolesGuard, JwtAuthGuard } from "src/auth/guards";
 import { InfoUpdateGuard } from "src/users/guards";
@@ -22,18 +22,30 @@ export class UsersController {
     @UseGuards(RolesGuard)
     @Roles(Role.Admin)
     @Get("")
-    findAll() {
-        return this.usersService.findAll();
+    async findAll() {
+        return await this.usersService.findAll();
     }
 
     @Get("me")
-    findMe(@Request() req) {
-        return this.usersService.findOne(req.user.username);
+    async findMe(@Request() req) {
+        return await this.usersService.findOne(req.user.username);
     }
-
+    
     @UseGuards(InfoUpdateGuard)
     @Patch("me")
-    changeInfo(@Request() req) {
-        return this.usersService.updateOne(req.user.username, req.body);
+    async changeInfo(@Request() req) {
+        return await this.usersService.updateOne(req.user.username, req.body);
+    }
+    
+    @Get("my-courses")
+    async myCourse(@Request() req) {
+        return await this.usersService.myCourses(req.user.username);
+    }
+
+    @Get("one")
+    async findOne(@Query() query) {
+        const result = await this.usersService.isUsernameTaken(query.username);
+        console.log(result);
+        return { isTaken: result }; 
     }
 }
