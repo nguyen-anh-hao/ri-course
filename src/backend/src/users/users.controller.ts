@@ -1,11 +1,11 @@
-import { Body, ClassSerializerInterceptor, Controller, Get, Patch, Query, Request, UseGuards, UseInterceptors } from "@nestjs/common";
+import { ClassSerializerInterceptor, Controller, Get, Patch, Request, UseGuards, UseInterceptors } from "@nestjs/common";
 import { Role, Roles } from "src/auth/role";
 import { RolesGuard, JwtAuthGuard } from "src/auth/guards";
 import { InfoUpdateGuard } from "src/users/guards";
 import { UsersService } from "./users.service";
-import { ApiBearerAuth, ApiBody, ApiExcludeEndpoint, ApiForbiddenResponse, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { UserEntity } from "./entities/user.entity";
 import { CourseEntity } from "src/courses/entities/course.entity";
+import { ApiBearerAuth, ApiBody, ApiForbiddenResponse, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse } from "@nestjs/swagger";
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)

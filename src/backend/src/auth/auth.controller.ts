@@ -1,12 +1,8 @@
 import { Body, ClassSerializerInterceptor, Controller, Patch, Post, Request, UseGuards, UseInterceptors } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { SignUpGuard } from "./guards/signup.guard";
-import { SignInDto, SignUpDto } from "./dtos";
-import { LocalAuthGuard } from "./guards/local-auth.guard";
-import { JwtAuthGuard } from "./guards/jwt-auth.guard";
-import { ChangePasswordGuard } from "./guards/change-password.guard";
-import { ChangePasswordDto } from "./dtos/change-password.dto";
-import { ApiBadRequestResponse, ApiBasicAuth, ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiForbiddenResponse, ApiHeader, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { SignInDto, SignUpDto, ChangePasswordDto } from "./dtos";
+import { LocalAuthGuard, JwtAuthGuard, ChangePasswordGuard, SignUpGuard } from "./guards";
+import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiForbiddenResponse, ApiHeader, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { UserEntity } from "src/users/entities/user.entity";
 
 @UseInterceptors(ClassSerializerInterceptor)

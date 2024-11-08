@@ -6,11 +6,9 @@ import {
     Request,
     UseGuards,
 } from "@nestjs/common";
-import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { EnrollmentsService } from "./enrollments.service";
-import { RolesGuard } from "src/auth/guards/roles.guard";
-import { Roles } from "src/auth/role/roles.decorator";
-import { Role } from "src/auth/role/role.enum";
+import { JwtAuthGuard, RolesGuard } from "src/auth/guards";
+import { Roles, Role } from "src/auth/role";
 import { CreateEnrollmentDto } from "./dtos";
 
 @UseGuards(JwtAuthGuard)
