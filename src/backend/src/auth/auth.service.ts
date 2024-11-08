@@ -51,8 +51,8 @@ export class AuthService {
         });
     }
 
-    async changePassword(changePasswordDto: ChangePasswordDto) {
-        const { username, newPassword } = changePasswordDto;
+    async changePassword(username : string, changePasswordDto: ChangePasswordDto) {
+        const { newPassword } = changePasswordDto;
 
         const hashedNewPassword = await bcrypt.hash(newPassword, 11);
 

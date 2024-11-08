@@ -16,6 +16,9 @@ export class UsersService {
             }
         });
 
+        if (user === null)
+            return null;
+
         return new UserEntity(user);
     }
 
@@ -36,36 +39,39 @@ export class UsersService {
         return new UserEntity(user);
     }
     
-    async updateOne(username: string, updateUserDto: UpdateUserDto) : Promise<UserEntity> {
+    async updateOne(username: string, updateUserDto: UpdateUserDto) : Promise<void> {
         const user = await this.prisma.user.update({
             where: {
                 username: username
             },
             data: updateUserDto
         });
-        
-        return new UserEntity(user);
     }
 
-    async myCourses(username : string) : Promise<CourseEntity[]> {
+    async getMyCourses(username : string) : Promise<CourseEntity[]> {
+        const user = await this.findOne(username);
+
         const courses = await this.prisma.course.findMany({
-            select : {
-                id: true,
-                title: true,
-                description: true,
-                createAt: true,
-                updatedAt: true,
+            where: {
                 users: {
-                    where: {
-                        user: {
-                            username
-                        }
+                    some: {
+                        userId: user.id
                     }
                 }
-            },
+            }
         });
 
         return courses.map(course => new CourseEntity(course));
+    }
+
+    async deleteOne(username: string) : Promise<UserEntity> {
+        const user = await this.prisma.user.delete({
+            where: {
+                username
+            }
+        });
+
+        return new UserEntity(user);
     }
 
     async isUsernameTaken(username: string) : Promise<boolean> {

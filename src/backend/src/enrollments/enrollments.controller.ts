@@ -24,6 +24,8 @@ export class EnrollmentsController {
     async create(@Body() createEnrollmentDto: CreateEnrollmentDto) {
         return await this.enrollmentsService.create(createEnrollmentDto);
     }
+    
+    // -----------------------------------------------
 
     @UseGuards(RolesGuard)
     @Roles(Role.Admin)
@@ -31,6 +33,8 @@ export class EnrollmentsController {
     async findAll() {
         return await this.enrollmentsService.findAll();
     }
+
+    // -----------------------------------------------
 
     @UseGuards(RolesGuard)
     @Roles(Role.Learner)
