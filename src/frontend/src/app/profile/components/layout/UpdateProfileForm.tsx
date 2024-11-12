@@ -29,6 +29,7 @@ const UpdateProfileForm: React.FC = () => {
                 label='Họ và tên'
                 name='name'
             />
+
             <Grid container spacing={2}>
                 <Grid item xs={4}>
                     <TextField fullWidth label='Ngày' name='day' />
@@ -40,6 +41,7 @@ const UpdateProfileForm: React.FC = () => {
                     <TextField fullWidth label='Năm' name='year' />
                 </Grid>
             </Grid>
+
             <TextField
                 margin='normal'
                 fullWidth
@@ -48,6 +50,27 @@ const UpdateProfileForm: React.FC = () => {
                 type='email'
                 id='email'
             />
+            <TextField
+                margin='normal'
+                fullWidth
+                id='role'
+                label='Vai trò'
+                name='role'
+            />
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2, mt: 2 }}>
+                <TextField
+                    fullWidth
+                    label='Ngày tạo'
+                    name='created'
+                    InputProps={{ readOnly: true }}
+                />
+                <TextField
+                    fullWidth
+                    label='Ngày cập nhật'
+                    name='updated'
+                    InputProps={{ readOnly: true }}
+                />
+            </Box>
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Button variant='contained' sx={{ mt: 2 }}>
                     Cập nhật hồ sơ
