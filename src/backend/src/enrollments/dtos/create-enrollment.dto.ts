@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsNumber } from "class-validator";
 
 export class CreateEnrollmentDto {
@@ -5,6 +6,9 @@ export class CreateEnrollmentDto {
     @IsNumber()
     userId: number;
 
+    @ApiProperty({
+        example: 4
+    })
     @IsNotEmpty()
     @IsNumber()
     courseId: number;

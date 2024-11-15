@@ -10,7 +10,7 @@ import { EnrollmentsService } from "./enrollments.service";
 import { JwtAuthGuard, RolesGuard } from "src/auth/guards";
 import { Roles, Role } from "src/auth/role";
 import { CreateEnrollmentDto } from "./dtos";
-import { ApiBearerAuth, ApiCreatedResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse } from "@nestjs/swagger";
 
 @UseGuards(JwtAuthGuard)
 @Controller("enrollments")
@@ -43,6 +43,9 @@ export class EnrollmentsController {
     @ApiOperation({
         summary: "Enroll in a course (Learner only)"
     })
+    @ApiBody({
+        type: CreateEnrollmentDto
+    })
     @ApiCreatedResponse({
         description: "Created: Enrolled in a course successfully"
     })
@@ -55,17 +58,12 @@ export class EnrollmentsController {
     @UseGuards(RolesGuard)
     @Roles(Role.Learner)
     @Post()
-    async create(@Body() createEnrollmentDto: CreateEnrollmentDto) {
+    async create(@Request() req) {
+        const createEnrollmentDto : CreateEnrollmentDto = {
+            userId: req.user.id,
+            courseId: req.body.courseId
+        }
+
         return await this.enrollmentsService.create(createEnrollmentDto);
-    }
-    
-    // -----------------------------------------------
-    
-    @ApiBearerAuth()
-    @UseGuards(RolesGuard)
-    @Roles(Role.Learner)
-    @Get()
-    async findAllEnrolled(@Request() req) {
-        return await this.enrollmentsService.findByUserId(req.user.id);
     }
 }
