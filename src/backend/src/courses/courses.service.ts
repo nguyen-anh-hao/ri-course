@@ -31,13 +31,13 @@ export class CoursesService {
         return new CourseEntity(course);
     }
 
-    async findOneByTitle(id: number) : Promise<CourseEntity> {
-        const course = await this.prisma.course.findUnique({
+    async findOneByTitle(title: string) : Promise<CourseEntity[]> {
+        const courses = await this.prisma.course.findMany({
             where: {
-                id
+                title
             }
         });
 
-        return new CourseEntity(course);
+        return courses.map(course => new CourseEntity(course));
     }
 }

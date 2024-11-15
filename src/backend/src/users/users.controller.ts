@@ -22,11 +22,14 @@ export class UsersController {
         type: [UserEntity]
     })
     @ApiUnauthorizedResponse({
-        description: "Unauthorized: the user with JWT provided must be an Admin"
+        description: "Unauthorized: missing JWT"
+    })
+    @ApiForbiddenResponse({
+        description: "Forbbiden: The user with the JWT must be an Admin"
     })
     @UseGuards(RolesGuard)
     @Roles(Role.Admin)
-    @Get("")
+    @Get("all")
     async findAll() {
         return await this.usersService.findAll();
     }
@@ -45,7 +48,7 @@ export class UsersController {
     })
     @Get("me")
     async findMe(@Request() req) {
-        return await this.usersService.findOne(req.user.username);
+        return await this.usersService.findById(req.user.id);
     }
     
     // -----------------------------------------------

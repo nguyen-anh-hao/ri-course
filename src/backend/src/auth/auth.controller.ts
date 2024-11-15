@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Patch, Post, Request, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, ClassSerializerInterceptor, Controller, HttpCode, Patch, Post, Request, UseGuards, UseInterceptors } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { SignInDto, SignUpDto, ChangePasswordDto } from "./dtos";
 import { LocalAuthGuard, JwtAuthGuard, ChangePasswordGuard, SignUpGuard } from "./guards";
@@ -29,6 +29,7 @@ export class AuthController {
         description: "Bad Request: Missing username or password"
     })
     @UseGuards(LocalAuthGuard)
+    @HttpCode(200)
     @Post("signin")
     signin(@Request() req: { user: SignInDto }) {
         return this.authService.signin(req.user);

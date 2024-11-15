@@ -9,7 +9,20 @@ import { CourseEntity } from "src/courses/entities/course.entity";
 export class UsersService {
     constructor(private prisma : PrismaService) {}
 
-    async findOne(username: string) : Promise<UserEntity> {
+    async findById(id: number) : Promise<UserEntity> {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                id
+            }
+        });
+
+        if (user === null)
+            return null;
+        
+        return new UserEntity(user);
+    }
+    
+    async findByUsername(username : string) : Promise<UserEntity> {
         const user = await this.prisma.user.findUnique({
             where: {
                 username
@@ -18,8 +31,8 @@ export class UsersService {
 
         if (user === null)
             return null;
-
-        return new UserEntity(user);
+        
+        return user;
     }
 
     async findAll() : Promise<UserEntity[]> {
@@ -49,7 +62,7 @@ export class UsersService {
     }
 
     async getMyCourses(username : string) : Promise<CourseEntity[]> {
-        const user = await this.findOne(username);
+        const user = await this.findByUsername(username);
 
         const courses = await this.prisma.course.findMany({
             where: {
@@ -75,7 +88,7 @@ export class UsersService {
     }
 
     async isUsernameTaken(username: string) : Promise<boolean> {
-        const user = await this.findOne(username);
+        const user = await this.findByUsername(username);
         return !!user;
     }
 }

@@ -12,7 +12,7 @@ import { CoursesService } from "./courses.service";
 import { CreateCourseDto } from "./dto/create-course.dto";
 import { JwtAuthGuard, RolesGuard } from "src/auth/guards";
 import { Role, Roles } from "src/auth/role";
-import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { CourseEntity } from "./entities/course.entity";
 
 @UseGuards(JwtAuthGuard)
@@ -29,11 +29,14 @@ export class CoursesController {
         type: CreateCourseDto
     })
     @ApiCreatedResponse({
-        description: "Course create successfully",
+        description: "Created: Course create successfully",
         type: CourseEntity
     })
     @ApiUnauthorizedResponse({
-        description: "Missing JWT or not being an Admin"
+        description: "Unauthorized: Missing JWT"
+    })
+    @ApiForbiddenResponse({
+        description: "Forbidden: The user with the JWT must be an Admin"
     })
     @UseGuards(RolesGuard)
     @Roles(Role.Admin)
@@ -76,10 +79,10 @@ export class CoursesController {
             throw new BadRequestException("Only one of id or title of the course can be passed into the course query");
             
         if (id)
-            return [await this.coursesService.findOneById(id)];
+            return [await this.coursesService.findOneById(+id)];
         
         if (title)
-            return [await this.coursesService.findOneByTitle(title)];
+            return await this.coursesService.findOneByTitle(title);
 
         return await this.coursesService.findAll();
     }
