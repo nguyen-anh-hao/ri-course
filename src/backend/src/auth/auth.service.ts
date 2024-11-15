@@ -1,9 +1,8 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "src/users/users.service";
-import { SignInDto, SignUpDto } from "./dtos";
+import { SignInDto, SignUpDto,  ChangePasswordDto } from "./dtos";
 import * as bcrypt from "bcrypt";
-import { ChangePasswordDto } from "./dtos/change-password.dto";
 
 @Injectable()
 export class AuthService {
@@ -13,7 +12,7 @@ export class AuthService {
     ) {}
 
     async validateUser(username: string, password: string) {
-        const user = await this.usersService.findOne(username);
+        const user = await this.usersService.findByUsername(username);
         if (user == null) return null;
 
         const isMatch = await bcrypt.compare(password, user.password);
@@ -51,8 +50,8 @@ export class AuthService {
         });
     }
 
-    async changePassword(changePasswordDto: ChangePasswordDto) {
-        const { username, newPassword } = changePasswordDto;
+    async changePassword(username : string, changePasswordDto: ChangePasswordDto) {
+        const { newPassword } = changePasswordDto;
 
         const hashedNewPassword = await bcrypt.hash(newPassword, 11);
 

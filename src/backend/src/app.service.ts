@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "./prisma/prisma.service";
+import { UserEntity } from "./users/entities/user.entity";
 
 @Injectable()
 export class AppService {
@@ -9,7 +10,13 @@ export class AppService {
         return "Hello World!";
     }
 
-    async test() {
-        return await this.prisma.course.findMany();
+    async test(username : string) {
+        const user = await this.prisma.user.delete({
+            where: {
+                username
+            }
+        });
+
+        return new UserEntity(user);
     }
 }

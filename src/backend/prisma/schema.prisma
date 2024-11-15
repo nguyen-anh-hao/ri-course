@@ -24,7 +24,7 @@ model User {
   roles    Role[]
 
   fullname String?
-  dob      DateTime
+  dob      DateTime?
 
   courses Enrollment[]
 }

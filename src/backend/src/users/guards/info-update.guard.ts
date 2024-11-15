@@ -12,17 +12,17 @@ export class InfoUpdateGuard implements CanActivate {
     canActivate(context: ExecutionContext): boolean {
         const { body } = context.switchToHttp().getRequest();
 
-        if (body.roles !== null)
+        if (body.roles)
             throw new ForbiddenException(
-                "You don't have permission to change this field",
+                "You don't have permission to change this field?",
             );
 
-        if (body.password !== null)
+        if (body.password)
             throw new ForbiddenException(
                 "You need a higher level of authentication to change this field",
             );
 
-        if (body.username !== null)
+        if (body.username)
             throw new ForbiddenException("You can't change your username");
 
         return true;

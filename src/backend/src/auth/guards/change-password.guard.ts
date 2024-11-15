@@ -1,6 +1,7 @@
 import {
     CanActivate,
     ExecutionContext,
+    ForbiddenException,
     Injectable,
     UnauthorizedException,
 } from "@nestjs/common";
@@ -13,18 +14,15 @@ export class ChangePasswordGuard implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const { user, body } = context.switchToHttp().getRequest();
         const usernameFromJWT = user.username;
-        const requestUsername = body.username;
-
-        if (usernameFromJWT !== requestUsername)
-            throw new UnauthorizedException();
 
         const oldPassword = body.oldPassword;
         const realUser = await this.authService.validateUser(
-            requestUsername,
+            usernameFromJWT,
             oldPassword,
         );
-        if (realUser === null) throw new UnauthorizedException();
-
-        return true;
+        if (realUser) 
+            return true;
+        
+        throw new ForbiddenException();
     }
 }
