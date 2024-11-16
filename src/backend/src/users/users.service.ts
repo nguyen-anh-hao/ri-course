@@ -41,21 +41,21 @@ export class UsersService {
         return users.map(user => new UserEntity(user));
     }
 
-    async createOne(createUserDto: CreateUserDto) : Promise<UserEntity> {
+    async createOne(createUserDto: CreateUserDto, role: $Enums.Role) : Promise<UserEntity> {
         const user = await this.prisma.user.create({
             data: {
                 ...createUserDto,
-                roles: [$Enums.Role.Learner]
+                roles: [role]
             }
         });
         
         return new UserEntity(user);
     }
     
-    async updateOne(username: string, updateUserDto: UpdateUserDto) : Promise<void> {
+    async updateOne(id: number, updateUserDto: UpdateUserDto) : Promise<void> {
         const user = await this.prisma.user.update({
             where: {
-                username: username
+                id
             },
             data: updateUserDto
         });
@@ -77,10 +77,10 @@ export class UsersService {
         return courses.map(course => new CourseEntity(course));
     }
 
-    async deleteOne(username: string) : Promise<UserEntity> {
+    async deleteOne(id: number) : Promise<UserEntity> {
         const user = await this.prisma.user.delete({
             where: {
-                username
+                id
             }
         });
 

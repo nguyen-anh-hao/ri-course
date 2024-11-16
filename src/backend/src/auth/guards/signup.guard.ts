@@ -30,11 +30,9 @@ export class SignUpGuard implements CanActivate {
             throw new ForbiddenException("Invalid sign up token");
 
         const thisHashCombo = `${expirationTime}-${thisHashedUserAgent}_${secret}`;
-        console.log({expirationTime, thisHashedUserAgent, secret});
         const thisHashedHashCombo = CryptoJS.MD5(thisHashCombo).toString();
 
         if (thisHashedHashCombo !== hashedHashCombo) {
-            console.log({thisHashedHashCombo, hashedHashCombo});
             throw new ForbiddenException("Invalid sign up token");
         }
 
