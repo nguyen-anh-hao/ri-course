@@ -84,9 +84,7 @@ const Header: React.FC = () => {
                                 onClick={handleMenuOpen}
                                 alt='User Avatar'
                                 style={{ cursor: 'pointer' }}
-                            >
-                                B
-                            </Avatar>
+                            />
 
                             <Menu
                                 anchorEl={anchorEl}

@@ -13,7 +13,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<any>(() => {
         if (typeof window !== 'undefined') {
-            const storedUser = localStorage.getItem('user');
+            const storedUser = sessionStorage.getItem('user');
             return storedUser ? JSON.parse(storedUser) : null;
         }
         return null;
@@ -23,16 +23,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const signin = (user: any) => {
         setUser(user);
-        localStorage.setItem('user', JSON.stringify(user));
+        sessionStorage.setItem('user', JSON.stringify(user));
     };
 
     const signout = () => {
         setUser(null);
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
     };
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
+        const storedUser = sessionStorage.getItem('user');
         if (storedUser) {
             setUser(JSON.parse(storedUser));
         }
