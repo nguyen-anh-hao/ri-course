@@ -3,7 +3,7 @@ import { Card, Paper, Typography, LinearProgress, Skeleton, Box } from '@mui/mat
 
 interface CourseCardProps {
     name: string;
-    mentor: string;
+    mentor?: string;
     progress?: number;
 }
 
@@ -12,38 +12,46 @@ const CourseCard: React.FC<CourseCardProps> = ({ name, mentor, progress }) => {
         <Paper
             elevation={3}
             sx={{
-                marginTop: 8,
                 display: 'flex',
                 flexDirection: 'column',
                 borderRadius: 2,
-                overflow: 'hidden'
+                overflow: 'hidden',
+                height: '100%'
             }}
         >
             <Box
                 sx={{
                     width: '100%',
-                    paddingTop: '54%', // Tạo chiều cao 54% chiều rộng
+                    paddingTop: '54%',
                     position: 'relative',
-                    backgroundColor: 'transparent', // Nền trong suốt
+                    backgroundColor: 'transparent',
                 }}
             >
                 <Skeleton
                     variant='rectangular'
                     width='100%'
-                    height='100%' // Chiều cao sẽ bằng 54% chiều rộng nhờ padding-top
-                    sx={{ position: 'absolute', top: 0, left: 0 }} // Đặt Skeleton ở vị trí chính xác
+                    height='100%'
+                    sx={{ position: 'absolute', top: 0, left: 0 }}
                 />
             </Box>
-            <Box sx={{ px: 2, py: 1 }}>
+            <Box sx={{ px: 2, py: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
                 <Typography variant='h6' component='h2'>
                     {name}
                 </Typography>
-                <Typography variant='body2' component='p'>
-                    Giáo viên: {mentor}
-                </Typography>
+                {mentor !== undefined ? (
+                    <Typography variant='body2' component='p'>
+                        Giáo viên: {mentor}
+                    </Typography>
+                ) : (
+                    <Skeleton>
+                        <Typography variant='body2' component='p'>
+                            Giáo viên: Nguyễn Văn An
+                        </Typography>
+                    </Skeleton>
+                )}
             </Box>
             {progress !== undefined && (
-                <LinearProgress variant='determinate' value={progress} />
+                <LinearProgress variant='determinate' value={progress} sx={{ height: 12 }} />
             )}
         </Paper>
     );
