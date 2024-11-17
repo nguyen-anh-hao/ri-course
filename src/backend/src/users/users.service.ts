@@ -41,12 +41,9 @@ export class UsersService {
         return users.map(user => new UserEntity(user));
     }
 
-    async createOne(createUserDto: CreateUserDto, role: $Enums.Role) : Promise<UserEntity> {
+    async createOne(createUserDto: CreateUserDto) : Promise<UserEntity> {
         const user = await this.prisma.user.create({
-            data: {
-                ...createUserDto,
-                roles: [role]
-            }
+            data: createUserDto
         });
         
         return new UserEntity(user);
@@ -61,14 +58,12 @@ export class UsersService {
         });
     }
 
-    async getMyCourses(username : string) : Promise<CourseEntity[]> {
-        const user = await this.findByUsername(username);
-
+    async getMyCourses(id : number) : Promise<CourseEntity[]> {
         const courses = await this.prisma.course.findMany({
             where: {
                 users: {
                     some: {
-                        userId: user.id
+                        userId: id
                     }
                 }
             }

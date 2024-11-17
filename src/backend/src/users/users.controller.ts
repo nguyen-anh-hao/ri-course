@@ -6,15 +6,14 @@ import { UsersService } from "./users.service";
 import { UserEntity } from "./entities/user.entity";
 import { CourseEntity } from "src/courses/entities/course.entity";
 import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiForbiddenResponse, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiParam, ApiUnauthorizedResponse } from "@nestjs/swagger";
-import { AuthService } from "src/auth/auth.service";
-import { SignUpDto } from "src/auth/dtos";
+import { CreateUserDto } from "./dtos";
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller("users")
 export class UsersController {
-    constructor(private usersService: UsersService, private authService: AuthService) {}
+    constructor(private usersService: UsersService) {}
 
     @ApiOperation({
         summary: "Get all users (Admin only)",
@@ -42,7 +41,7 @@ export class UsersController {
         summary: "Create a new user (Admin only)"
     })
     @ApiBody({
-        type: SignUpDto
+        type: CreateUserDto
     })
     @ApiCreatedResponse({
         description: "Created: create a user successfully"
@@ -53,9 +52,11 @@ export class UsersController {
     @ApiForbiddenResponse({
         description: "Forbbiden: The user with the JWT must be an Admin"
     })
+    @UseGuards(RolesGuard)
+    @Roles(Role.Admin)
     @Post("")
-    async create(@Body() signUpDto: SignUpDto) {
-        return await this.authService.signup(signUpDto);
+    async create(@Body() createUserDto: CreateUserDto) {
+        return await this.usersService.createOne(createUserDto);
     }
 
     // -----------------------------------------------
@@ -104,8 +105,10 @@ export class UsersController {
     @ApiForbiddenResponse({
         description: "Forbbiden: The user with the JWT must be an Admin"
     })
+    @UseGuards(RolesGuard)
+    @Roles(Role.Admin)
     @Patch(":id")
-    async delete(@Param("id") id : number, @Body() body) {
+    async updateUser(@Param("id") id : number, @Body() body) {
         return await this.usersService.updateOne(+id, body);
     }
     // -----------------------------------------------
@@ -127,8 +130,10 @@ export class UsersController {
     @ApiForbiddenResponse({
         description: "Forbbiden: The user with the JWT must be an Admin"
     })
+    @UseGuards(RolesGuard)
+    @Roles(Role.Admin)
     @Delete(":id")
-    async updateUserInfo(@Param("id") id : number) {
+    async deleteUser(@Param("id") id : number) {
         return await this.usersService.deleteOne(+id);
     }
 
@@ -146,7 +151,7 @@ export class UsersController {
     })
     @Get("me")
     async findMe(@Request() req) {
-        return await this.usersService.findById(req.user.id);
+        return await this.usersService.findById(+req.user.id);
     }
     
     // -----------------------------------------------
@@ -210,6 +215,6 @@ export class UsersController {
     })
     @Get("me/courses")
     async getMyCourses(@Request() req) {
-        return await this.usersService.getMyCourses(req.user.username);
+        return await this.usersService.getMyCourses(+req.user.id);
     }
 }

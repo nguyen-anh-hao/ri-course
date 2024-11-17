@@ -49,8 +49,8 @@ export class AuthService {
             {
                 ...signUpDto,
                 password: hashedPassword,
-            },
-            $Enums.Role.Learner
+                roles: [$Enums.Role.Learner]
+            }
         );
     }
 
