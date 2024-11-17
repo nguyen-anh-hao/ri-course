@@ -50,7 +50,7 @@ const darkColors = {
         main: Colors.yellow[500],
     },
     secondary: {
-        main: Colors.grey[900],
+        main: Colors.common.white,
     },
     background: {
         default: Colors.grey[900],

@@ -1,8 +1,7 @@
 'use client'
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { createTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
-
 import { lightTheme, darkTheme } from '@/styles/theme';
 
 interface ThemeContextType {
@@ -14,7 +13,21 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+    const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+        const storedThemePreference = sessionStorage.getItem('isDarkMode');
+        return storedThemePreference ? storedThemePreference === 'true' : false;
+    });
+
+    useEffect(() => {
+        const storedThemePreference = sessionStorage.getItem('isDarkMode');
+        if (storedThemePreference) {
+            setIsDarkMode(storedThemePreference === 'true');
+        }
+    }, []);
+
+    useEffect(() => {
+        sessionStorage.setItem('isDarkMode', isDarkMode.toString());
+    }, [isDarkMode]);
 
     const toggleDarkMode = () => {
         setIsDarkMode(prev => !prev);

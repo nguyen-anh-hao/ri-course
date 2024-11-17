@@ -1,52 +1,47 @@
-import { Injectable } from '@nestjs/common';
-import { CreateEnrollmentDto } from './dtos';
-
-export type Enrollment = {
-    userId: number,
-    courseId: number,
-    level?: number,
-}
+import { Injectable } from "@nestjs/common";
+import { CreateEnrollmentDto } from "./dtos";
+import { PrismaService } from "src/prisma/prisma.service";
+import { EnrollmentEntity } from "./entities/enrollment.entity";
+import { UserEntity } from "src/users/entities/user.entity";
 
 @Injectable()
 export class EnrollmentsService {
-    constructor() {}
+    constructor(private prisma : PrismaService, ) {}
 
-    enrollments : Enrollment[] = [
-        {
-            userId: 1,
-            courseId: 1,
-        },
-        {
-            userId: 1,
-            courseId: 2,
-        },
-        {
-            userId: 2,
-            courseId: 2,
-        },
-        {
-            userId: 2,
-            courseId: 3,
-        },
-        {
-            userId: 4,
-            courseId: 3,
-        },
-        {
-            userId: 5,
-            courseId: 1,
-        },
-    ];
+    async findAll() : Promise<EnrollmentEntity[]> {
+        const enrollments = await this.prisma.enrollment.findMany();
 
-    async create(createEnrollmentDto : CreateEnrollmentDto) {
-        return await this.enrollments.push(createEnrollmentDto);
+        return enrollments.map(enrollment => new EnrollmentEntity(enrollment));
     }
 
-    async findByUserId(userId : number) {
-        return await this.enrollments.filter(enrollment => enrollment.userId === userId);
+    async create(createEnrollmentDto: CreateEnrollmentDto) : Promise<EnrollmentEntity> {
+        const enrollment = await this.prisma.enrollment.create({
+            data : createEnrollmentDto
+        });
+
+        return new EnrollmentEntity(enrollment);
     }
 
-    async findByCourseId(courseId : number) {
-        return await this.enrollments.filter(enrollment => enrollment.courseId === courseId);
+    async findByUserId(userId: number) : Promise<EnrollmentEntity[]> {
+        const enrollments = await this.prisma.enrollment.findMany({
+            where: {
+                userId
+            }
+        });
+
+        return enrollments.map(enrollment => new EnrollmentEntity(enrollment));
+    } 
+    
+    async findByCourseId(courseId: number) : Promise<UserEntity[]> {
+        const enrollments = await this.prisma.enrollment.findMany({
+            select: {
+                user: true
+            },
+            where: {
+                courseId
+            }
+        });
+    
+        return enrollments.map(enrollments => new UserEntity(enrollments.user));
     }
 }

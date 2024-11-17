@@ -1,9 +1,8 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "src/users/users.service";
-import { SignInDto, SignUpDto } from "./dtos";
+import { SignInDto, SignUpDto,  ChangePasswordDto } from "./dtos";
 import * as bcrypt from "bcrypt";
-import { ChangePasswordDto } from "./dtos/change-password.dto";
 
 @Injectable()
 export class AuthService {
@@ -13,13 +12,11 @@ export class AuthService {
     ) {}
 
     async validateUser(username: string, password: string) {
-        const user = await this.usersService.findOne(username);
-        if (user == null)
-            return null;
+        const user = await this.usersService.findByUsername(username);
+        if (user == null) return null;
 
         const isMatch = await bcrypt.compare(password, user.password);
-        if (isMatch)
-            return user;
+        if (isMatch) return user;
 
         return null;
     }
@@ -38,28 +35,28 @@ export class AuthService {
         };
     }
 
-    async signup(signUpDto : SignUpDto) {
-        const { username, password } = signUpDto; 
+    async signup(signUpDto: SignUpDto) {
+        const { username, password } = signUpDto;
 
         const isTaken = await this.usersService.isUsernameTaken(username);
         if (isTaken === true)
             throw new BadRequestException("Username is already taken");
 
         const hashedPassword = await bcrypt.hash(password, 11);
-        
+
         return await this.usersService.createOne({
             ...signUpDto,
-            password: hashedPassword
+            password: hashedPassword,
         });
     }
-    
-    async changePassword(changePasswordDto : ChangePasswordDto) {
-        const { username, newPassword } = changePasswordDto;
+
+    async changePassword(username : string, changePasswordDto: ChangePasswordDto) {
+        const { newPassword } = changePasswordDto;
 
         const hashedNewPassword = await bcrypt.hash(newPassword, 11);
 
         return await this.usersService.updateOne(username, {
-            password: hashedNewPassword
+            password: hashedNewPassword,
         });
     }
 }

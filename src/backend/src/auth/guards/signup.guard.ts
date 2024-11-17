@@ -9,7 +9,7 @@ import configuration from "src/config/configuration";
 
 @Injectable()
 export class SignUpGuard implements CanActivate {
-    constructor() { }
+    constructor() {}
 
     verifySignUpToken(
         token: string,
@@ -30,10 +30,13 @@ export class SignUpGuard implements CanActivate {
             throw new ForbiddenException("Invalid sign up token");
 
         const thisHashCombo = `${expirationTime}-${thisHashedUserAgent}_${secret}`;
+        console.log({expirationTime, thisHashedUserAgent, secret});
         const thisHashedHashCombo = CryptoJS.MD5(thisHashCombo).toString();
 
-        if (thisHashedHashCombo !== hashedHashCombo)
+        if (thisHashedHashCombo !== hashedHashCombo) {
+            console.log({thisHashedHashCombo, hashedHashCombo});
             throw new ForbiddenException("Invalid sign up token");
+        }
 
         return true;
     }
@@ -44,9 +47,6 @@ export class SignUpGuard implements CanActivate {
         const userAgent = request.headers["user-agent"];
         const signUpSecret = configuration().security.signUpSecret;
 
-        if (this.verifySignUpToken(signUpToken, userAgent, signUpSecret) === false)
-            return false;
-
-        return true;
+        return this.verifySignUpToken(signUpToken, userAgent, signUpSecret)
     }
 }

@@ -1,87 +1,94 @@
 import { Injectable } from "@nestjs/common";
 import { CreateUserDto, UpdateUserDto } from "./dtos";
-
-export type User = {
-    id: number;
-    username: string;
-    fullname?: string;
-    password: string;
-    email?: string;
-    roles: string[];
-};
+import { PrismaService } from "src/prisma/prisma.service";
+import { UserEntity } from "./entities/user.entity";
+import { $Enums } from "@prisma/client";
+import { CourseEntity } from "src/courses/entities/course.entity";
 
 @Injectable()
 export class UsersService {
-    users: User[] = [
-        {
-            id: 1,
-            username: "user1",
-            password: "$2b$11$iF.vIFWlXJdkhQCnDIrgxuC/VeD4CvI4qH9B5puZrr83My2NiKF2S",
-            email: "user1@ricourse.com",
-            roles: ["Learner"],
-        },
-        {
-            id: 2,
-            username: "user2",
-            password: "$2b$11$hlcxykhjO.YlVstp.z2zAOgj90mGK1Q3ejieZCnliOwlIsZ6mSwxu",
-            email: "user2@ricourse.com",
-            roles: ["Learner"],
-        },
-        {
-            id: 3,
-            username: "user3",
-            password: "$2b$11$fWN8U2inFKp9bxiXzLK7N.ZW7pKr2G/X1kA3ZWBJBFpN2nRtgluYC",
-            email: "user3@ricourse.com",
-            roles: ["Learner"],
-        },
-        {
-            id: 4,
-            username: "user4",
-            password: "$2b$11$x33wC4RG7xiWWNDix8HABO4NK67XpOei9hIX/ZrAdrjdDCZnvasri",
-            email: "user4@ricourse.com",
-            roles: ["Learner"],
-        },
-        {
-            id: 5,
-            username: "user5",
-            password: "$2b$11$ezrTdQZaPAxN6jacU9lhPefzcVfbRWUIZaxN01kSDS/gY2Nj..tDu",
-            email: "user5@ricourse.com",
-            roles: ["Admin"],
-        },
-    ];
+    constructor(private prisma : PrismaService) {}
 
-    async findOne(username: string): Promise<User | undefined> {
-        return this.users.find((user) => user.username === username);
+    async findById(id: number) : Promise<UserEntity> {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                id
+            }
+        });
+
+        if (user === null)
+            return null;
+        
+        return new UserEntity(user);
+    }
+    
+    async findByUsername(username : string) : Promise<UserEntity> {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                username
+            }
+        });
+
+        if (user === null)
+            return null;
+        
+        return user;
     }
 
-    async findAll(): Promise<User[]> {
-        return this.users;
+    async findAll() : Promise<UserEntity[]> {
+        const users = await this.prisma.user.findMany();
+
+        return users.map(user => new UserEntity(user));
     }
 
-    async isUsernameTaken(username: string): Promise<boolean> {
-        const user = await this.findOne(username);
+    async createOne(createUserDto: CreateUserDto) : Promise<UserEntity> {
+        const user = await this.prisma.user.create({
+            data: {
+                ...createUserDto,
+                roles: [$Enums.Role.Learner]
+            }
+        });
+        
+        return new UserEntity(user);
+    }
+    
+    async updateOne(username: string, updateUserDto: UpdateUserDto) : Promise<void> {
+        const user = await this.prisma.user.update({
+            where: {
+                username: username
+            },
+            data: updateUserDto
+        });
+    }
+
+    async getMyCourses(username : string) : Promise<CourseEntity[]> {
+        const user = await this.findByUsername(username);
+
+        const courses = await this.prisma.course.findMany({
+            where: {
+                users: {
+                    some: {
+                        userId: user.id
+                    }
+                }
+            }
+        });
+
+        return courses.map(course => new CourseEntity(course));
+    }
+
+    async deleteOne(username: string) : Promise<UserEntity> {
+        const user = await this.prisma.user.delete({
+            where: {
+                username
+            }
+        });
+
+        return new UserEntity(user);
+    }
+
+    async isUsernameTaken(username: string) : Promise<boolean> {
+        const user = await this.findByUsername(username);
         return !!user;
-    }
-
-    async createOne(createUserDto : CreateUserDto) {
-        const newUser: User = {
-            ...createUserDto,
-            id: this.users.length + 1,
-            roles: ["Learner"],
-        };
-        await this.users.push(newUser);
-        console.log(newUser);
-        return newUser;
-    }
-
-    async updateOne(username : string, updateUserDto : UpdateUserDto) {
-        const index = this.users.findIndex(user => user.username === username);
-
-        this.users[index] = {
-            ...this.users[index],
-            ...updateUserDto
-        }
-
-        return this.users[index];
     }
 }
