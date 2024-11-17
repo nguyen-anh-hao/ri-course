@@ -32,14 +32,14 @@ const Footer: React.FC = () => {
                                             marginRight: '16px',
                                         }}
                                     />
-                                    <Typography variant='h6' py={1}>
+                                    <Typography variant='h6' py={1} color='white'>
                                         RiCourse
                                     </Typography>
                                 </Box>
-                                <Typography variant='body2' sx={{ py: 0.25 }}>
+                                <Typography variant='body2' sx={{ py: 0.25 }} color='white'>
                                     RiCourse là nền tảng tương tác trực tuyến hỗ trợ người dùng học tập, luyện tập và đánh giá kỹ năng lập trình một cách nhanh chóng và chính xác.
                                 </Typography>
-                                <Typography variant='body2' sx={{ mt: 2 }}>
+                                <Typography variant='body2' sx={{ mt: 2 }} color='white'>
                                     © 2024 RiCon | All rights reserved
                                 </Typography>
                             </Box>
@@ -47,7 +47,7 @@ const Footer: React.FC = () => {
 
                         <Grid item xs={12} sm={3}>
                             <Box display='flex' flexDirection='column'>
-                                <Typography variant='h6' sx={{ mb: 2 }} py={1}>
+                                <Typography variant='h6' sx={{ mb: 2 }} py={1} color='white'>
                                     Tính năng
                                 </Typography>
                                 <Typography variant='body2' sx={{ mb: 2, py: 0.25 }}>
@@ -56,6 +56,7 @@ const Footer: React.FC = () => {
                                             variant='body2'
                                             sx={{ mb: 2, py: 0.25, color: 'white' }}
                                             component='span'
+                                            color='white'
                                         >
                                             Khóa học
                                         </Typography>
@@ -88,24 +89,24 @@ const Footer: React.FC = () => {
 
                         <Grid item xs={12} sm={4}>
                             <Box display='flex' flexDirection='column'>
-                                <Typography variant='h6' sx={{ mb: 2 }} py={1}>
+                                <Typography variant='h6' sx={{ mb: 2 }} py={1} color='white'>
                                     Liên hệ
                                 </Typography>
                                 <Box display='flex' alignItems='center' sx={{ mb: 2 }}>
                                     <LocationOnIcon sx={{ mr: 1 }} />
-                                    <Typography variant='body2'>
+                                    <Typography variant='body2' color='white'>
                                         Linh Trung, Thủ Đức, TP. HCM
                                     </Typography>
                                 </Box>
                                 <Box display='flex' alignItems='center' sx={{ mb: 2 }}>
                                     <PhoneIcon sx={{ mr: 1 }} />
-                                    <Typography variant='body2'>
+                                    <Typography variant='body2' color='white'>
                                         0987 654 321
                                     </Typography>
                                 </Box>
                                 <Box display='flex' alignItems='center' sx={{ mb: 2 }}>
                                     <EmailIcon sx={{ mr: 1 }} />
-                                    <Typography variant='body2'>
+                                    <Typography variant='body2' color='white'>
                                         <a href='mailto:random@gmail.com' style={{ color: 'inherit', textDecoration: 'none' }}>
                                             random@gmail.com
                                         </a>
