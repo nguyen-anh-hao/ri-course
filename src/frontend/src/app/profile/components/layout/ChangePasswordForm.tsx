@@ -6,12 +6,13 @@ import axios from 'axios';
 import config from '@/config/config';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { getCookie } from 'cookies-next';
 
 const ChangePasswordForm: React.FC = () => {
     const route = useRouter();
     const [message, setMessage] = useState<string | null>(null);
     const [isError, setIsError] = useState<boolean>(false);
-    const token = sessionStorage.getItem('token');
+    const token = getCookie('token');
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
     const handleSubmit = async (event: React.FormEvent) => {

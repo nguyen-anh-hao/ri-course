@@ -8,6 +8,7 @@ import { User } from '@/interfaces/user.interface';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import config from '@/config/config';
+import { getCookie } from 'cookies-next';
 
 const ProfileInfo = () => {
     const [user, setUser] = useState<User | null>(null);
@@ -15,7 +16,7 @@ const ProfileInfo = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const token = sessionStorage.getItem('token');
+                const token = getCookie('token');
                 if (token) {
                     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 }

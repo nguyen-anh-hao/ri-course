@@ -48,10 +48,10 @@ const Header: React.FC = () => {
     };
 
     const navItems = [
-        { text: 'Học tập', path: '/my-courses' },
-        { text: 'Khóa học', path: '/all-courses' },
-        { text: 'Kỳ thi', path: '#' },
-        { text: 'Diễn đàn', path: '#' },
+        { key: 1, text: 'Học tập', path: '/my-courses' },
+        { key: 2, text: 'Khóa học', path: '/all-courses' },
+        { key: 3, text: 'Kỳ thi', path: '#' },
+        { key: 4, text: 'Diễn đàn', path: '#' },
     ];
 
     return (
@@ -76,7 +76,7 @@ const Header: React.FC = () => {
                             </Box>
                         </Link>
                         {navItems.map((item) => (
-                            <NavItem text={item.text} isActive={pathname.includes(item.path)} onClick={() => router.push(item.path)} />
+                            <NavItem key={item.key} text={item.text} isActive={pathname.includes(item.path)} onClick={() => router.push(item.path)} />
                         ))}
                     </Box>
                     {user ? (

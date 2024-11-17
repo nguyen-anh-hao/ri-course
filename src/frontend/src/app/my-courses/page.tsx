@@ -5,9 +5,10 @@ import { Box, Container, Grid, Typography } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import config from '@/config/config';
+import { getCookie } from 'cookies-next';
 
 export default function AllCourses() {
-    const token = sessionStorage.getItem('token');
+    const token = getCookie('token');
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
     type Course = {

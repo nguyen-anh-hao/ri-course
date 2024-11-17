@@ -1,10 +1,11 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { setCookie, deleteCookie } from 'cookies-next';
 
 interface AuthContextType {
     user: any;
-    signin: (user: any) => void;
+    signin: (user: any, token: any) => void;
     signout: () => void;
 }
 
@@ -21,14 +22,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const [isMounted, setIsMounted] = useState(false);
 
-    const signin = (user: any) => {
+    const signin = (user: any, token: any) => {
         setUser(user);
         sessionStorage.setItem('user', JSON.stringify(user));
+        setCookie('token', token, {
+            maxAge: 60 * 60 * 24 * 7,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            path: '/',
+        });
     };
 
     const signout = () => {
         setUser(null);
         sessionStorage.removeItem('user');
+        deleteCookie('token');
     };
 
     useEffect(() => {

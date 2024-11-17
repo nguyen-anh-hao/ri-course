@@ -7,9 +7,10 @@ import { User } from '@/interfaces/user.interface';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import config from '@/config/config';
+import { getCookie } from 'cookies-next';
 
 const UpdateProfileForm: React.FC = () => {
-    const token = sessionStorage.getItem('token');
+    const token = getCookie('token');
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
     const router = useRouter();

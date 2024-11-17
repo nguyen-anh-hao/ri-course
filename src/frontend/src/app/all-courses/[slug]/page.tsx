@@ -4,10 +4,11 @@ import { notFound } from 'next/navigation';
 import axios from 'axios';
 import config from '@/config/config';
 import generateSlug from '@/utils/generateSlug';
+import { getCookie } from 'cookies-next';
 
 export const generateStaticParams = async () => {
-    // const token = sessionStorage.getItem('token');
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuaGhhbzIwMDQiLCJpZCI6MTEsInJvbGVzIjpbIkxlYXJuZXIiXSwiaWF0IjoxNzMxODMwNjM3LCJleHAiOjE3MzE4MzQyMzd9.iHxoJI3D2mOh1vE_I9ZoECR8Xn6vb6EvVjd2bNSEdvw";
+    // need fix: token is not being set
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIyIiwiaWQiOjIsInJvbGVzIjpbIkxlYXJuZXIiXSwiaWF0IjoxNzMxODM4NDQ0LCJleHAiOjE3MzE4NDIwNDR9.uALgBm5yawCirpOzDoq0ncO9715hkKU16VR-aUFHUj0"
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
     const response = await axios.get(`${config.API_BASE_URL}/courses/`);
@@ -19,8 +20,8 @@ export const generateStaticParams = async () => {
 };
 
 const fetchCourseData = async (slug: string) => {
-    // const token = sessionStorage.getItem('token');
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuaGhhbzIwMDQiLCJpZCI6MTEsInJvbGVzIjpbIkxlYXJuZXIiXSwiaWF0IjoxNzMxODMwNjM3LCJleHAiOjE3MzE4MzQyMzd9.iHxoJI3D2mOh1vE_I9ZoECR8Xn6vb6EvVjd2bNSEdvw";
+    // need fix: token is not being set
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIyIiwiaWQiOjIsInJvbGVzIjpbIkxlYXJuZXIiXSwiaWF0IjoxNzMxODM4NDQ0LCJleHAiOjE3MzE4NDIwNDR9.uALgBm5yawCirpOzDoq0ncO9715hkKU16VR-aUFHUj0";
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
     const response = await axios.get(`${config.API_BASE_URL}/courses/`);

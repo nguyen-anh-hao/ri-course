@@ -37,9 +37,7 @@ const SignInForm: React.FC = () => {
         try {
             const response = await axios.post(`${config.API_BASE_URL}/auth/signin`, { username, password });
             setMessage('Đăng nhập thành công!');
-
-            signin(username);
-            sessionStorage.setItem('token', response.data.access_token);
+            signin(username, response.data.access_token);
             router.push('/');
 
         } catch (error: any) {
