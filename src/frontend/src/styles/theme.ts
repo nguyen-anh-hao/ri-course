@@ -57,6 +57,22 @@ const lightTheme: ThemeOptions = {
                 },
             },
         },
+        MuiMenu: {
+            styleOverrides: {
+                paper: {
+                    backdropFilter: 'blur(10px)',
+                    boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+                    backgroundColor: colors.light.background.paper,
+                },
+            },
+        },
+        MuiTypography: {
+            styleOverrides: {
+                root: {
+                    color: colors.light.text.primary,
+                }
+            }
+        }
     },
 };
 
@@ -98,7 +114,7 @@ const darkTheme: ThemeOptions = {
                 },
                 contained: {
                     backgroundColor: colors.dark.secondary.main,
-                    color: colors.dark.common.white,
+                    color: colors.dark.common.black,
                     '&:hover': {
                         boxShadow: 'none',
                     },
@@ -114,6 +130,22 @@ const darkTheme: ThemeOptions = {
                 },
             },
         },
+        MuiMenu: {
+            styleOverrides: {
+                paper: {
+                    backdropFilter: 'blur(10px)',
+                    boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+                    backgroundColor: colors.dark.background.paper,
+                },
+            },
+        },
+        MuiTypography: {
+            styleOverrides: {
+                root: {
+                    color: colors.dark.text.primary,
+                }
+            }
+        }
     },
 };
 

@@ -49,7 +49,9 @@ const SignUpForm: React.FC<{ userAgent: string, secret: string }> = ({ userAgent
         setPasswordMismatch(false);
         const signupToken = token(5000, userAgent, secret);
         try {
-            const response = await axios.post(`${config.API_BASE_URL}/auth/signup`, { username, password }, {
+            const fullname = username; // Default full name
+            const dob = new Date(2000, 0, 1, 7, 0, 0); // Default date of birth
+            const response = await axios.post(`${config.API_BASE_URL}/auth/signup`, { username, password, dob }, {
                 headers: { 'Sign-Up-Token': signupToken },
             });
             setMessage('Đăng ký thành công!');

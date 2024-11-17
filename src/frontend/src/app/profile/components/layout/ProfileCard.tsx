@@ -1,12 +1,28 @@
 'use client'
 
 import React from 'react';
-import { Paper, Box, TextField, Button, Typography } from '@mui/material';
+import { Paper, Box, Avatar, Button, Typography, Skeleton } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import { User } from '@/interfaces/user.interface';
 
-const ProfileCard: React.FC = () => {
+interface ProfileCardProps {
+    user?: User | null;
+}
+
+const ProfileCard: React.FC<ProfileCardProps> = ({ user }) => {
     const router = useRouter();
     const handleUpdateProfileButtonClick = () => { router.push('/profile/update-information'); }
+
+    const roleTranslations: { [key: string]: string } = {
+        'Admin': 'Quản trị viên',
+        'Learner': 'Học viên',
+        'Mentor': 'Giáo viên',
+    };
+
+    const fullname = (user?.fullname != null) ? user?.fullname : user?.username;
+    const roles = user?.roles.map((role) => roleTranslations[role]).join(', ');
+    const dob = user?.dob.split('T')[0].split('-').reverse().join('/');
+    const createAt = user?.createAt.split('T')[0].split('-').reverse().join('/');
 
     return (
         <Paper elevation={3} sx={{ px: 4, py: 3, gap: 2, display: 'flex', flexDirection: 'column', borderRadius: 2 }}>
@@ -16,34 +32,37 @@ const ProfileCard: React.FC = () => {
             </Box>
             <Box sx={{ display: 'flex', gap: 8, alignItems: 'center', justifyItems: 'center' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-                    <Box
-                        component='img'
-                        sx={{ width: 128, height: 128, borderRadius: '50%' }}
-                        src='https://ui-avatars.com/api/?background=random'
-                        alt='Avatar'
-                    />
-                    <Typography variant='body1'>JohnDoe</Typography>
+                    <Box sx={{ width: 128, height: 128, borderRadius: '50%' }}>
+                        <Avatar sx={{ width: '100%', height: '100%' }} />
+                    </Box>
+                    <Typography variant='body1'>
+                        {user?.username !== undefined ?
+                            user.username :
+                            <Skeleton width="100%">
+                                <Typography>username</Typography>
+                            </Skeleton>}
+                    </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, flexGrow: 1 }}>
                     <Box sx={{ display: 'flex', gap: 4 }}>
                         <Typography variant='body1' sx={{ fontWeight: 'bold', width: '180px' }}>Họ và tên</Typography>
-                        <Typography variant='body1'>John Doe</Typography>
+                        <Typography variant='body1'>{fullname}</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', gap: 4 }}>
                         <Typography variant='body1' sx={{ fontWeight: 'bold', width: '180px' }}>Ngày tháng năm sinh</Typography>
-                        <Typography variant='body1'>12/03/2004</Typography>
+                        <Typography variant='body1'>{dob}</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', gap: 4 }}>
                         <Typography variant='body1' sx={{ fontWeight: 'bold', width: '180px' }}>Email</Typography>
-                        <Typography variant='body1'>john.doe@example.com</Typography>
+                        <Typography variant='body1'>{user?.email != null ? user?.email : ''}</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', gap: 4 }}>
                         <Typography variant='body1' sx={{ fontWeight: 'bold', width: '180px' }}>Vai trò</Typography>
-                        <Typography variant='body1'>Học viên</Typography>
+                        <Typography variant='body1'>{roles}</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', gap: 4 }}>
                         <Typography variant='body1' sx={{ fontWeight: 'bold', width: '180px' }}>Ngày tạo tài khoản</Typography>
-                        <Typography variant='body1'>22/10/2024</Typography>
+                        <Typography variant='body1'>{createAt}</Typography>
                     </Box>
                 </Box>
             </Box>

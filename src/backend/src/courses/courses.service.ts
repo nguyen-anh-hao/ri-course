@@ -21,7 +21,7 @@ export class CoursesService {
         return new CourseEntity(course);
     }
 
-    async findOne(id: number) : Promise<CourseEntity> {
+    async findOneById(id: number) : Promise<CourseEntity> {
         const course = await this.prisma.course.findUnique({
             where: {
                 id
@@ -29,5 +29,15 @@ export class CoursesService {
         });
 
         return new CourseEntity(course);
+    }
+
+    async findOneByTitle(title: string) : Promise<CourseEntity[]> {
+        const courses = await this.prisma.course.findMany({
+            where: {
+                title
+            }
+        });
+
+        return courses.map(course => new CourseEntity(course));
     }
 }

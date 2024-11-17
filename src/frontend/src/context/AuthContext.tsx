@@ -1,10 +1,11 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { setCookie, deleteCookie } from 'cookies-next';
 
 interface AuthContextType {
     user: any;
-    signin: (user: any) => void;
+    signin: (user: any, token: any) => void;
     signout: () => void;
 }
 
@@ -13,7 +14,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<any>(() => {
         if (typeof window !== 'undefined') {
-            const storedUser = localStorage.getItem('user');
+            const storedUser = sessionStorage.getItem('user');
             return storedUser ? JSON.parse(storedUser) : null;
         }
         return null;
@@ -21,18 +22,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const [isMounted, setIsMounted] = useState(false);
 
-    const signin = (user: any) => {
+    const signin = (user: any, token: any) => {
         setUser(user);
-        localStorage.setItem('user', JSON.stringify(user));
+        sessionStorage.setItem('user', JSON.stringify(user));
+        setCookie('token', token, {
+            maxAge: 60 * 60 * 24 * 7,
+            httpOnly: false,
+            sameSite: 'lax',
+            path: '/',
+        });
     };
 
     const signout = () => {
         setUser(null);
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
+        deleteCookie('token');
     };
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
+        const storedUser = sessionStorage.getItem('user');
         if (storedUser) {
             setUser(JSON.parse(storedUser));
         }

@@ -9,14 +9,30 @@ import { CourseEntity } from "src/courses/entities/course.entity";
 export class UsersService {
     constructor(private prisma : PrismaService) {}
 
-    async findOne(username: string) : Promise<UserEntity> {
+    async findById(id: number) : Promise<UserEntity> {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                id
+            }
+        });
+
+        if (user === null)
+            return null;
+        
+        return new UserEntity(user);
+    }
+    
+    async findByUsername(username : string) : Promise<UserEntity> {
         const user = await this.prisma.user.findUnique({
             where: {
                 username
             }
         });
 
-        return new UserEntity(user);
+        if (user === null)
+            return null;
+        
+        return user;
     }
 
     async findAll() : Promise<UserEntity[]> {
@@ -36,40 +52,43 @@ export class UsersService {
         return new UserEntity(user);
     }
     
-    async updateOne(username: string, updateUserDto: UpdateUserDto) : Promise<UserEntity> {
+    async updateOne(username: string, updateUserDto: UpdateUserDto) : Promise<void> {
         const user = await this.prisma.user.update({
             where: {
                 username: username
             },
             data: updateUserDto
         });
-        
-        return new UserEntity(user);
     }
 
-    async myCourses(username : string) : Promise<CourseEntity[]> {
+    async getMyCourses(username : string) : Promise<CourseEntity[]> {
+        const user = await this.findByUsername(username);
+
         const courses = await this.prisma.course.findMany({
-            select : {
-                id: true,
-                title: true,
-                description: true,
-                createAt: true,
-                updatedAt: true,
+            where: {
                 users: {
-                    where: {
-                        user: {
-                            username
-                        }
+                    some: {
+                        userId: user.id
                     }
                 }
-            },
+            }
         });
 
         return courses.map(course => new CourseEntity(course));
     }
 
+    async deleteOne(username: string) : Promise<UserEntity> {
+        const user = await this.prisma.user.delete({
+            where: {
+                username
+            }
+        });
+
+        return new UserEntity(user);
+    }
+
     async isUsernameTaken(username: string) : Promise<boolean> {
-        const user = await this.findOne(username);
+        const user = await this.findByUsername(username);
         return !!user;
     }
 }
