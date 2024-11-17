@@ -3,7 +3,7 @@
 // React and Next.js
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 // Material-UI components
 import { AppBar, Toolbar, Typography, Container, Box, Button, IconButton, Avatar, Menu, MenuItem } from '@mui/material';
@@ -19,6 +19,7 @@ import { useTheme } from '@/context/ThemeContext';
 
 const Header: React.FC = () => {
     const router = useRouter();
+    const pathname = usePathname();
 
     const theme = useTheme().theme;
     const isDarkMode = useTheme().isDarkMode;
@@ -46,6 +47,13 @@ const Header: React.FC = () => {
         router.push('/');
     };
 
+    const navItems = [
+        { text: 'Học tập', path: '/my-courses' },
+        { text: 'Khóa học', path: '/all-courses' },
+        { text: 'Kỳ thi', path: '#' },
+        { text: 'Diễn đàn', path: '#' },
+    ];
+
     return (
         <AppBar>
             <Container maxWidth={false}>
@@ -67,9 +75,9 @@ const Header: React.FC = () => {
                                 </Typography>
                             </Box>
                         </Link>
-                        <NavItem text='Khóa học' isActive={true} onClick={() => router.push('/all-courses')} />
-                        <NavItem text='Kỳ thi' />
-                        <NavItem text='Diễn đàn' />
+                        {navItems.map((item) => (
+                            <NavItem text={item.text} isActive={pathname.includes(item.path)} onClick={() => router.push(item.path)} />
+                        ))}
                     </Box>
                     {user ? (
                         <>

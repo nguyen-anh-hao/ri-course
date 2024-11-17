@@ -1,7 +1,7 @@
 'use client'
 
 import CourseCard from '@/components/ui/CourseCard';
-import { Box, Container, Grid } from '@mui/material';
+import { Box, Container, Grid, Typography } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import config from '@/config/config';
@@ -37,6 +37,7 @@ export default function AllCourses() {
 
     return (
         <Container component='main' maxWidth='lg'>
+            <Typography variant='h4' sx={{ my: 4 }}>Danh sách khóa học</Typography>
             <Grid container spacing={2} justifyContent='left'>
                 {Object.keys(courses).map((key) => {
                     const courseKey = Number(key);
