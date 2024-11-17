@@ -1,49 +1,50 @@
-import React from 'react';
-import CourseInfo from '../components/CourseInfo';
-import { notFound } from 'next/navigation';
 import axios from 'axios';
+import { cookies } from 'next/headers';
+import { notFound } from 'next/navigation';
+import CourseInfo from '../components/CourseInfo';
 import config from '@/config/config';
 import generateSlug from '@/utils/generateSlug';
-import { getCookie } from 'cookies-next';
 
-export const generateStaticParams = async () => {
-    // need fix: token is not being set
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIyIiwiaWQiOjIsInJvbGVzIjpbIkxlYXJuZXIiXSwiaWF0IjoxNzMxODM4NDQ0LCJleHAiOjE3MzE4NDIwNDR9.uALgBm5yawCirpOzDoq0ncO9715hkKU16VR-aUFHUj0"
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+const fetchCourseData = async (slug: string, token: string) => {
+    try {
+        const response = await axios.get(`${config.API_BASE_URL}/courses/`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
 
-    const response = await axios.get(`${config.API_BASE_URL}/courses/`);
-    const courses = response.data;
-
-    return courses.map((course: { title: string; }) => ({
-        slug: generateSlug(course.title),
-    }));
+        const courses = response.data;
+        return courses.find((course: { title: string }) => generateSlug(course.title) === slug);
+    } catch (error) {
+        console.error('Error fetching course data:', error);
+        return null;
+    }
 };
 
-const fetchCourseData = async (slug: string) => {
-    // need fix: token is not being set
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIyIiwiaWQiOjIsInJvbGVzIjpbIkxlYXJuZXIiXSwiaWF0IjoxNzMxODM4NDQ0LCJleHAiOjE3MzE4NDIwNDR9.uALgBm5yawCirpOzDoq0ncO9715hkKU16VR-aUFHUj0";
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-    const response = await axios.get(`${config.API_BASE_URL}/courses/`);
-    const courses = response.data;
-
-    return courses.find((course: { title: string }) => generateSlug(course.title) === slug);
-};
-
-const CoursePage = async ({ params }: { params: { slug: string } }) => {
+export default async function CoursePage({ params }: { params: { slug: string } }) {
     const { slug } = params;
-    const courseData = await fetchCourseData(slug);
+
+    console.log('slug:', slug);
+    const cookieStore = cookies();
+    const token = (await cookieStore).get('token')?.value;
+    console.log('token:', token);
+
+    if (!token) {
+        return notFound();
+    }
+
+    const courseData = await fetchCourseData(slug, token);
 
     if (!courseData) {
         return notFound();
     }
 
-    return <CourseInfo
-        courseName={courseData.title}
-        mentor1='Mentor 1'
-        mentor2='Mentor 2'
-        description={courseData.description}
-    />;
-};
-
-export default CoursePage;
+    return (
+        <CourseInfo
+            courseName={courseData.title}
+            mentor1="Mentor 1"
+            mentor2="Mentor 2"
+            description={courseData.description}
+        />
+    );
+}

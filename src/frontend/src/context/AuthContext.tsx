@@ -27,9 +27,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         sessionStorage.setItem('user', JSON.stringify(user));
         setCookie('token', token, {
             maxAge: 60 * 60 * 24 * 7,
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
+            httpOnly: false,
+            sameSite: 'lax',
             path: '/',
         });
     };
