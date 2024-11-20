@@ -124,6 +124,55 @@ async function main() {
             create: enrollment,
         });
     }
+
+    const auditLogs = [
+        {
+            userId: 1,
+            adminId: 5,
+            before: {
+                username: "user1",
+                password:
+                    "$2b$11$iF.vIFWlXJdkhQCnDIrgxuC/VeD4CvI4qH9B5puZrr83My2NiKF2S",
+                email: "user1@ricourse.com",
+                roles: [Role.Learner],
+                dob: new Date("2004-09-20"),
+            },
+            after: {
+                username: "user1",
+                password:
+                    "$2b$11$iF.vIFWlXJdkhQCnDIrgxuC/VeD4CvI4qH9B5puZrr83My2NiKF2S",
+                email: "user1new@ricourse.com",
+                roles: [Role.Learner],
+                dob: new Date("2004-09-20"),
+            }
+        },
+        {
+            userId: 3,
+            adminId: 5,
+            before: {
+                username: "user3",
+                password:
+                    "$2b$11$fWN8U2inFKp9bxiXzLK7N.ZW7pKr2G/X1kA3ZWBJBFpN2nRtgluYC",
+                email: "user3@ricourse.com",
+                roles: [Role.Learner],
+                dob: new Date("2006-09-20"),
+            },
+            after: {
+                username: "user3",
+                password:
+                    "$2b$11$fWN8U2inFKp9bxiXzLK7N.ZW7pKr2G/X1kA3ZWBJBFpN2nRtgluYC",
+                email: "user3@ricourse.com",
+                roles: [Role.Learner],
+                dob: new Date("2008-09-20"),
+            }
+        }
+    ];
+
+    for (let auditLog of auditLogs) {
+        const newAuditLog = await prisma.auditLog.create({
+            data: auditLog
+        })
+    }
 }
 
 // execute the main function
