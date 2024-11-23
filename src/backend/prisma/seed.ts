@@ -127,6 +127,7 @@ async function main() {
 
     const auditLogs = [
         {
+            actionType: "Update",
             userId: 1,
             adminId: 5,
             before: {
@@ -147,6 +148,7 @@ async function main() {
             }
         },
         {
+            actionType: "Update",
             userId: 3,
             adminId: 5,
             before: {
