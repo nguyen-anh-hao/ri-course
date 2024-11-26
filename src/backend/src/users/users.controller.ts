@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Patch, Post, Request, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, Request, UseGuards, UseInterceptors } from "@nestjs/common";
 import { Role, Roles } from "src/auth/role";
 import { RolesGuard, JwtAuthGuard } from "src/auth/guards";
 import { InfoUpdateGuard } from "src/users/guards";
@@ -7,13 +7,14 @@ import { UserEntity } from "./entities/user.entity";
 import { CourseEntity } from "src/courses/entities/course.entity";
 import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiForbiddenResponse, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiParam, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { CreateUserDto } from "./dtos";
+import { AuditLogsService } from "src/audit-logs/audit-logs.service";
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller("users")
 export class UsersController {
-    constructor(private usersService: UsersService) {}
+    constructor(private usersService: UsersService, private auditLogsService: AuditLogsService) {}
 
     @ApiOperation({
         summary: "Get all users (Admin only)",
@@ -55,8 +56,13 @@ export class UsersController {
     @UseGuards(RolesGuard)
     @Roles(Role.Admin)
     @Post("")
-    async create(@Body() createUserDto: CreateUserDto) {
-        return await this.usersService.createOne(createUserDto);
+    async create(@Body() createUserDto: CreateUserDto, @Req() req) {
+        const newUser = await this.usersService.createOne(createUserDto);
+        await this.auditLogsService.createAuditLogs({
+            actionType: "Create",
+            userId: newUser.id,
+            adminId: req.user.id
+        })
     }
 
     // -----------------------------------------------
@@ -108,8 +114,18 @@ export class UsersController {
     @UseGuards(RolesGuard)
     @Roles(Role.Admin)
     @Patch(":id")
-    async updateUser(@Param("id") id : number, @Body() body) {
-        return await this.usersService.updateOne(+id, body);
+    async updateUser(@Param("id", ParseIntPipe) id : number, @Req() req) {
+        const beforeUpdate = await this.usersService.findById(id);
+        await this.usersService.updateOne(id, req.body);
+        const afterUpdate = await this.usersService.findById(id);
+        
+        await this.auditLogsService.createAuditLogs({
+            actionType: "Update",
+            userId: id,
+            adminId: req.user.id,
+            before: beforeUpdate,
+            after: afterUpdate
+        });
     }
     // -----------------------------------------------
 
@@ -133,8 +149,9 @@ export class UsersController {
     @UseGuards(RolesGuard)
     @Roles(Role.Admin)
     @Delete(":id")
-    async deleteUser(@Param("id") id : number) {
-        return await this.usersService.deleteOne(+id);
+    async deleteUser(@Param("id", ParseIntPipe) id : number, @Req() req) {
+        await this.auditLogsService.deleteAuditLogs(id);
+        return await this.usersService.deleteOne(id);
     }
 
     // -----------------------------------------------

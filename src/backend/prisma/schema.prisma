@@ -28,6 +28,8 @@ model User {
 
   courses Enrollment[]
 
+  lastSignIn DateTime @default(now())
+
   auditLogs AuditLog[] @relation("changed")
   auditedLogs AuditLog[] @relation("changer")
 }
@@ -66,12 +68,14 @@ model AuditLog {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
 
+  actionType String
+
   userId Int
   changedUser User @relation("changed", fields: [userId], references: [id])
 
   adminId Int
   changer User @relation("changer", fields: [adminId],  references: [id])
 
-  before Json
-  after Json
+  before Json?
+  after Json?
 }

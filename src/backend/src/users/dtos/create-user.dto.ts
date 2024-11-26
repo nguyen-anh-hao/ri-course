@@ -32,7 +32,7 @@ export class CreateUserDto {
     dob?: Date;
     
     @ApiProperty({
-        example: $Enums.Role.Mentor,
+        example: [$Enums.Role.Mentor],
         required: true
     })
     @IsNotEmpty()
