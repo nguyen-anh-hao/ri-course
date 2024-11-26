@@ -28,6 +28,8 @@ model User {
 
   courses Enrollment[]
 
+  lastSignIn DateTime @default(now())
+
   auditLogs AuditLog[] @relation("changed")
   auditedLogs AuditLog[] @relation("changer")
 }

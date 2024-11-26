@@ -6,8 +6,25 @@ export class AuditLogsService {
     constructor(private prisma: PrismaService) {}
 
     async createAuditLogs(log) {
-        const newAuditLog = await this.prisma.auditLog.create({
-            data: log
+        const newAuditLog = await this.prisma.auditLog.upsert({
+            where: {
+                id: -1
+            },
+            update: {},
+            create: log
         })
+    }
+
+    async deleteAuditLogs(userId: number) {
+        try {
+
+            await this.prisma.auditLog.deleteMany({
+                where: {
+                    userId
+                }
+            })
+        } catch(e) {
+            console.log(e)
+        }
     }
 }

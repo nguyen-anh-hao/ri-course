@@ -52,6 +52,12 @@ export class UserEntity implements User {
     })
     dob: Date;
 
+    @ApiProperty({
+        description: "The time this user last signed in",
+        example: new Date("2004-04-20")
+    })
+    lastSignIn: Date;
+
     constructor(partial : Partial<UserEntity>) {
         Object.assign(this, partial);
     }

@@ -150,12 +150,8 @@ export class UsersController {
     @Roles(Role.Admin)
     @Delete(":id")
     async deleteUser(@Param("id", ParseIntPipe) id : number, @Req() req) {
+        await this.auditLogsService.deleteAuditLogs(id);
         return await this.usersService.deleteOne(id);
-        // await this.auditLogsService.createAuditLogs({
-        //     actionType: "Delete",
-        //     userId: id,
-        //     adminId: req.user.id,
-        // })
     }
 
     // -----------------------------------------------
