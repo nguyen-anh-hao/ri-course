@@ -2,7 +2,7 @@ import React from 'react';
 import UserAccountsTable from './components/UserAccountsTable';
 import { Container } from '@mui/material';
 
-function UserAccountsPage() {
+export default function UserAccountsPage() {
     return <Container component='main' maxWidth='lg'>
         <UserAccountsTable users={mockUsers} />
     </Container>;
@@ -119,5 +119,3 @@ const mockUsers = [
         lastSignin: '2023-10-12',
     }
 ];
-
-export default UserAccountsPage;
