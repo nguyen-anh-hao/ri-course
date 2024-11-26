@@ -13,6 +13,9 @@ const UpdateProfileForm: React.FC = () => {
     const token = getCookie('token');
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
+    const token = getCookie('token');
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
     const router = useRouter();
 
     const [user, setUser] = useState<User | null>(null);
@@ -42,6 +45,21 @@ const UpdateProfileForm: React.FC = () => {
     }, [user]);
 
     const handleBackButtonClick = () => { router.push('/profile'); }
+
+    const handleUpdateProfile = async () => {
+        try {
+            const dob = new Date(
+                (year !== null ? year : 2000),
+                (month !== null ? month - 1 : 0),
+                (day !== null ? day : 1),
+                7, 0, 0
+            );
+            const response = await axios.patch(`${config.API_BASE_URL}/users/me`, { fullname, dob, email });
+            router.push('/profile');
+        } catch (error) {
+            console.error('Error updating user data:', error);
+        }
+    }
 
     const handleUpdateProfile = async () => {
         try {
