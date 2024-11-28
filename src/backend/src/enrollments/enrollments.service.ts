@@ -6,7 +6,7 @@ import { UserEntity } from "src/users/entities/user.entity";
 
 @Injectable()
 export class EnrollmentsService {
-    constructor(private prisma : PrismaService, ) {}
+    constructor(private prisma : PrismaService) {}
 
     async findAll() : Promise<EnrollmentEntity[]> {
         const enrollments = await this.prisma.enrollment.findMany();

@@ -35,8 +35,10 @@ export class UsersService {
         return user;
     }
 
-    async findAll() : Promise<UserEntity[]> {
-        const users = await this.prisma.user.findMany();
+    async findAll(query) : Promise<UserEntity[]> {
+        const users = await this.prisma.user.findMany({
+            where: query
+        });
 
         return users.map(user => new UserEntity(user));
     }

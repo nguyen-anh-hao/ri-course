@@ -32,6 +32,8 @@ model User {
 
   auditLogs AuditLog[] @relation("changed")
   auditedLogs AuditLog[] @relation("changer")
+
+  authorizedCourses CourseMentor[]
 }
 
 model Course {
@@ -43,6 +45,7 @@ model Course {
   description String
 
   users Enrollment[]
+  mentors CourseMentor[]
 }
 
 model Enrollment {
@@ -78,4 +81,14 @@ model AuditLog {
 
   before Json?
   after Json?
+}
+
+model CourseMentor {
+  mentorId   Int
+  mentor User @relation(fields: [mentorId], references: [id])
+
+  courseId Int
+  course Course @relation(fields: [courseId], references: [id])
+
+  @@id([mentorId, courseId])
 }

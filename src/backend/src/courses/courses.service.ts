@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { CreateCourseDto } from "./dto/create-course.dto";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CourseEntity } from "./entities/course.entity";
+import { UserEntity } from "src/users/entities/user.entity";
 
 @Injectable()
 export class CoursesService {
@@ -39,5 +40,33 @@ export class CoursesService {
         });
 
         return courses.map(course => new CourseEntity(course));
+    }
+
+    async findAllLearners(id: number) {
+        const users = await this.prisma.user.findMany({
+            where: {
+                courses: {
+                    some: {
+                        courseId: id
+                    }
+                }
+            }
+        });
+
+        return users.map(user => new UserEntity(user));
+    }
+
+    async findAllMentors(id: number) {
+        const users = await this.prisma.user.findMany({
+            where: {
+                authorizedCourses: {
+                    some: {
+                        courseId: id
+                    }
+                }
+            }
+        });
+
+        return users.map(user => new UserEntity(user));
     }
 }
