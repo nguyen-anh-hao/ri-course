@@ -5,7 +5,7 @@ import { PrismaService } from "src/prisma/prisma.service";
 export class AuditLogsService {
     constructor(private prisma: PrismaService) {}
 
-    async createAuditLogs(log) {
+    async createOne(log) {
         const newAuditLog = await this.prisma.auditLog.upsert({
             where: {
                 id: -1
@@ -15,7 +15,7 @@ export class AuditLogsService {
         })
     }
 
-    async deleteAuditLogs(userId: number) {
+    async deleteOne(userId: number) {
         try {
 
             await this.prisma.auditLog.deleteMany({

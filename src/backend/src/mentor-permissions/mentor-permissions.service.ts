@@ -7,7 +7,7 @@ import { $Enums } from "@prisma/client";
 export class MentorPermissionsService {
     constructor(private prisma : PrismaService) {}
 
-    async assign(mentorPermissionDto : MentorPermissionDto) {
+    async permit(mentorPermissionDto : MentorPermissionDto) {
         const { mentorId } = mentorPermissionDto;
         const mentor = await this.prisma.user.findUnique({
             where: {
@@ -26,7 +26,7 @@ export class MentorPermissionsService {
         })
     }
 
-    async unassign(mentorPermissionDto : MentorPermissionDto) {
+    async unpermit(mentorPermissionDto : MentorPermissionDto) {
         await this.prisma.mentorPermission.delete({
             where: {
                 mentorId_courseId: mentorPermissionDto

@@ -65,7 +65,7 @@ export class UsersController {
     @Post("")
     async create(@Body() createUserDto: CreateUserDto, @Req() req) {
         const newUser = await this.usersService.createOne(createUserDto);
-        await this.auditLogsService.createAuditLogs({
+        await this.auditLogsService.createOne({
             actionType: "Create",
             userId: newUser.id,
             adminId: req.user.id
@@ -126,7 +126,7 @@ export class UsersController {
         await this.usersService.updateOne(id, req.body);
         const afterUpdate = await this.usersService.findById(id);
         
-        await this.auditLogsService.createAuditLogs({
+        await this.auditLogsService.createOne({
             actionType: "Update",
             userId: id,
             adminId: req.user.id,

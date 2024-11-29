@@ -14,7 +14,7 @@ export class EnrollmentsService {
         return enrollments.map(enrollment => new EnrollmentEntity(enrollment));
     }
 
-    async create(createEnrollmentDto: CreateEnrollmentDto) : Promise<EnrollmentEntity> {
+    async createOne(createEnrollmentDto: CreateEnrollmentDto) : Promise<EnrollmentEntity> {
         const enrollment = await this.prisma.enrollment.create({
             data : createEnrollmentDto
         });

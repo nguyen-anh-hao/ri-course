@@ -14,7 +14,7 @@ export class CoursesService {
         return courses.map(course => new CourseEntity(course));
     }
 
-    async create(createCourseDto: CreateCourseDto) : Promise<CourseEntity> {
+    async createOne(createCourseDto: CreateCourseDto) : Promise<CourseEntity> {
         const course = await this.prisma.course.create({
             data: createCourseDto
         });
@@ -22,7 +22,7 @@ export class CoursesService {
         return new CourseEntity(course);
     }
 
-    async deleteCourse(id: number) {
+    async deleteOne(id: number) {
         const course = await this.prisma.course.delete({
             where: {
                 id
@@ -32,7 +32,7 @@ export class CoursesService {
         return new CourseEntity(course);
     }
 
-    async findOneById(id: number) : Promise<CourseEntity> {
+    async findById(id: number) : Promise<CourseEntity> {
         const course = await this.prisma.course.findUnique({
             where: {
                 id
@@ -42,7 +42,7 @@ export class CoursesService {
         return new CourseEntity(course);
     }
 
-    async findOneByTitle(title: string) : Promise<CourseEntity[]> {
+    async findByTitle(title: string) : Promise<CourseEntity[]> {
         const courses = await this.prisma.course.findMany({
             where: {
                 title

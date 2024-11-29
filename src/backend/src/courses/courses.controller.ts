@@ -61,10 +61,10 @@ export class CoursesController {
             throw new BadRequestException("Only one of id or title of the course can be passed into the query");
             
         if (id)
-            return [await this.coursesService.findOneById(+id)];
+            return [await this.coursesService.findById(+id)];
         
         if (title)
-            return await this.coursesService.findOneByTitle(title);
+            return await this.coursesService.findByTitle(title);
 
         return await this.coursesService.findAll();
     }
@@ -92,7 +92,7 @@ export class CoursesController {
     @Roles(Role.Admin)
     @Post()
     async createCourse(@Body() createCourseDto: CreateCourseDto) : Promise<CourseEntity> {
-        return await this.coursesService.create(createCourseDto);
+        return await this.coursesService.createOne(createCourseDto);
     }
 
     // -----------------------------------------------
@@ -113,7 +113,7 @@ export class CoursesController {
     @Roles(Role.Admin)
     @Delete(":id")
     async deleteCourse(@Param("id", ParseIntPipe) id: number) {
-        return await this.coursesService.deleteCourse(id);
+        return await this.coursesService.deleteOne(id);
     }
 
     // -----------------------------------------------
@@ -153,7 +153,7 @@ export class CoursesController {
     @Roles(Role.Learner)
     @Post(":id/learners")
     async createLearnerEnrollment(@Param("id", ParseIntPipe) id : number, @Request() req) {
-        return await this.enrollmentsService.create({
+        return await this.enrollmentsService.createOne({
             userId: req.user.id,
             courseId: id
         });
@@ -224,7 +224,7 @@ export class CoursesController {
     @Roles(Role.Admin)
     @Post(":id/mentors")
     async createMentorPermission(@Param("id", ParseIntPipe) courseId : number, @Body("mentorId", ParseIntPipe) mentorId) {
-        return await this.mentorPermissionsService.assign({
+        return await this.mentorPermissionsService.permit({
             mentorId: mentorId,
             courseId: courseId
         });
@@ -248,7 +248,7 @@ export class CoursesController {
     @Roles(Role.Admin)
     @Delete(":courseId/mentors/:mentorId")
     async kickMentor(@Param("courseId", ParseIntPipe) courseId: number, @Param("mentorId", ParseIntPipe) mentorId: number) {
-        return await this.mentorPermissionsService.unassign({
+        return await this.mentorPermissionsService.unpermit({
             courseId,
             mentorId
         });
