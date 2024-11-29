@@ -19,10 +19,10 @@ export class EnrollmentsController {
 
     @ApiBearerAuth()
     @ApiOperation({
-        summary: "Find all existing courses on the system (Admin only)"
+        summary: "Find all existing enrollments on the system (Admin only)"
     })
     @ApiOkResponse({
-        description: "Ok: Fetch courses successfully"
+        description: "Ok: Fetch enrollments successfully"
     })
     @ApiUnauthorizedResponse({
         description: "Unauthorized: Missing JWT"

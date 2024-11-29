@@ -14,7 +14,10 @@ import { AuditLogsService } from "src/audit-logs/audit-logs.service";
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller("users")
 export class UsersController {
-    constructor(private usersService: UsersService, private auditLogsService: AuditLogsService) {}
+    constructor(
+        private usersService: UsersService,
+        private auditLogsService: AuditLogsService
+    ) {}
 
     @ApiOperation({
         summary: "Get all users with optional criteria (Admin only)",
@@ -154,7 +157,6 @@ export class UsersController {
     @Roles(Role.Admin)
     @Delete(":id")
     async deleteUser(@Param("id", ParseIntPipe) id : number, @Req() req) {
-        await this.auditLogsService.deleteAuditLogs(id);
         return await this.usersService.deleteOne(id);
     }
 

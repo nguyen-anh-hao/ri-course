@@ -22,6 +22,16 @@ export class CoursesService {
         return new CourseEntity(course);
     }
 
+    async deleteCourse(id: number) {
+        const course = await this.prisma.course.delete({
+            where: {
+                id
+            }
+        });
+
+        return new CourseEntity(course);
+    }
+
     async findOneById(id: number) : Promise<CourseEntity> {
         const course = await this.prisma.course.findUnique({
             where: {

@@ -44,4 +44,15 @@ export class EnrollmentsService {
     
         return enrollments.map(enrollments => new UserEntity(enrollments.user));
     }
+
+    async kickLearnerFromCourse(learnerId: number, courseId: number) {
+        return await this.prisma.enrollment.delete({
+            where: {
+                userId_courseId: {
+                    userId: learnerId,
+                    courseId
+                }
+            }
+        })
+    }
 }

@@ -19,6 +19,7 @@ import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiF
 import { CourseEntity } from "./entities/course.entity";
 import { EnrollmentsService } from "src/enrollments/enrollments.service";
 import { MentorPermissionsService } from "src/mentor-permissions/mentor-permissions.service";
+import { MentorGuard } from "./guards/mentor.guard";
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -54,10 +55,10 @@ export class CoursesController {
         description: "May be both id and title are presented on the query string"
     })
     @Get()
-    async findAll(@Query("id") id? : number, @Query("title") title? : string) : Promise<CourseEntity[]> {
+    async findAllCourses(@Query("id") id? : number, @Query("title") title? : string) : Promise<CourseEntity[]> {
 
         if (id && title) 
-            throw new BadRequestException("Only one of id or title of the course can be passed into the course query");
+            throw new BadRequestException("Only one of id or title of the course can be passed into the query");
             
         if (id)
             return [await this.coursesService.findOneById(+id)];
@@ -90,8 +91,29 @@ export class CoursesController {
     @UseGuards(RolesGuard)
     @Roles(Role.Admin)
     @Post()
-    async create(@Body() createCourseDto: CreateCourseDto) : Promise<CourseEntity> {
+    async createCourse(@Body() createCourseDto: CreateCourseDto) : Promise<CourseEntity> {
         return await this.coursesService.create(createCourseDto);
+    }
+
+    // -----------------------------------------------
+
+    @ApiOperation({
+        summary: "Delete a course (Admin only)"
+    })
+    @ApiOkResponse({
+        description: "Ok: Deleted the given course successfully"
+    })
+    @ApiUnauthorizedResponse({
+        description: "Unauthorized: Missing JWT"
+    })
+    @ApiForbiddenResponse({
+        description: "Forbidden: The user with the JWT must be an Admin"
+    })
+    @UseGuards(RolesGuard)
+    @Roles(Role.Admin)
+    @Delete(":id")
+    async deleteCourse(@Param("id", ParseIntPipe) id: number) {
+        return await this.coursesService.deleteCourse(id);
     }
 
     // -----------------------------------------------
@@ -104,6 +126,9 @@ export class CoursesController {
     })
     @ApiUnauthorizedResponse({
         description: "Unauthorized: Missing JWT"
+    })
+    @ApiForbiddenResponse({
+        description: "The user with JWT must be a Learner"
     })
     @Get(":id/learners")
     async findAllLearners(@Param("id", ParseIntPipe) id : number) {
@@ -137,15 +162,34 @@ export class CoursesController {
     // -----------------------------------------------
 
     @ApiOperation({
-        summary: "Delete a learner enrollment from a course (Admin only) NOT IMPLEMENTED"
+        summary: "Delete a learner enrollment from a course (Admin and Mentor only)"
     })
+    @ApiOkResponse({
+        description: "Ok: Kicked learner from course successfully"
+    })
+    @ApiUnauthorizedResponse({
+        description: "Unauthorized: Missing JWT"
+    })
+    @ApiForbiddenResponse({
+        description: "Forbidden: The user with the JWT must be an Admin"
+    })
+    @UseGuards(RolesGuard)
+    @Roles(Role.Admin, Role.Mentor)
     @Delete(":courseId/learners/:learnerId")
-    async kickLearner() {
-
+    async kickLearner(@Param("courseId", ParseIntPipe) courseId: number, @Param("learnerId", ParseIntPipe) learnerId: number) {
+        return await this.enrollmentsService.kickLearnerFromCourse(learnerId, courseId);
     }
+
+    // -----------------------------------------------
 
     @ApiOperation({
         summary: "Find all mentors in a course"
+    })
+    @ApiOkResponse({
+        description: "Ok: Fetched all mentors in course successfully"
+    })
+    @ApiUnauthorizedResponse({
+        description: "Unauthorized: Missing JWT"
     })
     @Get(":id/mentors")
     async findAllMentors(@Param("id", ParseIntPipe) id : number) {
@@ -157,21 +201,62 @@ export class CoursesController {
     @ApiOperation({
         summary: "Create a mentor permission for accessing a course (Admin only)"
     })
+    @ApiBody({
+        description: "Hi just example value hihi",
+        examples: {
+            1: {
+                value: {
+                    mentorId: 6
+                }
+            }
+        }
+    })
+    @ApiCreatedResponse({
+        description: "Created: Granted course access permission to mentor successfully"
+    })
+    @ApiUnauthorizedResponse({
+        description: "Unauthorized: Missing JWT"
+    })
+    @ApiForbiddenResponse({
+        description: "Forbidden: The user with the JWT must be an Admin"
+    })
+    @UseGuards(RolesGuard)
+    @Roles(Role.Admin)
     @Post(":id/mentors")
-    async createMentorPermission(@Param("id", ParseIntPipe) id : number, @Body() body) {
+    async createMentorPermission(@Param("id", ParseIntPipe) courseId : number, @Body("mentorId", ParseIntPipe) mentorId) {
         return await this.mentorPermissionsService.assign({
-            mentorId: body.mentorId,
-            courseId: id
+            mentorId: mentorId,
+            courseId: courseId
         });
     }
 
     // -----------------------------------------------
 
     @ApiOperation({
-        summary: "Delete a mentor permission from a course (Admin only) NOT IMPLEMENTED"
+        summary: "Delete a mentor permission from a course (Admin only)"
     })
+    @ApiOkResponse({
+        description: "Ok: Kicked mentor from the course successfully"
+    })
+    @ApiUnauthorizedResponse({
+        description: "Unauthorized: Missing JWT"
+    })
+    @ApiForbiddenResponse({
+        description: "Forbidden: The user with the JWT must be an Admin"
+    })
+    @UseGuards(RolesGuard)
+    @Roles(Role.Admin)
     @Delete(":courseId/mentors/:mentorId")
-    async kickMentor() {
+    async kickMentor(@Param("courseId", ParseIntPipe) courseId: number, @Param("mentorId", ParseIntPipe) mentorId: number) {
+        return await this.mentorPermissionsService.unassign({
+            courseId,
+            mentorId
+        });
+    }
 
+    @UseGuards(MentorGuard)
+    @Get(":id/test")
+    async test(@Param("id", ParseIntPipe) id: number) {
+        return "hihi";
     }
 }

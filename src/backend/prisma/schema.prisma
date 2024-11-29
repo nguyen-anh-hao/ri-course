@@ -30,10 +30,10 @@ model User {
 
   lastSignIn DateTime @default(now())
 
-  auditLogs AuditLog[] @relation("changed")
+  auditLogs   AuditLog[] @relation("changed")
   auditedLogs AuditLog[] @relation("changer")
 
-  authorizedCourses CourseMentor[]
+  authorizedCourses MentorPermission[]
 }
 
 model Course {
@@ -44,16 +44,16 @@ model Course {
   title       String
   description String
 
-  users Enrollment[]
-  mentors CourseMentor[]
+  users   Enrollment[]
+  mentors MentorPermission[]
 }
 
 model Enrollment {
-  userId   Int
-  user User @relation(fields: [userId], references: [id])
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   courseId Int
-  course Course @relation(fields: [courseId], references: [id])
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   level     String?
@@ -68,27 +68,27 @@ enum Role {
 }
 
 model AuditLog {
-  id Int @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
 
   actionType String
 
-  userId Int
-  changedUser User @relation("changed", fields: [userId], references: [id])
+  userId      Int
+  changedUser User @relation("changed", fields: [userId], references: [id], onDelete: Cascade)
 
   adminId Int
-  changer User @relation("changer", fields: [adminId],  references: [id])
+  changer User? @relation("changer", fields: [adminId], references: [id])
 
   before Json?
-  after Json?
+  after  Json?
 }
 
-model CourseMentor {
-  mentorId   Int
-  mentor User @relation(fields: [mentorId], references: [id])
+model MentorPermission {
+  mentorId Int
+  mentor   User @relation(fields: [mentorId], references: [id], onDelete: Cascade)
 
   courseId Int
-  course Course @relation(fields: [courseId], references: [id])
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@id([mentorId, courseId])
 }
