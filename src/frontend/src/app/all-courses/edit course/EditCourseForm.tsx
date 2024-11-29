@@ -7,7 +7,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 
-const CreateEditCourse: React.FC = () => {
+const EditCourseForm: React.FC = () => {
     const [courseName, setCourseName] = useState('');
     const [mentors, setMentors] = useState<string[]>([]);
     const [newMentor, setNewMentor] = useState('');
@@ -135,4 +135,4 @@ const CreateEditCourse: React.FC = () => {
     );
 };
 
-export default CreateEditCourse;
+export default EditCourseForm;
