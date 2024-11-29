@@ -3,6 +3,7 @@ import { CreateCourseDto } from "./dto/create-course.dto";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CourseEntity } from "./entities/course.entity";
 import { UserEntity } from "src/users/entities/user.entity";
+import { UpdateCourseDto } from "./dto/update-course.dto";
 
 @Injectable()
 export class CoursesService {
@@ -78,5 +79,14 @@ export class CoursesService {
         });
 
         return users.map(user => new UserEntity(user));
+    }
+
+    async update(id: number, updateCourseDto: UpdateCourseDto): Promise<CourseEntity> {
+        const course = await this.prisma.course.update({
+            where: {id},
+            data: updateCourseDto
+        });
+
+        return new CourseEntity(course);
     }
 }

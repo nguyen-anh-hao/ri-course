@@ -10,6 +10,7 @@ import {
     ParseIntPipe,
     Param,
     Request,
+    Patch,
 } from "@nestjs/common";
 import { CoursesService } from "./courses.service";
 import { CreateCourseDto } from "./dto/create-course.dto";
@@ -20,6 +21,7 @@ import { CourseEntity } from "./entities/course.entity";
 import { EnrollmentsService } from "src/enrollments/enrollments.service";
 import { MentorPermissionsService } from "src/mentor-permissions/mentor-permissions.service";
 import { MentorGuard } from "./guards/mentor.guard";
+import { UpdateCourseDto } from "./dto/update-course.dto";
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -258,5 +260,31 @@ export class CoursesController {
     @Get(":id/test")
     async test(@Param("id", ParseIntPipe) id: number) {
         return "hihi";
+    }
+
+    // -----------------------------------------------
+
+    @ApiOperation({
+        summary: "Update a course (Admin only)"
+    })
+    @ApiBody({
+        description: "Info of the course",
+        type: UpdateCourseDto
+    })
+    @ApiCreatedResponse({
+        description: "Updated: Course create successfully",
+        type: CourseEntity
+    })
+    @ApiUnauthorizedResponse({
+        description: "Unauthorized: Missing JWT"
+    })
+    @ApiForbiddenResponse({
+        description: "Forbidden: The user with the JWT must be an Admin"
+    })
+    @UseGuards(RolesGuard)
+    @Roles(Role.Admin)
+    @Patch(":id")
+    async update(@Param("id", ParseIntPipe) id: number, @Body() updateCourseDto:UpdateCourseDto): Promise<CourseEntity> {
+        return await this.coursesService.update(id, updateCourseDto);
     }
 }
