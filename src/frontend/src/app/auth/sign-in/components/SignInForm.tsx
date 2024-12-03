@@ -12,7 +12,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
 
 // Config
-import config from '@/config/config';
+import appConfig from '@/config/appConfig';
 import { errorMessages } from '@/config/errorMessages';
 
 // Context
@@ -35,7 +35,7 @@ const SignInForm: React.FC = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post(`${config.API_BASE_URL}/auth/signin`, { username, password });
+            const response = await axios.post(`${appConfig.API_BASE_URL}/auth/signin`, { username, password });
             setMessage('Đăng nhập thành công!');
             signin(username, response.data.access_token);
             router.push('/');
@@ -45,7 +45,6 @@ const SignInForm: React.FC = () => {
                 errorMessages[error.status] || 'Đăng nhập không thành công!'
                 : 'Đã xảy ra lỗi!';
             setMessage(errorMessage);
-            console.log(errorMessage);
         }
     };
 

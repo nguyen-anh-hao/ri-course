@@ -72,6 +72,15 @@ const lightTheme: ThemeOptions = {
                     color: colors.light.text.primary,
                 }
             }
+        },
+        MuiDialog: {
+            styleOverrides: {
+                paper: {
+                    backdropFilter: 'blur(10px)',
+                    boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.05)',
+                    backgroundColor: colors.light.background.paper,
+                }
+            }
         }
     },
 };
@@ -143,6 +152,15 @@ const darkTheme: ThemeOptions = {
             styleOverrides: {
                 root: {
                     color: colors.dark.text.primary,
+                }
+            }
+        },
+        MuiDialog: {
+            styleOverrides: {
+                paper: {
+                    backdropFilter: 'blur(10px)',
+                    boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.05)',
+                    backgroundColor: colors.dark.background.paper,
                 }
             }
         }

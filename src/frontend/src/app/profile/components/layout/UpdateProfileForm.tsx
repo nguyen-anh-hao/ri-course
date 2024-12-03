@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { User } from '@/interfaces/user.interface';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import config from '@/config/config';
+import appConfig from '@/config/appConfig';
 import { getCookie } from 'cookies-next';
 
 const UpdateProfileForm: React.FC = () => {
@@ -25,7 +25,7 @@ const UpdateProfileForm: React.FC = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await axios.get<User>(`${config.API_BASE_URL}/users/me`);
+                const response = await axios.get<User>(`${appConfig.API_BASE_URL}/users/me`);
                 setUser(response.data);
                 setFullname(response.data.fullname ?? response.data.username ?? '');
                 setDay(new Date(response.data.dob).getDate());
@@ -51,7 +51,7 @@ const UpdateProfileForm: React.FC = () => {
                 (day !== null ? day : 1),
                 7, 0, 0
             );
-            const response = await axios.patch(`${config.API_BASE_URL}/users/me`, { fullname, dob, email });
+            await axios.patch(`${appConfig.API_BASE_URL}/users/me`, { fullname, dob, email });
             router.push('/profile');
         } catch (error) {
             console.error('Error updating user data:', error);
@@ -76,6 +76,7 @@ const UpdateProfileForm: React.FC = () => {
                     name='name'
                     value={fullname ? fullname : ''}
                     onChange={(e) => setFullname(e.target.value)}
+                    sx={{ mb: 2 }}
                 />
                 <Grid container spacing={2}>
                     <Grid item xs={4}>

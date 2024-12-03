@@ -7,7 +7,7 @@ import UserProfileMenu from './components/layout/UserProfileMenu';
 import { User } from '@/interfaces/user.interface';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import config from '@/config/config';
+import appConfig from '@/config/appConfig';
 import { getCookie } from 'cookies-next';
 
 const ProfileInfo = () => {
@@ -17,10 +17,8 @@ const ProfileInfo = () => {
         const fetchUser = async () => {
             try {
                 const token = getCookie('token');
-                if (token) {
-                    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-                }
-                const response = await axios.get<User>(`${config.API_BASE_URL}/users/me`);
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                const response = await axios.get<User>(`${appConfig.API_BASE_URL}/users/me`);
                 setUser(response.data);
             } catch (error) {
                 console.error('Error fetching user data:', error);
