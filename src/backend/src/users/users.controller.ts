@@ -1,11 +1,11 @@
-import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, Request, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, ParseArrayPipe, ParseIntPipe, Patch, Post, Query, Req, Request, UseGuards, UseInterceptors } from "@nestjs/common";
 import { Role, Roles } from "src/auth/role";
 import { RolesGuard, JwtAuthGuard } from "src/auth/guards";
 import { InfoUpdateGuard } from "src/users/guards";
 import { UsersService } from "./users.service";
 import { UserEntity } from "./entities/user.entity";
 import { CourseEntity } from "src/courses/entities/course.entity";
-import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiForbiddenResponse, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiParam, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiForbiddenResponse, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { CreateUserDto } from "./dtos";
 import { AuditLogsService } from "src/audit-logs/audit-logs.service";
 
@@ -14,10 +14,17 @@ import { AuditLogsService } from "src/audit-logs/audit-logs.service";
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller("users")
 export class UsersController {
-    constructor(private usersService: UsersService, private auditLogsService: AuditLogsService) {}
+    constructor(
+        private usersService: UsersService,
+        private auditLogsService: AuditLogsService
+    ) {}
 
     @ApiOperation({
-        summary: "Get all users (Admin only)",
+        summary: "Get all users with optional criteria (Admin only)",
+    })
+    @ApiQuery({
+        name: "role",
+        required: false
     })
     @ApiOkResponse({
         description: "Ok: fetch all users successfully",
@@ -31,9 +38,9 @@ export class UsersController {
     })
     @UseGuards(RolesGuard)
     @Roles(Role.Admin)
-    @Get("all")
-    async findAll() {
-        return await this.usersService.findAll();
+    @Get("")
+    async findAll(@Query() query) {
+        return await this.usersService.findAll(query);
     }
 
     // -----------------------------------------------
@@ -58,7 +65,7 @@ export class UsersController {
     @Post("")
     async create(@Body() createUserDto: CreateUserDto, @Req() req) {
         const newUser = await this.usersService.createOne(createUserDto);
-        await this.auditLogsService.createAuditLogs({
+        await this.auditLogsService.createOne({
             actionType: "Create",
             userId: newUser.id,
             adminId: req.user.id
@@ -119,7 +126,7 @@ export class UsersController {
         await this.usersService.updateOne(id, req.body);
         const afterUpdate = await this.usersService.findById(id);
         
-        await this.auditLogsService.createAuditLogs({
+        await this.auditLogsService.createOne({
             actionType: "Update",
             userId: id,
             adminId: req.user.id,
@@ -150,7 +157,6 @@ export class UsersController {
     @Roles(Role.Admin)
     @Delete(":id")
     async deleteUser(@Param("id", ParseIntPipe) id : number, @Req() req) {
-        await this.auditLogsService.deleteAuditLogs(id);
         return await this.usersService.deleteOne(id);
     }
 
