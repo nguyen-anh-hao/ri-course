@@ -47,11 +47,26 @@ const Header: React.FC = () => {
         router.push('/');
     };
 
-    const navItems = [
+    const learnerNavItems = [
         { key: 1, text: 'Học tập', path: '/my-courses' },
         { key: 2, text: 'Khóa học', path: '/all-courses' },
-        { key: 3, text: 'Kỳ thi', path: '#' },
-        { key: 4, text: 'Diễn đàn', path: '#' },
+        { key: 3, text: 'Bài tập', path: '/assignments' },
+        { key: 4, text: 'Bài thi', path: '/tests' },
+        { key: 5, text: 'Bài kiểm tra', path: '/exams' },
+        { key: 6, text: 'Bài giảng', path: '/lectures' },
+    ];
+
+    const mentorNavItems = [
+        { key: 1, 'text': 'Quản lý khóa học', 'path': '/mentor/courses' },
+        { key: 2, 'text': 'Quản lý bài giảng', 'path': '/mentor/lectures' },
+        { key: 3, 'text': 'Quản lý bài kiểm tra', 'path': '/mentor/exams' },
+        { key: 4, 'text': 'Quản lý bài thi', 'path': '/mentor/tests' },
+        { key: 5, 'text': 'Quản lý bài tập', 'path': '/mentor/assignments' },
+    ];
+
+    const adminNavItems = [
+        { key: 1, text: 'Quản lý người dùng', path: '/admin/user-accounts' },
+        { key: 2, text: 'Quản lý khóa học', path: '/admin/courses' },
     ];
 
     return (
@@ -75,9 +90,19 @@ const Header: React.FC = () => {
                                 </Typography>
                             </Box>
                         </Link>
-                        {navItems.map((item) => (
-                            <NavItem key={item.key} text={item.text} isActive={pathname.includes(item.path)} onClick={() => router.push(item.path)} />
-                        ))}
+                        {sessionStorage.getItem('role') == '"Learner"' ? (
+                            learnerNavItems.map((item) => (
+                                <NavItem key={item.key} text={item.text} isActive={pathname.includes(item.path)} onClick={() => router.push(item.path)} />
+                            ))
+                        ) : sessionStorage.getItem('role') == '"Mentor"' ? (
+                            mentorNavItems.map((item) => (
+                                <NavItem key={item.key} text={item.text} isActive={pathname.includes(item.path)} onClick={() => router.push(item.path)} />
+                            ))
+                        ) : sessionStorage.getItem('role') === '"Admin"' ? (
+                            adminNavItems.map((item) => (
+                                <NavItem key={item.key} text={item.text} isActive={pathname.includes(item.path)} onClick={() => router.push(item.path)} />
+                            ))
+                        ) : null}
                     </Box>
                     {user ? (
                         <>

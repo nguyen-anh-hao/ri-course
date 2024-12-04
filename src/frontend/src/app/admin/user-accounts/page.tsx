@@ -5,20 +5,21 @@ import UserAccountsTable from './components/UserAccountsTable';
 import { Container, Typography } from '@mui/material';
 import axios from 'axios';
 import appConfig from '@/config/appConfig';
-import { getCookie } from 'cookies-next';
 import { useState } from 'react';
 import { User } from './interfaces/user.interfaces';
+import { useRefresh } from '@/context/RefreshContext';
+import { getToken } from '@/utils/getToken';
 
 export default function UserAccountsPage() {
-    const token = getCookie('token');
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
     const [userAccounts, setUserAccounts] = useState<User[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const { refresh } = useRefresh();
 
     useEffect(() => {
         const fetchUsers = async () => {
             try {
+                const token = await getToken();
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 const response = await axios.get(`${appConfig.API_BASE_URL}/users/all`);
                 setUserAccounts(response.data);
             } catch (error) {
@@ -29,7 +30,7 @@ export default function UserAccountsPage() {
         }
 
         fetchUsers();
-    }, []);
+    }, [refresh]);
 
     if (loading) return <></>;
 

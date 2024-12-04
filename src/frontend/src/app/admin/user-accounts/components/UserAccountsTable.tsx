@@ -9,6 +9,7 @@ import NewUserForm from './NewUserForm';
 import { User } from '../interfaces/user.interfaces';
 import axios from 'axios';
 import appConfig from '@/config/appConfig';
+import { useRefresh } from '@/context/RefreshContext';
 
 interface UserAccountsTableProps {
     users: User[];
@@ -25,6 +26,7 @@ const UserAccountsTable: React.FC<UserAccountsTableProps> = ({ users }) => {
     const [open, setOpen] = useState(false);
     const [newUser, setNewUser] = useState(false);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const { setRefresh } = useRefresh();
 
     const handleMenuClick = (event: React.MouseEvent<HTMLElement>, user: User) => {
         setAnchorEl(event.currentTarget);
@@ -64,8 +66,8 @@ const UserAccountsTable: React.FC<UserAccountsTableProps> = ({ users }) => {
             if (confirmDelete) {
                 try {
                     axios.delete(`${appConfig.API_BASE_URL}/users/${selectedUser.id}`);
-                    setSelectedUser(null);
                     alert(`Tài khoản ${selectedUser.username} đã bị xóa.`);
+                    setRefresh((prev) => !prev);
                 } catch (error) {
                     console.error('Error deleting user:', error);
                 }

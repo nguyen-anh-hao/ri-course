@@ -4,6 +4,7 @@ import { User } from '../interfaces/user.interfaces';
 import { useState } from 'react';
 import axios from 'axios';
 import appConfig from '@/config/appConfig';
+import { useRefresh } from '@/context/RefreshContext';
 
 const toISO8601 = (date: string): string => {
     const [day, month, year] = date.split('/');
@@ -57,6 +58,8 @@ const NewUserForm: React.FC<NewUserFormProps> = ({ open, onClose }) => {
     const [role, setRole] = useState<string>('');
     const [dob, setDob] = useState<string>('');
 
+    const { setRefresh } = useRefresh();
+
     async function newUser(data: { fullname: string; username: string; email: string; dob: string; password: string; }) {
         try {
             const newUser = {
@@ -67,6 +70,7 @@ const NewUserForm: React.FC<NewUserFormProps> = ({ open, onClose }) => {
             await axios.post(`${appConfig.API_BASE_URL}/users`, newUser);
 
             alert('Thêm tài khoản thành công');
+            setRefresh((prev) => !prev);
         } catch (error) {
             console.error('Error creating new user:', error);
         }

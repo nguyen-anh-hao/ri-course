@@ -9,8 +9,6 @@ const LandingPage = () => {
     const theme = useTheme().theme;
     const { user } = useAuth();
 
-    const token = getCookie('token');
-
     return (
         <Container maxWidth='lg'>
             <Typography component='h1' variant='h5' color={theme.palette.text.primary}>

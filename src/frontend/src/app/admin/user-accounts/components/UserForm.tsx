@@ -4,6 +4,7 @@ import { User } from '../interfaces/user.interfaces';
 import { useState } from 'react';
 import axios from 'axios';
 import appConfig from '@/config/appConfig';
+import { useRefresh } from '@/context/RefreshContext';
 
 const formatDate = (date: Date): string => {
     return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
@@ -65,10 +66,13 @@ const UserForm: React.FC<UserFormProps> = ({ open, onClose, user }) => {
     const [role, setRole] = useState<string>(roleMap.find(role => role.value === user.roles[0])?.value ?? '');
     const [dob, setDob] = useState<string>(formatDate(new Date(user.dob)));
 
+    const { setRefresh } = useRefresh();
+
     const patchUser = async (userId: string, data: { fullname: string, username: string, email: string, roles: string[], dob: string }) => {
         try {
             await axios.patch(`${appConfig.API_BASE_URL}/users/${userId}`, data);
             alert('Cập nhật tài khoản thành công');
+            setRefresh(prev => !prev);
         } catch (error) {
             console.error('Error updating user:', error);
         }

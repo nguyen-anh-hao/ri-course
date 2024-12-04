@@ -35,8 +35,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const signout = () => {
         setUser(null);
-        sessionStorage.removeItem('user');
         deleteCookie('token');
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('role');
     };
 
     useEffect(() => {
