@@ -4,7 +4,7 @@ import CourseCard from '@/components/ui/CourseCard';
 import { Box, Container, Grid, Typography } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import config from '@/config/config';
+import appConfig from '@/config/appConfig';
 import { getCookie } from 'cookies-next';
 
 export default function AllCourses() {
@@ -23,7 +23,7 @@ export default function AllCourses() {
     const [courses, setCourses] = useState<{ [key: number]: Course }>({});
 
     useEffect(() => {
-        axios.get(`${config.API_BASE_URL}/users/me/courses`)
+        axios.get(`${appConfig.API_BASE_URL}/users/me/courses`)
             .then(response => {
                 const coursesData = response.data.reduce((acc: { [key: number]: Course }, course: Course) => {
                     acc[course.id] = course;

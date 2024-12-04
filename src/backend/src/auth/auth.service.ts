@@ -3,12 +3,15 @@ import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "src/users/users.service";
 import { SignInDto, SignUpDto,  ChangePasswordDto } from "./dtos";
 import * as bcrypt from "bcrypt";
+import { $Enums } from "@prisma/client";
+import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
 export class AuthService {
     constructor(
         private usersService: UsersService,
         private jwtService: JwtService,
+        private prisma : PrismaService
     ) {}
 
     async validateUser(username: string, password: string) {
@@ -30,6 +33,15 @@ export class AuthService {
             roles,
         };
 
+        await this.prisma.user.update({
+            where: {
+                id
+            },
+            data: {
+                lastSignIn: new Date()
+            }
+        })
+
         return {
             access_token: this.jwtService.sign(payload),
         };
@@ -44,18 +56,21 @@ export class AuthService {
 
         const hashedPassword = await bcrypt.hash(password, 11);
 
-        return await this.usersService.createOne({
-            ...signUpDto,
-            password: hashedPassword,
-        });
+        return await this.usersService.createOne(
+            {
+                ...signUpDto,
+                password: hashedPassword,
+                roles: [$Enums.Role.Learner]
+            }
+        );
     }
 
-    async changePassword(username : string, changePasswordDto: ChangePasswordDto) {
+    async changePassword(id: number, changePasswordDto: ChangePasswordDto) {
         const { newPassword } = changePasswordDto;
 
         const hashedNewPassword = await bcrypt.hash(newPassword, 11);
 
-        return await this.usersService.updateOne(username, {
+        return await this.usersService.updateOne(id, {
             password: hashedNewPassword,
         });
     }

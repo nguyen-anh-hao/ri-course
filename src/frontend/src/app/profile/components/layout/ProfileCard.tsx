@@ -36,33 +36,39 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user }) => {
                         <Avatar sx={{ width: '100%', height: '100%' }} />
                     </Box>
                     <Typography variant='body1'>
-                        {user?.username !== undefined ?
-                            user.username :
-                            <Skeleton width="100%">
-                                <Typography>username</Typography>
-                            </Skeleton>}
+                        {user?.username != null ? user?.username : <Skeleton variant='text' width={100} />}
                     </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, flexGrow: 1 }}>
                     <Box sx={{ display: 'flex', gap: 4 }}>
                         <Typography variant='body1' sx={{ fontWeight: 'bold', width: '180px' }}>Họ và tên</Typography>
-                        <Typography variant='body1'>{fullname}</Typography>
+                        <Typography variant='body1'>
+                            {fullname != null ? fullname : <Skeleton variant='text' width={100} />}
+                        </Typography>
                     </Box>
                     <Box sx={{ display: 'flex', gap: 4 }}>
                         <Typography variant='body1' sx={{ fontWeight: 'bold', width: '180px' }}>Ngày tháng năm sinh</Typography>
-                        <Typography variant='body1'>{dob}</Typography>
+                        <Typography variant='body1'>
+                            {dob != null ? dob : <Skeleton variant='text' width={100} />}
+                        </Typography>
                     </Box>
                     <Box sx={{ display: 'flex', gap: 4 }}>
                         <Typography variant='body1' sx={{ fontWeight: 'bold', width: '180px' }}>Email</Typography>
-                        <Typography variant='body1'>{user?.email != null ? user?.email : ''}</Typography>
+                        <Typography variant='body1'>
+                            {user?.email != null ? user?.email : <Skeleton variant='text' width={100} />}
+                        </Typography>
                     </Box>
                     <Box sx={{ display: 'flex', gap: 4 }}>
                         <Typography variant='body1' sx={{ fontWeight: 'bold', width: '180px' }}>Vai trò</Typography>
-                        <Typography variant='body1'>{roles}</Typography>
+                        <Typography variant='body1'>
+                            {roles != null ? roles : <Skeleton variant='text' width={100} />}
+                        </Typography>
                     </Box>
                     <Box sx={{ display: 'flex', gap: 4 }}>
                         <Typography variant='body1' sx={{ fontWeight: 'bold', width: '180px' }}>Ngày tạo tài khoản</Typography>
-                        <Typography variant='body1'>{createAt}</Typography>
+                        <Typography variant='body1'>
+                            {createAt != null ? createAt : <Skeleton variant='text' width={100} />}
+                        </Typography>
                     </Box>
                 </Box>
             </Box>
