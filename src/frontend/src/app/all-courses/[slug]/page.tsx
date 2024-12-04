@@ -2,12 +2,12 @@ import axios from 'axios';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import CourseInfo from '../components/CourseInfo';
-import config from '@/config/config';
+import appConfig from '@/config/appConfig';
 import generateSlug from '@/utils/generateSlug';
 
 const fetchCourseData = async (slug: string, token: string) => {
     try {
-        const response = await axios.get(`${config.API_BASE_URL}/courses/`, {
+        const response = await axios.get(`${appConfig.API_BASE_URL}/courses/`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -24,10 +24,8 @@ const fetchCourseData = async (slug: string, token: string) => {
 export default async function CoursePage({ params }: { params: { slug: string } }) {
     const { slug } = params;
 
-    console.log('slug:', slug);
     const cookieStore = cookies();
     const token = (await cookieStore).get('token')?.value;
-    console.log('token:', token);
 
     if (!token) {
         return notFound();

@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(user);
         sessionStorage.setItem('user', JSON.stringify(user));
         setCookie('token', token, {
-            maxAge: 60 * 60 * 24 * 7,
+            maxAge: 60 * 60,
             httpOnly: false,
             sameSite: 'lax',
             path: '/',
@@ -35,8 +35,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const signout = () => {
         setUser(null);
-        sessionStorage.removeItem('user');
         deleteCookie('token');
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('role');
     };
 
     useEffect(() => {

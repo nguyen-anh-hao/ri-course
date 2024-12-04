@@ -3,7 +3,7 @@
 import React from 'react';
 import { Paper, Box, TextField, Button, Typography, Alert } from '@mui/material';
 import axios from 'axios';
-import config from '@/config/config';
+import appConfig from '@/config/appConfig';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getCookie } from 'cookies-next';
@@ -29,7 +29,7 @@ const ChangePasswordForm: React.FC = () => {
         }
 
         try {
-            await axios.patch(`${config.API_BASE_URL}/auth/change-password`, {
+            await axios.patch(`${appConfig.API_BASE_URL}/auth/change-password`, {
                 oldPassword,
                 newPassword
             });

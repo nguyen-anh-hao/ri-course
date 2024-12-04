@@ -9,7 +9,7 @@ import { Alert, Box, Button, Container, Divider, IconButton, InputAdornment, Pap
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 // Config
-import config from '@/config/config';
+import appConfig from '@/config/appConfig';
 
 // CryptoJS
 import CryptoJS from 'crypto-js';
@@ -51,13 +51,12 @@ const SignUpForm: React.FC<{ userAgent: string, secret: string }> = ({ userAgent
         try {
             const fullname = username; // Default full name
             const dob = new Date(2000, 0, 1, 7, 0, 0); // Default date of birth
-            const response = await axios.post(`${config.API_BASE_URL}/auth/signup`, { username, password, dob }, {
+            await axios.post(`${appConfig.API_BASE_URL}/auth/signup`, { fullname, username, password, dob }, {
                 headers: { 'Sign-Up-Token': signupToken },
             });
             setMessage('Đăng ký thành công!');
             router.push('/auth/sign-in');
         } catch (error: any) {
-            console.log(error.status);
             const errorMessage = error.response?.data.message ?
                 errorMessages[error.status] || 'Đăng ký không thành công!'
                 : 'Đã xảy ra lỗi!';

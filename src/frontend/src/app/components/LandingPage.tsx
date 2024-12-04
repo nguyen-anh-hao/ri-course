@@ -9,14 +9,6 @@ const LandingPage = () => {
     const theme = useTheme().theme;
     const { user } = useAuth();
 
-    const token = getCookie('token');
-
-    if (!token) {
-        console.log('No token found in cookies');
-    } else {
-        console.log('Token:', token);
-    }
-
     return (
         <Container maxWidth='lg'>
             <Typography component='h1' variant='h5' color={theme.palette.text.primary}>

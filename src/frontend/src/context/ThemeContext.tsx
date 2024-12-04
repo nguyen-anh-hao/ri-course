@@ -14,19 +14,19 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-        const storedThemePreference = sessionStorage.getItem('isDarkMode');
+        const storedThemePreference = localStorage.getItem('isDarkMode');
         return storedThemePreference ? storedThemePreference === 'true' : false;
     });
 
     useEffect(() => {
-        const storedThemePreference = sessionStorage.getItem('isDarkMode');
+        const storedThemePreference = localStorage.getItem('isDarkMode');
         if (storedThemePreference) {
             setIsDarkMode(storedThemePreference === 'true');
         }
     }, []);
 
     useEffect(() => {
-        sessionStorage.setItem('isDarkMode', isDarkMode.toString());
+        localStorage.setItem('isDarkMode', isDarkMode.toString());
     }, [isDarkMode]);
 
     const toggleDarkMode = () => {
