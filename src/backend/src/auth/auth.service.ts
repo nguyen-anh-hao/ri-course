@@ -48,18 +48,9 @@ export class AuthService {
     }
 
     async signup(signUpDto: SignUpDto) {
-        const { username, password } = signUpDto;
-
-        const isTaken = await this.usersService.isUsernameTaken(username);
-        if (isTaken === true)
-            throw new BadRequestException("Username is already taken");
-
-        const hashedPassword = await bcrypt.hash(password, 11);
-
         return await this.usersService.createOne(
             {
                 ...signUpDto,
-                password: hashedPassword,
                 roles: [$Enums.Role.Learner]
             }
         );

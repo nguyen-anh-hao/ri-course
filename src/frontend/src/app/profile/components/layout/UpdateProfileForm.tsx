@@ -3,7 +3,7 @@
 import React from 'react';
 import { Paper, Box, TextField, Button, Typography, Grid, Avatar } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { User } from '@/interfaces/user.interface';
+import { User } from '@/interfaces/user.interfaces';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import appConfig from '@/config/appConfig';

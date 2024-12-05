@@ -6,7 +6,6 @@ import { UsersModule } from "./users/users.module";
 import configuration from "./config/configuration";
 import { ConfigModule } from "@nestjs/config";
 import { CoursesModule } from "./courses/courses.module";
-import { EnrollmentsModule } from "./enrollments/enrollments.module";
 import { PrismaModule } from "./prisma/prisma.module";
 
 @Module({
@@ -18,8 +17,7 @@ import { PrismaModule } from "./prisma/prisma.module";
             load: [configuration],
         }),
         CoursesModule,
-        EnrollmentsModule,
-        PrismaModule,
+        PrismaModule
     ],
     controllers: [AppController],
     providers: [AppService],

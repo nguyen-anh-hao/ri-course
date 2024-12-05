@@ -1,6 +1,5 @@
 import React from 'react';
 import { MenuItem, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, patch } from '@mui/material';
-import { User } from '../interfaces/user.interfaces';
 import { useState } from 'react';
 import axios from 'axios';
 import appConfig from '@/config/appConfig';
@@ -151,7 +150,7 @@ const NewUserForm: React.FC<NewUserFormProps> = ({ open, onClose }) => {
                     } else {
                         alert('Vui lòng điền đầy đủ thông tin');
                     }
-                }} color='primary'>
+                }}>
                     Lưu
                 </Button>
             </DialogActions>
