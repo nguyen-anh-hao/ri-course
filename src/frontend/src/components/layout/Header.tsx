@@ -6,9 +6,10 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 
 // Material-UI components
-import { AppBar, Toolbar, Typography, Container, Box, Button, IconButton, Avatar, Menu, MenuItem } from '@mui/material';
+import { AppBar, Toolbar, Typography, Container, Box, Button, IconButton, Avatar, Menu, MenuItem, Drawer, List, ListItem, ListItemText, ListItemButton } from '@mui/material';
 import Brightness2OutlinedIcon from '@mui/icons-material/Brightness2Outlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
+import MenuIcon from '@mui/icons-material/Menu';
 
 // Custom components
 import NavItem from '@/components/ui/NavItem';
@@ -27,6 +28,7 @@ const Header: React.FC = () => {
 
     const { user, signout } = useAuth();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [drawerOpen, setDrawerOpen] = useState(false);
 
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -47,13 +49,16 @@ const Header: React.FC = () => {
         router.push('/');
     };
 
+    const handleDrawerToggle = () => {
+        setDrawerOpen(!drawerOpen);
+    };
+
     const learnerNavItems = [
         { key: 1, text: 'Học tập', path: '/my-courses' },
         { key: 2, text: 'Khóa học', path: '/all-courses' },
-        { key: 3, text: 'Bài tập', path: '/assignments' },
-        { key: 4, text: 'Bài thi', path: '/tests' },
-        { key: 5, text: 'Bài kiểm tra', path: '/exams' },
-        { key: 6, text: 'Bài giảng', path: '/lectures' },
+        { key: 3, text: 'Bài giảng', path: '/lectures' },
+        { key: 4, text: 'Bài tập', path: '/assignments' },
+        { key: 5, text: 'Kiểm tra', path: '/exams' },
     ];
 
     const mentorNavItems = [
@@ -66,13 +71,54 @@ const Header: React.FC = () => {
 
     const adminNavItems = [
         { key: 1, text: 'Quản lý người dùng', path: '/admin/user-accounts' },
-        { key: 2, text: 'Quản lý khóa học', path: '/admin/courses' },
+        { key: 2, text: 'Quản lý khóa học', path: '/admin/all-courses' },
     ];
+
+    const navItems = sessionStorage.getItem('role') === '"Mentor"' ? mentorNavItems :
+        sessionStorage.getItem('role') === '"Admin"' ? adminNavItems : learnerNavItems;
 
     return (
         <AppBar>
             <Container maxWidth={false}>
                 <Toolbar disableGutters>
+                    <IconButton
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        onClick={handleDrawerToggle}
+                        sx={{ display: { xs: 'block', md: 'none' } }}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Drawer
+                        anchor="left"
+                        open={drawerOpen}
+                        onClose={handleDrawerToggle}
+                        PaperProps={{
+                            sx: {
+                                backdropFilter: 'blur(10px)',
+                            },
+                        }}
+                    >
+                        <List>
+                            {navItems.map((item) => (
+                                <ListItem key={item.key} disablePadding>
+                                    <ListItemButton
+                                        onClick={() => { router.push(item.path); handleDrawerToggle(); }}
+                                        selected={pathname.includes(item.path)}
+                                        sx={{
+                                            backgroundColor: pathname.includes(item.path) ? theme.palette.action.selected : 'inherit',
+                                            '&:hover': {
+                                                backgroundColor: pathname.includes(item.path) ? theme.palette.action.selected : theme.palette.action.hover,
+                                            }
+                                        }}
+                                    >
+                                        <ListItemText primary={item.text} />
+                                    </ListItemButton>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Drawer>
                     <Box display='flex' alignItems='center' flexGrow={1} gap='8px'>
                         <Link href='/' passHref style={{ textDecoration: 'none' }}>
                             <Box display='flex' alignItems='center' gap='16px' sx={{ padding: '0px 12px 0px 0px' }}>
@@ -84,25 +130,17 @@ const Header: React.FC = () => {
                                 <Typography
                                     variant='h6'
                                     component='div'
-                                    sx={{ color: theme.palette.text.primary }}
+                                    sx={{ color: theme.palette.text.primary, display: { xs: 'none', sm: 'block' } }}
                                 >
                                     RiCourse
                                 </Typography>
                             </Box>
                         </Link>
-                        {sessionStorage.getItem('role') == '"Learner"' ? (
-                            learnerNavItems.map((item) => (
+                        <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                            {navItems.map((item) => (
                                 <NavItem key={item.key} text={item.text} isActive={pathname.includes(item.path)} onClick={() => router.push(item.path)} />
-                            ))
-                        ) : sessionStorage.getItem('role') == '"Mentor"' ? (
-                            mentorNavItems.map((item) => (
-                                <NavItem key={item.key} text={item.text} isActive={pathname.includes(item.path)} onClick={() => router.push(item.path)} />
-                            ))
-                        ) : sessionStorage.getItem('role') === '"Admin"' ? (
-                            adminNavItems.map((item) => (
-                                <NavItem key={item.key} text={item.text} isActive={pathname.includes(item.path)} onClick={() => router.push(item.path)} />
-                            ))
-                        ) : null}
+                            ))}
+                        </Box>
                     </Box>
                     {user ? (
                         <>

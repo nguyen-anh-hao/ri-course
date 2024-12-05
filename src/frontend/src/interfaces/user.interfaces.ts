@@ -6,4 +6,6 @@ export interface User {
     roles: string[];
     dob: string;
     createAt: string;
+    updatedAt?: string;
+    lastSignIn?: string;
 }

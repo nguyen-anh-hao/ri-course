@@ -3,7 +3,7 @@
 import React from 'react';
 import { Paper, Box, Avatar, Button, Typography, Skeleton } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { User } from '@/interfaces/user.interface';
+import { User } from '@/interfaces/user.interfaces';
 
 interface ProfileCardProps {
     user?: User | null;
