@@ -1,0 +1,9 @@
+Compare report/2024-11-20_19-39-02_0.jpg with report/2024-11-20_19-38-42_0.jpg: Verified: True, Distance: 0.19731726872097344
+Compare report/2024-11-20_19-39-02_0.jpg with report/2024-11-20_19-38-42_1.jpg: Verified: True, Distance: 0.3024065060184149
+Compare report/2024-11-20_19-39-02_0.jpg with report/2024-11-20_19-38-42_2.jpg: Verified: True, Distance: 0.22410126004095687
+Compare report/2024-11-20_19-39-02_0.jpg with report/2024-11-20_19-38-42_3.jpg: Verified: True, Distance: 0.16408898017928286
+Compare report/2024-11-20_19-39-02_0.jpg with report/2024-11-20_19-38-42_4.jpg: Verified: True, Distance: 0.15400522865550537
+Compare report/2024-11-20_19-39-02_1.jpg with report/2024-11-20_19-38-42_0.jpg: Verified: True, Distance: 0.2308312532638772
+Compare report/2024-11-20_19-39-02_1.jpg with report/2024-11-20_19-38-42_1.jpg: Verified: True, Distance: 0.3047558863318387
+Compare report/2024-11-20_19-39-02_1.jpg with report/2024-11-20_19-38-42_2.jpg: Verified: True, Distance: 0.21212711894529446
+Compare report/2024-11-20_19-39-02_1.jpg with report/2024-11-20_19-38-42_3.jpg: Verified: True, Distance: 0.18257573537016925
