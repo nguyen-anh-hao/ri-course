@@ -78,10 +78,27 @@ const lightTheme: ThemeOptions = {
                 paper: {
                     backdropFilter: 'blur(10px)',
                     boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.05)',
-                    backgroundColor: colors.light.background.paper,
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
                 }
             }
-        }
+        },
+        MuiTableRow: {
+            styleOverrides: {
+                root: {
+                    '&:hover': {
+                        backgroundColor: 'rgba(0, 0, 0, 0.07)',
+                    },
+                },
+            },
+        },
+        MuiAutocomplete: {
+            styleOverrides: {
+                paper: {
+                    backdropFilter: 'blur(10px)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                },
+            },
+        },
     },
 };
 
@@ -160,9 +177,26 @@ const darkTheme: ThemeOptions = {
                 paper: {
                     backdropFilter: 'blur(10px)',
                     boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.05)',
-                    backgroundColor: colors.dark.background.paper,
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
                 }
             }
+        },
+        MuiTableRow: {
+            styleOverrides: {
+                root: {
+                    '&:hover': {
+                        backgroundColor: 'rgba(255, 255, 255, 0.07)',
+                    },
+                },
+            },
+        },
+        MuiAutocomplete: {
+            styleOverrides: {
+                paper: {
+                    backdropFilter: 'blur(10px)',
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                },
+            },
         }
     },
 };

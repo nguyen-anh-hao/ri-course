@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { getToken } from '@/utils/getToken';
-import { User } from './interfaces/user.interface';
+import { User } from './interfaces/user.interfaces';
 import axios from 'axios';
 import appConfig from '@/config/appConfig';
 
@@ -18,8 +18,11 @@ const routePermissions = [
     { url: '/admin', roles: ['Admin'], redirect: '/404' },
     { url: '/mentor', roles: ['Mentor'], redirect: '/404' },
     { url: '/profile', roles: ['Admin', 'Mentor', 'Learner'], redirect: '/auth/sign-in' },
-    { url: '/all-course', roles: ['Learner'], redirect: '/404' },
-    { url: '/my-course', roles: ['Learner'], redirect: '/404' },
+    { url: '/all-course', roles: ['Learner'], redirect: '/auth/sign-in' },
+    { url: '/my-course', roles: ['Learner'], redirect: '/auth/sign-in' },
+    { url: '/lectures', roles: ['Learner'], redirect: '/auth/sign-in' },
+    { url: '/assignments', roles: ['Learner'], redirect: '/auth/sign-in' },
+    { url: '/exams', roles: ['Learner'], redirect: '/auth/sign-in' },
 ];
 
 export async function middleware(req: NextRequest) {

@@ -6,7 +6,7 @@ import { UserEntity } from "src/users/entities/user.entity";
 
 @Injectable()
 export class EnrollmentsService {
-    constructor(private prisma : PrismaService, ) {}
+    constructor(private prisma : PrismaService) {}
 
     async findAll() : Promise<EnrollmentEntity[]> {
         const enrollments = await this.prisma.enrollment.findMany();
@@ -14,7 +14,7 @@ export class EnrollmentsService {
         return enrollments.map(enrollment => new EnrollmentEntity(enrollment));
     }
 
-    async create(createEnrollmentDto: CreateEnrollmentDto) : Promise<EnrollmentEntity> {
+    async createOne(createEnrollmentDto: CreateEnrollmentDto) : Promise<EnrollmentEntity> {
         const enrollment = await this.prisma.enrollment.create({
             data : createEnrollmentDto
         });
@@ -43,5 +43,16 @@ export class EnrollmentsService {
         });
     
         return enrollments.map(enrollments => new UserEntity(enrollments.user));
+    }
+
+    async kickLearnerFromCourse(learnerId: number, courseId: number) {
+        return await this.prisma.enrollment.delete({
+            where: {
+                userId_courseId: {
+                    userId: learnerId,
+                    courseId
+                }
+            }
+        })
     }
 }

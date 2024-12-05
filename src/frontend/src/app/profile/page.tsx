@@ -4,7 +4,7 @@ import { Grid } from '@mui/material';
 
 import ProfileCard from './components/layout/ProfileCard';
 import UserProfileMenu from './components/layout/UserProfileMenu';
-import { User } from '@/interfaces/user.interface';
+import { User } from '@/interfaces/user.interfaces';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import appConfig from '@/config/appConfig';

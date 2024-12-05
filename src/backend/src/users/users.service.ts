@@ -1,9 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { CreateUserDto, UpdateUserDto } from "./dtos";
 import { PrismaService } from "src/prisma/prisma.service";
 import { UserEntity } from "./entities/user.entity";
-import { $Enums } from "@prisma/client";
 import { CourseEntity } from "src/courses/entities/course.entity";
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class UsersService {
@@ -35,15 +35,28 @@ export class UsersService {
         return user;
     }
 
-    async findAll() : Promise<UserEntity[]> {
-        const users = await this.prisma.user.findMany();
+    async findAll(query) : Promise<UserEntity[]> {
+        const users = await this.prisma.user.findMany({
+            where: query
+        });
 
         return users.map(user => new UserEntity(user));
     }
 
     async createOne(createUserDto: CreateUserDto) : Promise<UserEntity> {
+        const { username, password } = createUserDto;
+
+        const isTaken = await this.isUsernameTaken(username);
+        if (isTaken === true)
+            throw new BadRequestException("Username is already taken");
+
+        const hashedPassword = await bcrypt.hash(password, 11);
+
         const user = await this.prisma.user.create({
-            data: createUserDto
+            data: {
+                ...createUserDto,
+                password: hashedPassword
+            }
         });
         
         return new UserEntity(user);
