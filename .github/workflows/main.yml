@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install dependencies for frontend
+        working-directory: ./src/frontend
+        run: |
+          npm install
+
+      - name: Run Jest tests for frontend
+        working-directory: ./src/frontend
+        run: |
+          npm test -- --coverage
+
+      - name: Install dependencies for backend
+        working-directory: ./src/backend
+        run: |
+          npm install
+
+      - name: Run Jest tests for backend
+        working-directory: ./src/backend
+        run: |
+          npm test -- --coverage
+
+      - name: Install Cypress for frontend tests
+        working-directory: ./src/frontend
+        run: |
+          npm install cypress
+
+      - name: Run Cypress tests for frontend
+        working-directory: ./src/frontend
+        run: |
+          npx cypress run
