@@ -1,8 +1,8 @@
-const client_url = process.env.CYPRESS_BASE_URL || 'http://localhost:3000';
+const cypress_base_url = Cypress.env('CYPRESS_BASE_URL');
 
 describe('Login functionality', () => {
     it('should sign in successfully with valid credentials', () => {
-        cy.visit(`${client_url}/auth/sign-in`);
+        cy.visit(`${cypress_base_url}/auth/sign-in`);
         cy.get('input[type="text"]').type('user1');
         cy.get('input[type="text"]').should('have.value', 'user1');
         cy.get('input[type="password"]').type('user1');
@@ -12,7 +12,7 @@ describe('Login functionality', () => {
     });
 
     it('should display error message with invalid credentials', () => {
-        cy.visit(`${client_url}/auth/sign-in`);
+        cy.visit(`${cypress_base_url}/auth/sign-in`);
         cy.get('input[type="text"]').type('user1');
         cy.get('input[type="text"]').should('have.value', 'user1');
         cy.get('input[type="password"]').type('wrongpassword');

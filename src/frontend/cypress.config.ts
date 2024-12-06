@@ -1,8 +1,11 @@
-const { defineConfig } = require("cypress");
+import {defineConfig} from 'cypress';
+import * as dotenv from 'dotenv';
+
+dotenv.config({path: '.env'});
 
 module.exports = defineConfig({
   e2e: {
-    baseUrl: process.env.NEXT_PUBLIC_CYPRESS_BASE_URL, // URL của ứng dụng
+    baseUrl: process.env.CYPRESS_BASE_URL,
     supportFile: false,
   },
 
@@ -12,4 +15,6 @@ module.exports = defineConfig({
       bundler: "webpack",
     },
   },
+  
+  env: process.env,
 });
