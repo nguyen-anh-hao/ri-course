@@ -43,6 +43,10 @@ jobs:
       #   run: |
       #     npm test -- --coverage
 
+      - name: Set environment variables
+        env:
+          CYPRESS_BASE_URL: ${{ secrets.CYPRESS_BASE_URL }}
+
       - name: Install Cypress for frontend tests
         working-directory: ./src/frontend
         run: |
