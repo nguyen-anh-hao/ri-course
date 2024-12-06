@@ -7,11 +7,14 @@ import appConfig from '@/config/appConfig';
 const getRole = async (token: string | null): Promise<string[] | null> => {
     if (!token) return null;
 
-    const response = await axios.get<User>(`${appConfig.API_BASE_URL}/users/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-    });
-
-    return response.data.roles;
+    try {
+        const response = await axios.get<User>(`${appConfig.API_BASE_URL}/users/me`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        return response.data.roles;
+    } catch (error) {
+        return null;
+    }
 };
 
 const routePermissions = [
