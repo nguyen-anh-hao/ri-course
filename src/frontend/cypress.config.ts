@@ -2,7 +2,7 @@ const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
   e2e: {
-    baseUrl: process.env.CYPRESS_BASE_URL || "http://localhost:3000", // URL của ứng dụng
+    baseUrl: process.env.NEXT_PUBLIC_CYPRESS_BASE_URL, // URL của ứng dụng
     supportFile: false,
   },
 
