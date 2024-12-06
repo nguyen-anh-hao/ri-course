@@ -32,8 +32,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
-  ],
+    ".next/types/**/*.ts", 
+    "src/jest.setup.js"  ],
   "exclude": [
     "node_modules"
   ]
