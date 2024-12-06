@@ -5,6 +5,10 @@ import CourseInfo from '../components/CourseInfo';
 import appConfig from '@/config/appConfig';
 import generateSlug from '@/utils/generateSlug';
 
+interface PageProps {
+    params: Promise<{ slug: string }>;
+}
+
 const fetchCourseData = async (slug: string, token: string) => {
     try {
         const response = await axios.get(`${appConfig.API_BASE_URL}/courses/`, {
@@ -21,8 +25,8 @@ const fetchCourseData = async (slug: string, token: string) => {
     }
 };
 
-export default async function CoursePage({ params }: { params: { slug: string } }) {
-    const { slug } = params;
+export default async function CoursePage({ params }: PageProps) {
+    const { slug } = await params;
 
     const cookieStore = cookies();
     const token = (await cookieStore).get('token')?.value;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { MenuItem, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, patch } from '@mui/material';
-import { User } from '../interfaces/user.interfaces';
+import { User } from '@/interfaces/user.interfaces';
 import { useState } from 'react';
 import axios from 'axios';
 import appConfig from '@/config/appConfig';
@@ -62,13 +62,13 @@ interface UserFormProps {
 const UserForm: React.FC<UserFormProps> = ({ open, onClose, user }) => {
     const [fullname, setFullname] = useState<string>(user.fullname);
     const [username, setUsername] = useState<string>(user.username);
-    const [email, setEmail] = useState<string>(user.email);
+    const [email, setEmail] = useState<string>(user.email ?? '');
     const [role, setRole] = useState<string>(roleMap.find(role => role.value === user.roles[0])?.value ?? '');
     const [dob, setDob] = useState<string>(formatDate(new Date(user.dob)));
 
     const { setRefresh } = useRefresh();
 
-    const patchUser = async (userId: string, data: { fullname: string, username: string, email: string, roles: string[], dob: string }) => {
+    const patchUser = async (userId: string, data: { fullname: string, username: string, email?: string, roles: string[], dob: string }) => {
         try {
             await axios.patch(`${appConfig.API_BASE_URL}/users/${userId}`, data);
             alert('Cập nhật tài khoản thành công');
@@ -172,7 +172,7 @@ const UserForm: React.FC<UserFormProps> = ({ open, onClose, user }) => {
                     type='text'
                     fullWidth
                     variant='outlined'
-                    value={formatDateTime(new Date(user?.updatedAt))}
+                    value={user?.updatedAt ? formatDateTime(new Date(user.updatedAt)) : ''}
                     InputProps={{
                         readOnly: true,
                     }}
@@ -183,7 +183,7 @@ const UserForm: React.FC<UserFormProps> = ({ open, onClose, user }) => {
                     type='text'
                     fullWidth
                     variant='outlined'
-                    value={formatDateTime(new Date(user?.lastSignIn))}
+                    value={user?.lastSignIn ? formatDateTime(new Date(user.lastSignIn)) : ''}
                     InputProps={{
                         readOnly: true,
                     }}
@@ -195,7 +195,7 @@ const UserForm: React.FC<UserFormProps> = ({ open, onClose, user }) => {
                 </Button>
                 <Button onClick={async () => {
                     if (fullname && username && role && dob) {
-                        await patchUser(user.id, { fullname, username, email, roles: [role], dob: toISO8601(dob) });
+                        await patchUser(user.id.toString(), { fullname, username, email, roles: [role], dob: toISO8601(dob) });
                         onClose();
                     } else {
                         alert('Vui lòng điền đầy đủ thông tin hợp lệ');
