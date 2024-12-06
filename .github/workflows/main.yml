@@ -27,23 +27,21 @@ jobs:
         working-directory: ./src/frontend
         run: |
           npm install
-
       - name: Run Jest tests for frontend
         working-directory: ./src/frontend
         run: |
           npm test -- --coverage
-
       - name: Install dependencies for backend
         working-directory: ./src/backend
         run: |
           npm install
-
       # - name: Run Jest tests for backend
       #   working-directory: ./src/backend
       #   run: |
       #     npm test -- --coverage
 
-      - name: Set environment variables
+      - name: Set environment variables for Cypress
+        run: echo "CYPRESS_BASE_URL=${{ secrets.CYPRESS_BASE_URL }}"
         env:
           CYPRESS_BASE_URL: ${{ secrets.CYPRESS_BASE_URL }}
 
@@ -51,40 +49,39 @@ jobs:
         working-directory: ./src/frontend
         run: |
           npm install cypress
-
       - name: Run Cypress tests for frontend
         working-directory: ./src/frontend
         run: |
           npx cypress run
           
   deploy_backend:
-      needs: test
-      runs-on: ubuntu-latest
-  
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
-  
-        - name: Deploy to Render
-          env:
-            RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-            RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
-          run: |
-            git remote add render https://git.render.com/${{ secrets.RENDER_SERVICE_ID }}.git
-            git push render main
-            
-  deploy_frontend:
     needs: test
     runs-on: ubuntu-latest
-  
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-  
+
+      - name: Deploy to Render
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+        run: |
+          git remote add render https://git.render.com/${{ secrets.RENDER_SERVICE_ID }}.git
+          git push render main
+
+  deploy_frontend:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Install Vercel CLI
         run: |
           npm install -g vercel
-  
+
       - name: Deploy to Vercel
         run: |
           vercel --token ${{ secrets.VERCEL_TOKEN }} --prod
