@@ -65,8 +65,11 @@ jobs:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
         run: |
-          git remote add render https://git.render.com/${{ secrets.RENDER_SERVICE_ID }}.git
-          git push render main
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{"serviceId": "${{ secrets.RENDER_SERVICE_ID }}", "branch": "main"}' \
+            https://api.render.com/v1/deploys
 
   deploy_frontend:
     needs: test
