@@ -3,13 +3,19 @@ import path from 'path';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 
-const MentorPage = () => {
-  const filePath = path.join(process.cwd(), 'frontend', 'app', 'mentor', 'demo.md');
-  const fileContents = fs.readFileSync(filePath, 'utf8');
+const MentorPage = async () => {
+  const filePath = path.join(process.cwd(), 'src', 'app', 'mentor', 'demo.md');
+
+  let content = '';
+  try {
+    content = fs.readFileSync(filePath, 'utf8');
+  } catch {
+    content = 'Error reading the Markdown file'; 
+  }
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <ReactMarkdown>{fileContents}</ReactMarkdown>
+      <ReactMarkdown>{content}</ReactMarkdown>
     </div>
   );
 };
