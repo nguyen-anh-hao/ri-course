@@ -4,6 +4,7 @@ import React from 'react';
 import { AppBar, Toolbar, Typography, Container, Box, Grid } from '@mui/material';
 import { LocationOn as LocationOnIcon, Phone as PhoneIcon, Email as EmailIcon } from '@mui/icons-material';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const Footer: React.FC = () => {
     return (
@@ -23,12 +24,12 @@ const Footer: React.FC = () => {
                         <Grid item xs={12} sm={5}>
                             <Box display='flex' flexDirection='column'>
                                 <Box display='flex' alignItems='center' mb={2}>
-                                    <img
+                                    <Image
                                         src='/logo-dark.png'
                                         alt='Logo'
+                                        width={40}
+                                        height={40}
                                         style={{
-                                            width: '40px',
-                                            height: '40px',
                                             marginRight: '16px',
                                         }}
                                     />

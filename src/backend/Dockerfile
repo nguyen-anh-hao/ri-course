@@ -17,8 +17,8 @@ COPY . .
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
 RUN chmod +x /app/docker-entrypoint.sh
 
-# Expose the port the frontend runs on
-EXPOSE 3000
+# Expose the port the backend runs on
+EXPOSE 3123
 
-# Command to run the frontend in development mode
+# Command to run the app in development mode
 ENTRYPOINT ["/app/docker-entrypoint.sh"]

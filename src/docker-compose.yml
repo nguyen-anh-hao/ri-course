@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database Service (from src)
+  db:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  # Backend Service (from backend)
+  # backend:
+  #   build:
+  #     context: ./backend
+  #   container_name: backend
+  #   ports:
+  #     - "${BE_PORT}:${BE_PORT}"
+  #   depends_on:
+  #     - db  # Wait for db service to start
+  #   networks:
+  #     - app-network
+
+  # Frontend Service (from frontend)
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #   container_name: frontend
+  #   ports:
+  #     - "${FE_PORT}:${FE_PORT}"
+  #   networks:
+  #     - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

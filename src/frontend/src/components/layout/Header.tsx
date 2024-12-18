@@ -4,6 +4,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
+import Image from 'next/image';
 
 // Material-UI components
 import { AppBar, Toolbar, Typography, Container, Box, Button, IconButton, Avatar, Menu, MenuItem, Drawer, List, ListItem, ListItemText, ListItemButton } from '@mui/material';
@@ -46,7 +47,7 @@ const Header: React.FC = () => {
     const handleLogout = () => {
         handleMenuClose();
         signout();
-        router.push('/');
+        window.location.href = '/';
     };
 
     const handleDrawerToggle = () => {
@@ -123,9 +124,9 @@ const Header: React.FC = () => {
                         <Link href='/' passHref style={{ textDecoration: 'none' }}>
                             <Box display='flex' alignItems='center' gap='16px' sx={{ padding: '0px 12px 0px 0px' }}>
                                 {isDarkMode ? (
-                                    <img src='/logo-dark.png' alt='Logo' style={{ width: '40px', height: '40px' }} />
+                                    <Image src='/logo-dark.png' alt='Logo' width={40} height={40} />
                                 ) : (
-                                    <img src='/logo.png' alt='Logo' style={{ width: '40px', height: '40px' }} />
+                                    <Image src='/logo.png' alt='Logo' width={40} height={40} />
                                 )}
                                 <Typography
                                     variant='h6'

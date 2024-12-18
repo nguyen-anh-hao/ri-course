@@ -43,7 +43,7 @@ const SignInForm: React.FC = () => {
             const responses = await axios.get(`${appConfig.API_BASE_URL}/users/me`);
             sessionStorage.setItem('role', JSON.stringify(responses.data.roles[0]));
 
-            router.push('/');
+            window.location.href = '/';
         } catch (error: any) {
             const errorMessage = error.response?.data.message ?
                 errorMessages[error.status] || 'Đăng nhập không thành công!'
