@@ -124,7 +124,21 @@ Run the unit tests for the frontend with coverage:
 \src\frontend> npx cypress open
 ```
 
-## V. Notes
+## V. Exiting the Project
+
+1. **Stop the Running Services:**
+
+   Use `Ctrl + C` in your terminal to terminate the active processes.
+
+2. **Shut Down Docker Containers:**
+
+   To stop and remove the PostgreSQL container, run:
+
+   ```bash
+   \src> docker-compose down
+   ```
+
+## VI. Notes
 
 - Ensure that the configuration in the `.env` file is consistent and correct.
 - Ensure that both Docker and PostgreSQL are running before starting the backend and frontend.
