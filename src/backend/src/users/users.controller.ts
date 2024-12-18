@@ -19,6 +19,72 @@ export class UsersController {
         private auditLogsService: AuditLogsService
     ) {}
 
+    
+    @ApiOperation({
+        summary: "Get personal info of the user with provided JWT"
+    })
+    @ApiOkResponse({
+        description: "Ok: fetch user's personal info successfully",
+        type: UserEntity
+    })
+    @ApiUnauthorizedResponse({
+        description: "Unauthorized: missing JWT"
+    })
+    @Get("me")
+    async findMe(@Request() req) {
+        return await this.usersService.findById(+req.user.id);
+    }
+    
+    // -----------------------------------------------
+
+    @ApiOperation({
+        summary: "Change user's personal info with provided JWT"
+    })
+    @ApiBody({
+        description: "All the info want to be changed with its new value",
+        examples: {
+            "Basic info": {
+                value: {
+                    fullname: "newfullname",
+                    email: "user1@ricourse.com.vn",
+                    dob: new Date()
+                }
+            },
+            "Invalid fields (username)": {
+                value: {
+                    username: "somenewusername"
+                }
+            },
+            "Invalid fields (password)": {
+                value: {
+                    password: "newpassword"
+                }
+            },
+            "Invalid fields (roles)": {
+                value: {
+                    roles: [Role.Admin]
+                }
+            }
+        }
+    })
+    @ApiNoContentResponse({
+        description: "No Content: user's info changed successfully"
+    })
+    @ApiForbiddenResponse({
+        description: "Forbidden: invalid changing fields"
+    })
+    @ApiUnauthorizedResponse({
+        description: "Unauthorized: missing JWT"
+    })
+    @UseGuards(InfoUpdateGuard)
+    @Patch("me")
+    async changeInfo(@Request() req) {
+        console.log("hi")
+        return await this.usersService.updateOne(+req.user.id, req.body);
+    }
+    
+    // -----------------------------------------------
+
     @ApiOperation({
         summary: "Get all users with optional criteria (Admin only)",
     })
@@ -160,70 +226,6 @@ export class UsersController {
         return await this.usersService.deleteOne(id);
     }
 
-    // -----------------------------------------------
-    
-    @ApiOperation({
-        summary: "Get personal info of the user with provided JWT"
-    })
-    @ApiOkResponse({
-        description: "Ok: fetch user's personal info successfully",
-        type: UserEntity
-    })
-    @ApiUnauthorizedResponse({
-        description: "Unauthorized: missing JWT"
-    })
-    @Get("me")
-    async findMe(@Request() req) {
-        return await this.usersService.findById(+req.user.id);
-    }
-    
-    // -----------------------------------------------
-
-    @ApiOperation({
-        summary: "Change user's personal info with provided JWT"
-    })
-    @ApiBody({
-        description: "All the info want to be changed with its new value",
-        examples: {
-            "Basic info": {
-                value: {
-                    fullname: "newfullname",
-                    email: "user1@ricourse.com.vn",
-                    dob: new Date()
-                }
-            },
-            "Invalid fields (username)": {
-                value: {
-                    username: "somenewusername"
-                }
-            },
-            "Invalid fields (password)": {
-                value: {
-                    password: "newpassword"
-                }
-            },
-            "Invalid fields (roles)": {
-                value: {
-                    roles: [Role.Admin]
-                }
-            }
-        }
-    })
-    @ApiNoContentResponse({
-        description: "No Content: user's info changed successfully"
-    })
-    @ApiForbiddenResponse({
-        description: "Forbidden: invalid changing fields"
-    })
-    @ApiUnauthorizedResponse({
-        description: "Unauthorized: missing JWT"
-    })
-    @UseGuards(InfoUpdateGuard)
-    @Patch("me")
-    async changeInfo(@Request() req) {
-        return await this.usersService.updateOne(+req.user.id, req.body);
-    }
-    
     // -----------------------------------------------
     
     @ApiOperation({
