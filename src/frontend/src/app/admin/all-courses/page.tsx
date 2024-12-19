@@ -43,7 +43,7 @@ const CoursePage: React.FC = () => {
         }
 
         fetchCourses();
-    }, [refresh, courses]);
+    }, [refresh]);
 
     const deleteCourse = async (courseId: number) => {
         try {

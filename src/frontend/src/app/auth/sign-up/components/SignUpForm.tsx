@@ -51,7 +51,7 @@ const SignUpForm: React.FC<{ userAgent: string, secret: string }> = ({ userAgent
         try {
             const fullname = username; // Default full name
             const dob = new Date(2000, 0, 1, 7, 0, 0); // Default date of birth
-            await axios.post(`${appConfig.API_BASE_URL}/auth/signup`, { fullname, username, password, dob }, {
+            await axios.post(`${appConfig.API_BASE_URL}/auth/signup`, { fullname, username: username?.toLowerCase(), password, dob }, {
                 headers: { 'Sign-Up-Token': signupToken },
             });
             setMessage('Đăng ký thành công!');

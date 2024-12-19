@@ -30,7 +30,10 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user }) => {
                 <Typography variant='h5' fontWeight='medium'>Hồ sơ cá nhân</Typography>
                 <Button variant='outlined' sx={{ alignSelf: 'flex-end' }} onClick={handleUpdateProfileButtonClick}>Chỉnh sửa</Button>
             </Box>
-            <Box sx={{ display: 'flex', gap: 8, alignItems: 'center', justifyItems: 'center' }}>
+            <Box sx={{
+                display: 'flex', gap: 8, alignItems: 'center', justifyItems: 'center',
+                flexDirection: { xs: 'column', sm: 'row' },
+            }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
                     <Box sx={{ width: 128, height: 128, borderRadius: '50%' }}>
                         <Avatar sx={{ width: '100%', height: '100%' }} />
@@ -40,32 +43,32 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user }) => {
                     </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, flexGrow: 1 }}>
-                    <Box sx={{ display: 'flex', gap: 4 }}>
-                        <Typography variant='body1' sx={{ fontWeight: 'bold', width: '180px' }}>Họ và tên</Typography>
+                    <Box sx={{ display: 'flex', gap: { xs: 0, sm: 4 } }}>
+                        <Typography variant='body1' sx={{ fontWeight: 'bold', width: '120px' }}>Họ và tên</Typography>
                         <Typography variant='body1'>
                             {fullname != null ? fullname : <Skeleton variant='text' width={100} />}
                         </Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', gap: 4 }}>
-                        <Typography variant='body1' sx={{ fontWeight: 'bold', width: '180px' }}>Ngày tháng năm sinh</Typography>
+                    <Box sx={{ display: 'flex', gap: { xs: 0, sm: 4 } }}>
+                        <Typography variant='body1' sx={{ fontWeight: 'bold', width: '120px' }}>Ngày sinh</Typography>
                         <Typography variant='body1'>
                             {dob != null ? dob : <Skeleton variant='text' width={100} />}
                         </Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', gap: 4 }}>
-                        <Typography variant='body1' sx={{ fontWeight: 'bold', width: '180px' }}>Email</Typography>
+                    <Box sx={{ display: 'flex', gap: { xs: 0, sm: 4 } }}>
+                        <Typography variant='body1' sx={{ fontWeight: 'bold', width: '120px' }}>Email</Typography>
                         <Typography variant='body1'>
                             {user?.email != null ? user?.email : <Skeleton variant='text' width={100} />}
                         </Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', gap: 4 }}>
-                        <Typography variant='body1' sx={{ fontWeight: 'bold', width: '180px' }}>Vai trò</Typography>
+                    <Box sx={{ display: 'flex', gap: { xs: 0, sm: 4 } }}>
+                        <Typography variant='body1' sx={{ fontWeight: 'bold', width: '120px' }}>Vai trò</Typography>
                         <Typography variant='body1'>
                             {roles != null ? roles : <Skeleton variant='text' width={100} />}
                         </Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', gap: 4 }}>
-                        <Typography variant='body1' sx={{ fontWeight: 'bold', width: '180px' }}>Ngày tạo tài khoản</Typography>
+                    <Box sx={{ display: 'flex', gap: { xs: 0, sm: 4 } }}>
+                        <Typography variant='body1' sx={{ fontWeight: 'bold', width: '120px' }}>Ngày tạo</Typography>
                         <Typography variant='body1'>
                             {createAt != null ? createAt : <Skeleton variant='text' width={100} />}
                         </Typography>

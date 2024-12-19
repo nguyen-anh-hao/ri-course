@@ -3,6 +3,7 @@ import { getToken } from '@/utils/getToken';
 import { User } from './interfaces/user.interfaces';
 import axios from 'axios';
 import appConfig from '@/config/appConfig';
+import { cookies } from 'next/headers';
 
 const getRole = async (token: string | null): Promise<string[] | null> => {
     if (!token) return null;
@@ -20,12 +21,11 @@ const getRole = async (token: string | null): Promise<string[] | null> => {
 const routePermissions = [
     { url: '/admin', roles: ['Admin'], redirect: '/404' },
     { url: '/mentor', roles: ['Mentor'], redirect: '/404' },
-    { url: '/profile', roles: ['Admin', 'Mentor', 'Learner'], redirect: '/auth/sign-in' },
-    { url: '/all-courses', roles: ['Learner'], redirect: '/auth/sign-in' },
-    { url: '/my-courses', roles: ['Learner'], redirect: '/auth/sign-in' },
-    { url: '/lectures', roles: ['Learner'], redirect: '/auth/sign-in' },
-    { url: '/assignments', roles: ['Learner'], redirect: '/auth/sign-in' },
-    { url: '/exams', roles: ['Learner'], redirect: '/auth/sign-in' },
+    { url: '/profile', roles: ['Admin', 'Mentor', 'Learner'], redirect: '/auth/sign-in?loginRequired=true' },
+    { url: '/my-courses', roles: ['Learner'], redirect: '/auth/sign-in?loginRequired=true' },
+    { url: '/lectures', roles: ['Learner'], redirect: '/auth/sign-in?loginRequired=true' },
+    { url: '/assignments', roles: ['Learner'], redirect: '/auth/sign-in?loginRequired=true' },
+    { url: '/exams', roles: ['Learner'], redirect: '/auth/sign-in?loginRequired=true' },
 ];
 
 export async function middleware(req: NextRequest) {

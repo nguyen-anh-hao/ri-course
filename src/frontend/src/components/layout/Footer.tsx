@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
         <AppBar
             position='static'
             sx={{
-                backgroundColor: 'black',
+                backgroundColor: '#303030',
                 color: 'white',
                 top: 'auto',
                 bottom: 0,

@@ -4,19 +4,20 @@ import { notFound } from 'next/navigation';
 import CourseInfo from '../components/CourseInfo';
 import appConfig from '@/config/appConfig';
 import generateSlug from '@/utils/generateSlug';
+import { getToken } from '@/utils/getToken';
 
 interface PageProps {
     params: Promise<{ slug: string }>;
 }
 
-const fetchCourseData = async (slug: string, token: string) => {
+const fetchCourseData = async (slug: string) => {
     try {
+        const token = await getToken();
         const response = await axios.get(`${appConfig.API_BASE_URL}/courses/`, {
             headers: {
-                Authorization: `Bearer ${token}`,
-            },
+                Authorization: `Bearer ${token}`
+            }
         });
-
         const courses = response.data;
         return courses.find((course: { title: string }) => generateSlug(course.title) === slug);
     } catch (error) {
@@ -28,14 +29,7 @@ const fetchCourseData = async (slug: string, token: string) => {
 export default async function CoursePage({ params }: PageProps) {
     const { slug } = await params;
 
-    const cookieStore = cookies();
-    const token = (await cookieStore).get('token')?.value;
-
-    if (!token) {
-        return notFound();
-    }
-
-    const courseData = await fetchCourseData(slug, token);
+    const courseData = await fetchCourseData(slug);
 
     if (!courseData) {
         return notFound();

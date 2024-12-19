@@ -1,10 +1,11 @@
 'use client'
 
 // React and Next.js
-import React, { useState } from 'react';
-import Link from 'next/link';
+import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
+import { getCookie } from 'cookies-next';
+import Link from 'next/link';
 
 // Material-UI components
 import { AppBar, Toolbar, Typography, Container, Box, Button, IconButton, Avatar, Menu, MenuItem, Drawer, List, ListItem, ListItemText, ListItemButton } from '@mui/material';
@@ -30,6 +31,13 @@ const Header: React.FC = () => {
     const { user, signout } = useAuth();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [drawerOpen, setDrawerOpen] = useState(false);
+
+    useEffect(() => {
+        const _token = getCookie('token');
+        const _user = sessionStorage.getItem('user');
+        if (!_token || !_user)
+            signout();
+    });
 
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -87,7 +95,12 @@ const Header: React.FC = () => {
                         color="inherit"
                         aria-label="menu"
                         onClick={handleDrawerToggle}
-                        sx={{ display: { xs: 'block', md: 'none' } }}
+                        sx={{
+                            display: { xs: 'block', md: 'none' },
+                            marginRight: 2,
+                            width: 40,
+                            height: 40,
+                        }}
                     >
                         <MenuIcon />
                     </IconButton>
@@ -98,10 +111,25 @@ const Header: React.FC = () => {
                         PaperProps={{
                             sx: {
                                 backdropFilter: 'blur(10px)',
+                                width: 240,
                             },
                         }}
                     >
-                        <List>
+                        <List sx={{ padding: 0 }}>
+                            <Box display='flex' alignItems='center' gap='16px' sx={{ width: '100%', padding: '8px 16px' }}>
+                                {isDarkMode ? (
+                                    <Image src='/logo-dark.png' alt='Logo' width={40} height={40} />
+                                ) : (
+                                    <Image src='/logo.png' alt='Logo' width={40} height={40} />
+                                )}
+                                <Typography
+                                    variant='h6'
+                                    component='div'
+                                    sx={{ color: theme.palette.text.primary }}
+                                >
+                                    RiCourse
+                                </Typography>
+                            </Box>
                             {navItems.map((item) => (
                                 <ListItem key={item.key} disablePadding>
                                     <ListItemButton
@@ -120,7 +148,7 @@ const Header: React.FC = () => {
                             ))}
                         </List>
                     </Drawer>
-                    <Box display='flex' alignItems='center' flexGrow={1} gap='8px'>
+                    <Box display='flex' alignItems='center' flexGrow={1} gap='8px' >
                         <Link href='/' passHref style={{ textDecoration: 'none' }}>
                             <Box display='flex' alignItems='center' gap='16px' sx={{ padding: '0px 12px 0px 0px' }}>
                                 {isDarkMode ? (
@@ -143,11 +171,11 @@ const Header: React.FC = () => {
                             ))}
                         </Box>
                     </Box>
+                    <IconButton sx={{ mx: 0.25 }} onClick={() => toggleDarkMode()}>
+                        <Brightness2OutlinedIcon />
+                    </IconButton>
                     {user ? (
                         <>
-                            <IconButton sx={{ mx: 0.25 }} onClick={() => toggleDarkMode()}>
-                                <Brightness2OutlinedIcon />
-                            </IconButton>
                             <IconButton sx={{ mx: 0.25 }}>
                                 <NotificationsOutlinedIcon />
                             </IconButton>

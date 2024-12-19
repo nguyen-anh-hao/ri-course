@@ -1,7 +1,9 @@
+'use client'
+
 import React, { useState } from 'react';
 import { Box, Button, Container } from '@mui/material';
-import CourseDetail from './CourseDetail';
-import EditCourseForm from './EditCourseForm';
+import CourseDetail from '../courses/components/CourseDetail';
+import EditCourseForm from '../courses/components/EditCourseForm';
 
 const CoursePage: React.FC = () => {
     const [isEditing, setIsEditing] = useState(false);
