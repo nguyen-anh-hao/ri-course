@@ -65,17 +65,17 @@ const Header: React.FC = () => {
     const learnerNavItems = [
         { key: 1, text: 'Học tập', path: '/my-courses' },
         { key: 2, text: 'Khóa học', path: '/all-courses' },
-        { key: 3, text: 'Bài giảng', path: '/lectures' },
-        { key: 4, text: 'Bài tập', path: '/assignments' },
-        { key: 5, text: 'Kiểm tra', path: '/exams' },
+        { key: 3, text: 'Thi cử', path: '/exams' },
+        // { key: 4, text: 'Bài giảng', path: '/lectures' },
+        // { key: 5, text: 'Bài tập', path: '/assignments' },
     ];
 
     const mentorNavItems = [
         { key: 1, 'text': 'Quản lý khóa học', 'path': '/mentor/courses' },
-        { key: 2, 'text': 'Quản lý bài giảng', 'path': '/mentor/lectures' },
-        { key: 3, 'text': 'Quản lý bài kiểm tra', 'path': '/mentor/exams' },
-        { key: 4, 'text': 'Quản lý bài thi', 'path': '/mentor/tests' },
-        { key: 5, 'text': 'Quản lý bài tập', 'path': '/mentor/assignments' },
+        { key: 3, 'text': 'Quản lý thi cử', 'path': '/mentor/exams' },
+        // { key: 2, 'text': 'Quản lý bài giảng', 'path': '/mentor/lectures' },
+        // { key: 4, 'text': 'Quản lý bài thi', 'path': '/mentor/tests' },
+        // { key: 5, 'text': 'Quản lý bài tập', 'path': '/mentor/assignments' },
     ];
 
     const adminNavItems = [
@@ -171,7 +171,7 @@ const Header: React.FC = () => {
                             ))}
                         </Box>
                     </Box>
-                    <IconButton sx={{ mx: 0.25 }} onClick={() => toggleDarkMode()}>
+                    <IconButton sx={{ mx: 0.25, display: { xs: 'none', sm: 'block' } }} onClick={() => toggleDarkMode()} >
                         <Brightness2OutlinedIcon />
                     </IconButton>
                     {user ? (

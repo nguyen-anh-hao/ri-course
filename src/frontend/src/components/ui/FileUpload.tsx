@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Button, Box, Typography, LinearProgress, IconButton, Snackbar, Avatar, Chip } from '@mui/material';
-import { CloudUpload as CloudUploadIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { BackupOutlined as BackupOutlinedIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { FiFile, FiImage } from 'react-icons/fi'; // Các icon cho từng loại file
 import axios from 'axios';
 
@@ -34,7 +34,6 @@ const FileUpload: React.FC = () => {
         multiple: true,
         accept: {
             'image/*': ['image/jpeg', 'image/png'],
-            'application/pdf': ['application/pdf'],
             'application/msword': ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
         }, // Các loại file hỗ trợ
     });
@@ -86,16 +85,16 @@ const FileUpload: React.FC = () => {
     };
 
     return (
-        <Box sx={{ padding: 4, maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
+        <Box sx={{ padding: 4, pb: 0, maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
             <Typography variant="h6" gutterBottom>
-                Tải lên nhiều tệp
+                Tải tệp lên
             </Typography>
 
             {/* Dropzone */}
             <Box
                 {...getRootProps()}
                 sx={{
-                    border: '2px dashed #3f51b5',
+                    border: '1px dashed #ccc',
                     padding: 4,
                     borderRadius: 2,
                     cursor: 'pointer',
@@ -107,7 +106,7 @@ const FileUpload: React.FC = () => {
                 <Typography variant="body1" color="textSecondary">
                     Kéo và thả các tệp vào đây hoặc nhấn để chọn
                 </Typography>
-                <CloudUploadIcon sx={{ fontSize: 40, marginTop: 2 }} />
+                <BackupOutlinedIcon sx={{ fontSize: 40, marginTop: 2 }} />
             </Box>
 
             {/* Hiển thị các file đã chọn */}
