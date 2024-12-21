@@ -10,14 +10,15 @@ conda activate myenv
 pip install -r requirements.txt
 ```
 
-```
-cài đặt cuda và cdnn nếu cần thiết
-```
+
+**cài đặt cuda và cdnn nếu cần thiết
+
 
 ## 3. Chạy
-
+Khởi chạy file index.html
+Sau đó chạy file app.py
 ```bash
 python app.py
 ```
 
-Chương trình sẽ chạy ở `http://localhost:5000`
+Chương trình sẽ chạy ở `http://localhost:5005`
