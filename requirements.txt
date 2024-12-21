@@ -1,0 +1,7 @@
+Flask
+Flask-SocketIO
+opencv-python
+deepface
+requests
+numpy
+tensorlow
