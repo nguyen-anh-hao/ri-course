@@ -10,6 +10,10 @@ conda activate myenv
 pip install -r requirements.txt
 ```
 
+```
+cài đặt cuda và cdnn nếu cần thiết
+```
+
 ## 3. Chạy
 
 ```bash
