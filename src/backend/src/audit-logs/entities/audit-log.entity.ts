@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { AuditLog } from "@prisma/client";
 
-export class AuditLogEntity {
+export class AuditLogEntity implements AuditLog{
     constructor(partial: Partial<AuditLogEntity>) {
         Object.assign(this, partial);
     }
@@ -48,4 +49,6 @@ export class AuditLogEntity {
         },
     })
     after: Record<string, any>;
+
+    actionType: string;
 }
