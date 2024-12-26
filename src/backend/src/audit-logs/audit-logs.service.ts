@@ -9,7 +9,7 @@ export class AuditLogsService {
         const newAuditLog = await this.prisma.auditLog.upsert({
             where: {
                 id: -1
-            },
+            }, 
             update: {},
             create: log
         })
@@ -17,7 +17,6 @@ export class AuditLogsService {
 
     async deleteOne(userId: number) {
         try {
-
             await this.prisma.auditLog.deleteMany({
                 where: {
                     userId

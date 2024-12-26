@@ -23,6 +23,15 @@ export class CoursesService {
         return new CourseEntity(course);
     }
 
+    async updateOne(id: number, updateCourseDto: UpdateCourseDto): Promise<CourseEntity> {
+        const course = await this.prisma.course.update({
+            where: {id},
+            data: updateCourseDto
+        });
+
+        return new CourseEntity(course);
+    }
+
     async deleteOne(id: number) {
         const course = await this.prisma.course.delete({
             where: {
@@ -79,14 +88,5 @@ export class CoursesService {
         });
 
         return users.map(user => new UserEntity(user));
-    }
-
-    async update(id: number, updateCourseDto: UpdateCourseDto): Promise<CourseEntity> {
-        const course = await this.prisma.course.update({
-            where: {id},
-            data: updateCourseDto
-        });
-
-        return new CourseEntity(course);
     }
 }
