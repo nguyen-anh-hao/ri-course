@@ -283,17 +283,22 @@ const CourseDetail: React.FC = () => {
                         <Box key={index} mb={2}>
                             <Typography variant='h4' mb={2} mt={4}>{chapter.title}</Typography>
                             {chapter.lessons.map((lesson, idx) => (
-                                <Link key={idx} href='#' passHref style={{ textDecoration: 'none' }}>
-                                    <Box key={idx} mt={1} padding={2} border='0.5px solid #ddd' borderRadius='8px' display='flex' justifyContent='space-between' alignItems='center'>
-                                        <Typography variant='body1' sx={{ pl: 2 }}>
-                                            {lesson}
-                                        </Typography>
+                                <div key={idx}>
+                                    <Box key={idx} mt={1} border='0.5px solid #ddd' borderRadius='8px' display='flex' justifyContent='space-between' alignItems='center'>
+                                        <Box sx={{ width: '100%', height: '100%', marginLeft: 2.5 }}>
+                                            <Link href={`${window.location.href}/1`} passHref style={{ textDecoration: 'none' }}>
+                                                <Typography variant='body1' sx={{ pl: 2 }}>
+                                                    {lesson}
+                                                </Typography>
+                                            </Link>
+                                        </Box>
                                         <IconButton
                                             aria-controls={`menu-${index}-${idx}`}
                                             aria-haspopup="true"
                                             onClick={(event) => {
                                                 setAnchorMoreEl(event.currentTarget);
                                             }}
+                                            sx={{ margin: 2.5 }}
                                         >
                                             <MoreVertIcon />
                                         </IconButton>
@@ -311,11 +316,11 @@ const CourseDetail: React.FC = () => {
                                                 horizontal: 'right',
                                             }}
                                         >
-                                            <MenuItem onClick={() => { /* handle edit */ }}>Chỉnh sửa</MenuItem>
+                                            <MenuItem onClick={() => { setOpenLessonDialog(true) }}>Chỉnh sửa</MenuItem>
                                             <MenuItem onClick={() => { /* handle delete */ }}>Xóa</MenuItem>
                                         </Menu>
                                     </Box>
-                                </Link>
+                                </div>
                             ))}
                         </Box>
                     ))}

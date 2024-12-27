@@ -16,27 +16,29 @@ services:
     networks:
       - app-network
 
-  # Backend Service (from backend)
-  # backend:
-  #   build:
-  #     context: ./backend
-  #   container_name: backend
-  #   ports:
-  #     - "${BE_PORT}:${BE_PORT}"
-  #   depends_on:
-  #     - db  # Wait for db service to start
-  #   networks:
-  #     - app-network
-
   # Frontend Service (from frontend)
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #   container_name: frontend
-  #   ports:
-  #     - "${FE_PORT}:${FE_PORT}"
-  #   networks:
-  #     - app-network
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - "${FE_PORT}:$3000"
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  # Backend Service (from backend)
+  backend:
+    build:
+      context: ./backend
+    container_name: backend
+    ports:
+      - "${BE_PORT}:$3123"
+    depends_on:
+      - frontend  # Wait for db service to start
+    networks:
+      - app-network
 
 networks:
   app-network:

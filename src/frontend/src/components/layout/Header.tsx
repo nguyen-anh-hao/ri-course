@@ -8,10 +8,14 @@ import { getCookie } from 'cookies-next';
 import Link from 'next/link';
 
 // Material-UI components
-import { AppBar, Toolbar, Typography, Container, Box, Button, IconButton, Avatar, Menu, MenuItem, Drawer, List, ListItem, ListItemText, ListItemButton } from '@mui/material';
+import { AppBar, Toolbar, Typography, Container, Box, Button, IconButton, Avatar, Menu, MenuItem, Drawer, List, ListItem, ListItemText, ListItemButton, ListItemIcon } from '@mui/material';
 import Brightness2OutlinedIcon from '@mui/icons-material/Brightness2Outlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
+import SchoolIcon from '@mui/icons-material/School';
+import BookIcon from '@mui/icons-material/Book';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import PeopleIcon from '@mui/icons-material/People';
 
 // Custom components
 import NavItem from '@/components/ui/NavItem';
@@ -63,24 +67,19 @@ const Header: React.FC = () => {
     };
 
     const learnerNavItems = [
-        { key: 1, text: 'Học tập', path: '/my-courses' },
-        { key: 2, text: 'Khóa học', path: '/all-courses' },
-        { key: 3, text: 'Thi cử', path: '/exams' },
-        // { key: 4, text: 'Bài giảng', path: '/lectures' },
-        // { key: 5, text: 'Bài tập', path: '/assignments' },
+        { key: 1, text: 'Học tập', path: '/my-courses', icon: <SchoolIcon /> },
+        { key: 2, text: 'Khóa học', path: '/all-courses', icon: <BookIcon /> },
+        { key: 3, text: 'Kỳ thi', path: '/exams', icon: <AssignmentIcon /> },
     ];
 
     const mentorNavItems = [
-        { key: 1, 'text': 'Quản lý khóa học', 'path': '/mentor/courses' },
-        { key: 3, 'text': 'Quản lý thi cử', 'path': '/mentor/exams' },
-        // { key: 2, 'text': 'Quản lý bài giảng', 'path': '/mentor/lectures' },
-        // { key: 4, 'text': 'Quản lý bài thi', 'path': '/mentor/tests' },
-        // { key: 5, 'text': 'Quản lý bài tập', 'path': '/mentor/assignments' },
+        { key: 1, text: 'Quản lý khóa học', path: '/mentor/courses', icon: <BookIcon /> },
+        { key: 3, text: 'Quản lý kỳ thi', path: '/mentor/exams', icon: <AssignmentIcon /> },
     ];
 
     const adminNavItems = [
-        { key: 1, text: 'Quản lý người dùng', path: '/admin/user-accounts' },
-        { key: 2, text: 'Quản lý khóa học', path: '/admin/all-courses' },
+        { key: 1, text: 'Quản lý người dùng', path: '/admin/user-accounts', icon: <PeopleIcon /> },
+        { key: 2, text: 'Quản lý khóa học', path: '/admin/all-courses', icon: <BookIcon /> },
     ];
 
     const navItems = sessionStorage.getItem('role') === '"Mentor"' ? mentorNavItems :
@@ -111,12 +110,12 @@ const Header: React.FC = () => {
                         PaperProps={{
                             sx: {
                                 backdropFilter: 'blur(10px)',
-                                width: 240,
+                                width: 300,
                             },
                         }}
                     >
                         <List sx={{ padding: 0 }}>
-                            <Box display='flex' alignItems='center' gap='16px' sx={{ width: '100%', padding: '8px 16px' }}>
+                            <Box display='flex' alignItems='center' gap='16px' sx={{ width: '80%', padding: '8px 16px' }}>
                                 {isDarkMode ? (
                                     <Image src='/logo-dark.png' alt='Logo' width={40} height={40} />
                                 ) : (
@@ -142,6 +141,9 @@ const Header: React.FC = () => {
                                             }
                                         }}
                                     >
+                                        <ListItemIcon>
+                                            {item.icon}
+                                        </ListItemIcon>
                                         <ListItemText primary={item.text} />
                                     </ListItemButton>
                                 </ListItem>
@@ -171,12 +173,12 @@ const Header: React.FC = () => {
                             ))}
                         </Box>
                     </Box>
-                    <IconButton sx={{ mx: 0.25, display: { xs: 'none', sm: 'block' } }} onClick={() => toggleDarkMode()} >
+                    <IconButton sx={{ mx: 0.25, height: 40, width: 40 }} onClick={() => toggleDarkMode()} >
                         <Brightness2OutlinedIcon />
                     </IconButton>
                     {user ? (
                         <>
-                            <IconButton sx={{ mx: 0.25 }}>
+                            <IconButton sx={{ mx: 0.25, height: 40, width: 40 }}>
                                 <NotificationsOutlinedIcon />
                             </IconButton>
                             <Avatar
@@ -209,24 +211,31 @@ const Header: React.FC = () => {
                             </Menu>
                         </>
                     ) : (
-                        <Box display='flex' alignItems='center' gap='16px'>
-                            <Button
-                                variant='contained'
-                                onClick={() => router.push('/auth/sign-in')}
-                                sx={{
-                                    color: theme.palette.text.primary,
-                                    backgroundColor: 'transparent',
-                                }}
-                            >
-                                Đăng nhập
-                            </Button>
-                            <Button
-                                variant='contained'
-                                onClick={() => router.push('/auth/sign-up')}
-                            >
-                                Đăng ký
-                            </Button>
-                        </Box>
+                        <>
+                            <Box display='flex' alignItems='center'>
+                                <Button
+                                    variant='contained'
+                                    onClick={() => router.push('/auth/sign-in')}
+                                    sx={{
+                                        color: theme.palette.text.primary,
+                                        backgroundColor: 'transparent',
+                                        display: { xs: 'none', sm: 'block' },
+                                        mx: 1,
+                                    }}
+                                >
+                                    Đăng nhập
+                                </Button>
+                                <Button
+                                    variant='contained'
+                                    onClick={() => router.push('/auth/sign-up')}
+                                    sx={{
+                                        mx: 1,
+                                    }}
+                                >
+                                    Đăng ký
+                                </Button>
+                            </Box>
+                        </>
                     )}
                 </Toolbar>
             </Container>
