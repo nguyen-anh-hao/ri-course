@@ -12,7 +12,6 @@ on:
 
 jobs:
   deploy_backend:
-    needs: test
     runs-on: ubuntu-latest
 
     steps:
@@ -31,7 +30,6 @@ jobs:
             https://api.render.com/v1/deploys
 
   deploy_frontend:
-    needs: test
     runs-on: ubuntu-latest
 
     steps:
@@ -44,11 +42,16 @@ jobs:
 
       - name: Deploy to Vercel
         run: |
-          vercel --token ${{ secrets.VERCEL_TOKEN }} --prod --yes
+          vercel --token ${{ secrets.VERCEL_TOKEN }} --prod --yes > result.txt
+          echo "Vercel deployment URL is:"
+          cat result.txt
+          DEPLOY_URL=$(cat result.txt | grep -o 'https://[a-zA-Z0-9.-]*\.vercel\.app')
+          echo "DEPLOY_URL=${DEPLOY_URL}" >> $GITHUB_ENV
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
   test:
+    needs: [deploy_backend, deploy_frontend]
     runs-on: ubuntu-latest
 
     steps:
@@ -108,6 +111,6 @@ jobs:
       - name: Run Cypress tests for frontend
         working-directory: ./src/frontend
         env:
-          CYPRESS_BASE_URL: "http://localhost:3000"
+          CYPRESS_BASE_URL: ${{ env.DEPLOY_URL }}
         run: |
           npx cypress run --browser chrome
