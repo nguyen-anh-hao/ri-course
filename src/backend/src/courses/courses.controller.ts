@@ -282,9 +282,9 @@ export class CoursesController {
         description: "Forbidden: The user with the JWT must be an Admin"
     })
     @UseGuards(RolesGuard)
-    @Roles(Role.Admin)
+    @Roles(Role.Admin) 
     @Patch(":id")
     async update(@Param("id", ParseIntPipe) id: number, @Body() updateCourseDto:UpdateCourseDto): Promise<CourseEntity> {
-        return await this.coursesService.update(id, updateCourseDto);
+        return await this.coursesService.updateOne(id, updateCourseDto);
     }
 }

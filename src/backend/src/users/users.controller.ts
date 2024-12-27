@@ -108,7 +108,7 @@ export class UsersController {
     async findAll(@Query() query) {
         return await this.usersService.findAll(query);
     }
-
+ 
     // -----------------------------------------------
 
     @ApiOperation({
@@ -129,7 +129,7 @@ export class UsersController {
     @UseGuards(RolesGuard)
     @Roles(Role.Admin)
     @Post("")
-    async create(@Body() createUserDto: CreateUserDto, @Req() req) {
+    async createUser(@Body() createUserDto: CreateUserDto, @Req() req) {
         const newUser = await this.usersService.createOne(createUserDto);
         await this.auditLogsService.createOne({
             actionType: "Create",
@@ -200,6 +200,7 @@ export class UsersController {
             after: afterUpdate
         });
     }
+    
     // -----------------------------------------------
 
     @ApiOperation({
