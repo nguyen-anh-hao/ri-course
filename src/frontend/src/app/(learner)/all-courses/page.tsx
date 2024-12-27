@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import appConfig from '@/config/appConfig';
 import { getCookie } from 'cookies-next';
+import { getToken } from '@/utils/getToken';
 
 export default function AllCourses() {
     const token = getCookie('token');

@@ -6,4 +6,6 @@ export class UpdateUserDto {
     fullname?: string;
 
     email?: string;
+
+    dob?: Date;
 }

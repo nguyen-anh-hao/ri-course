@@ -8,6 +8,7 @@ const prisma = new PrismaClient();
 async function main() {
     const users = [
         {
+            fullname: "User 1",
             username: "user1",
             password:
                 "$2b$11$iF.vIFWlXJdkhQCnDIrgxuC/VeD4CvI4qH9B5puZrr83My2NiKF2S",
@@ -16,6 +17,7 @@ async function main() {
             dob: new Date("2004-09-20"),
         },
         {
+            fullname: "User 2",
             username: "user2",
             password:
                 "$2b$11$hlcxykhjO.YlVstp.z2zAOgj90mGK1Q3ejieZCnliOwlIsZ6mSwxu",
@@ -24,6 +26,7 @@ async function main() {
             dob: new Date("2005-09-20"),
         },
         {
+            fullname: "User 3",
             username: "user3",
             password:
                 "$2b$11$fWN8U2inFKp9bxiXzLK7N.ZW7pKr2G/X1kA3ZWBJBFpN2nRtgluYC",
@@ -32,14 +35,16 @@ async function main() {
             dob: new Date("2006-09-20"),
         },
         {
+            fullname: "User 4",
             username: "user4",
             password:
                 "$2b$11$x33wC4RG7xiWWNDix8HABO4NK67XpOei9hIX/ZrAdrjdDCZnvasri",
             email: "user4@ricourse.com",
-            roles: [Role.Learner],
+            roles: [Role.Mentor],
             dob: new Date("2007-09-20"),
         },
         {
+            fullname: "User 5",
             username: "user5",
             password:
                 "$2b$11$ezrTdQZaPAxN6jacU9lhPefzcVfbRWUIZaxN01kSDS/gY2Nj..tDu",
@@ -60,20 +65,20 @@ async function main() {
 
     const courses = [
         {
-            title: "course1",
-            description: "course1 description",
+            title: "Lập trình C++ cơ bản",
+            description: "Khóa học cung cấp các kiến thức cơ bản về lập trình C++, từ những khái niệm cơ bản như biến, kiểu dữ liệu, toán tử cho đến các cấu trúc điều khiển như vòng lặp, câu lệnh điều kiện. Khóa học cũng bao gồm các khái niệm về hàm, mảng, con trỏ, và quản lý bộ nhớ.",
         },
         {
-            title: "course2",
-            description: "course2 description",
+            title: "Lập trình Web Full Stack",
+            description: "Khóa học miễn phí về lập trình web full stack, bao gồm cả frontend và backend. Bạn sẽ học HTML, CSS, JavaScript, React (front-end), Node.js, Express, MongoDB (back-end). Khóa học còn đi kèm với các dự án thực tế để bạn có thể thực hành và xây dựng các ứng dụng web hoàn chỉnh.",
         },
         {
-            title: "course3",
-            description: "course3 description",
+            title: "Lập trình ứng dụng di động với Flutter",
+            description: "Flutter là một framework phát triển ứng dụng di động mạnh mẽ của Google, giúp bạn xây dựng ứng dụng cho cả Android và iOS từ một mã nguồn duy nhất. Khóa học này trên RiCourse cung cấp các kiến thức từ cơ bản đến nâng cao, bao gồm cách sử dụng Dart (ngôn ngữ lập trình của Flutter), xây dựng giao diện người dùng, và triển khai ứng dụng di động.",
         },
         {
-            title: "course4",
-            description: "course4 description",
+            title: "Phát triển ứng dụng Windows với C# và .NET",
+            description: "Khóa học này cung cấp cái nhìn tổng quan về WinUI 3, giúp người học hiểu các thành phần cơ bản của ứng dụng WinUI, từ các điều khiển UI đến cách tích hợp với các dịch vụ nền tảng của Windows. Các học viên sẽ học cách xây dựng ứng dụng Windows hiện đại với WinUI 3, sử dụng .NET 5/6 và C#. Khóa học còn bao gồm việc làm quen với các khái niệm như data binding, commands, và navigation.",
         },
     ];
 

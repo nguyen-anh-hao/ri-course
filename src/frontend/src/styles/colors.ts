@@ -47,7 +47,7 @@ const originalColors = {
 
 const darkColors = {
     primary: {
-        main: Colors.yellow[500],
+        main: Colors.yellow[800],
     },
     secondary: {
         main: Colors.common.white,

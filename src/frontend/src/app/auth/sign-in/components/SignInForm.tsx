@@ -19,11 +19,15 @@ import { errorMessages } from '@/config/errorMessages';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 
-const SignInForm: React.FC = () => {
+interface SignInFormProps {
+    error?: string | null;
+}
+
+const SignInForm: React.FC<SignInFormProps> = ({ error }) => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [username, setUsername] = useState<string | null>(null);
     const [password, setPassword] = useState<string | null>(null);
-    const [message, setMessage] = useState<string | null>(null);
+    const [message, setMessage] = useState<string | null>(error ?? null);
     const router = useRouter();
     const signin = useAuth().signin;
     const theme = useTheme().theme;
@@ -35,7 +39,7 @@ const SignInForm: React.FC = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post(`${appConfig.API_BASE_URL}/auth/signin`, { username, password });
+            const response = await axios.post(`${appConfig.API_BASE_URL}/auth/signin`, { username: username?.toLowerCase(), password });
             setMessage('Đăng nhập thành công!');
             signin(username, response.data.access_token);
 
@@ -43,7 +47,7 @@ const SignInForm: React.FC = () => {
             const responses = await axios.get(`${appConfig.API_BASE_URL}/users/me`);
             sessionStorage.setItem('role', JSON.stringify(responses.data.roles[0]));
 
-            router.push('/');
+            window.location.href = '/';
         } catch (error: any) {
             const errorMessage = error.response?.data.message ?
                 errorMessages[error.status] || 'Đăng nhập không thành công!'

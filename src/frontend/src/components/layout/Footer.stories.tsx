@@ -1,7 +1,7 @@
 import React from "react";
 import Footer from "@/components/layout/Footer";
 
-export default {
+const FooterStory = {
   title: "Components/Footer",
   component: Footer,
 };
@@ -9,3 +9,5 @@ export default {
 const Template = () => <Footer />;
 
 export const Default = Template.bind({});
+
+export default FooterStory;
