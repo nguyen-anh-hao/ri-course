@@ -8,7 +8,7 @@ describe('Login functionality', () => {
         cy.get('input[type="password"]').type('user1');
         cy.get('input[type="password"]').should('have.value', 'user1');
         cy.get('button[type="submit"]').contains('Đăng nhập').click();
-        cy.url().should('include', '/');
+        cy.url().should('eq', `${cypress_base_url}/`);
     });
 
     it('should display error message with invalid credentials', () => {
@@ -20,6 +20,6 @@ describe('Login functionality', () => {
         cy.get('button[type="submit"]').contains('Đăng nhập').click();
         cy.get('.MuiAlert-message')
             .should('be.visible')
-            .and('contain', 'Tên đăng nhập hoặc mật khẩu không đúng!');
+            .should('have.text', 'Tên đăng nhập hoặc mật khẩu không đúng!');
     });
 });

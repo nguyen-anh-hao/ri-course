@@ -11,49 +11,7 @@ on:
       - develop
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '18'
-
-      - name: Install dependencies for frontend
-        working-directory: ./src/frontend
-        run: |
-          npm install
-      - name: Run Jest tests for frontend
-        working-directory: ./src/frontend
-        run: |
-          npm test -- --coverage
-      - name: Install dependencies for backend
-        working-directory: ./src/backend
-        run: |
-          npm install
-      # - name: Run Jest tests for backend
-      #   working-directory: ./src/backend
-      #   run: |
-      #     npm test -- --coverage
-
-      - name: Install Cypress for frontend tests
-        working-directory: ./src/frontend
-        run: |
-          npm install cypress
-      
-      - name: Run Cypress tests for frontend
-        working-directory: ./src/frontend
-        env:
-          CYPRESS_BASE_URL: ${{ secrets.CYPRESS_BASE_URL }}
-        run: |
-          npx cypress run
-          
   deploy_backend:
-    needs: test
     runs-on: ubuntu-latest
 
     steps:
@@ -72,7 +30,6 @@ jobs:
             https://api.render.com/v1/deploys
 
   deploy_frontend:
-    needs: test
     runs-on: ubuntu-latest
 
     steps:
@@ -88,3 +45,68 @@ jobs:
           vercel --token ${{ secrets.VERCEL_TOKEN }} --prod --yes
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+  test:
+    needs: [deploy_backend, deploy_frontend]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18"
+
+      - name: Install dependencies for frontend
+        working-directory: ./src/frontend
+        run: |
+          npm install
+
+      - name: Run Jest tests for frontend
+        working-directory: ./src/frontend
+        run: |
+          npm test -- --coverage
+
+      - name: Install dependencies for backend
+        working-directory: ./src/backend
+        run: |
+          npm install
+
+      # - name: Run Jest tests for backend
+      #   working-directory: ./src/backend
+      #   run: |
+      #     npm test -- --coverage
+
+      - name: Install Cypress for frontend tests
+        working-directory: ./src/frontend
+        run: |
+          npm install cypress
+
+      - name: Start backend server
+        working-directory: ./src/backend
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          SIGN_UP_SECRET: ${{ secrets.SIGN_UP_SECRET }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          npm start &
+          sleep 10
+
+      - name: Start frontend server
+        working-directory: ./src/frontend
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          SIGN_UP_SECRET: ${{ secrets.SIGN_UP_SECRET }}
+        run: |
+          npm run build &&
+          npm run start &
+          sleep 60
+
+      - name: Run Cypress tests for frontend
+        working-directory: ./src/frontend
+        env:
+          CYPRESS_BASE_URL: ${{ secrets.CYPRESS_BASE_URL }}
+        run: |
+          npx cypress run

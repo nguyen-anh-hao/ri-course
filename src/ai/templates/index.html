@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Face Detection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        #container {
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+            height: 80%;
+        }
+
+        #video-container,
+        #canvas-container {
+            position: relative;
+            width: 48%;
+        }
+
+        video,
+        canvas {
+            height: 480px;
+            border: 2px solid #ddd;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <!-- Left side: Webcam Video -->
+        <div id="video-container">
+            <video id="video" autoplay playsinline></video>
+        </div>
+
+        <!-- Right side: Processed Video with Face Detection -->
+        <div id="canvas-container">
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <script>
+        const socket = io.connect("http://localhost:5005");
+        const video = document.getElementById("video");
+        const canvas = document.getElementById("canvas");
+        const context = canvas.getContext("2d");
+        let isCameraOn = false;
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                video.srcObject = stream;
+                video.onloadedmetadata = function () {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                };
+            })
+            .catch(function (error) {
+                console.error("Error accessing webcam: ", error);
+            });
+
+
+        socket.on('connect', () => {
+            console.log("Connected to server");
+        });
+
+        socket.on('disconnect', () => {
+            console.log("Disconnected from server");
+        })
+
+        const CHUNK_SIZE = 1024; // Adjust chunk size as needed
+
+        function sendImageChunks(imageData) {
+            const base64String = imageData.split(',')[1];
+            const totalChunks = Math.ceil(base64String.length / CHUNK_SIZE);
+            for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
+                const start = chunkIndex * CHUNK_SIZE;
+                const end = start + CHUNK_SIZE;
+                const chunk = base64String.substring(start, end);
+                socket.emit('image_chunk', { chunk, totalChunks, chunkIndex });
+            }
+            socket.emit('image_done', {});
+
+        }
+
+        setInterval(() => {
+            if (video.srcObject) {
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const imageData = canvas.toDataURL("image/jpeg");
+                sendImageChunks(imageData)
+            }
+        }, 100); // 100ms
+
+        socket.on('verify_results', function (data) {
+            console.log("Verification Results:", data);
+            // Implement your logic to process and display results
+            // Example: find the image with best verification
+            let bestMatch = null;
+            let maxScore = 0;
+            for (const result of data) {
+                if (result.result.verified && result.result.confidence > maxScore) {
+                    maxScore = result.result.confidence;
+                    bestMatch = result;
+                    console.log("Found match with ", result.image, ", confidence is ", result.result.confidence)
+
+                }
+                if (result.result.verified) {
+                    // In thông báo và ảnh khi verified=true
+                    console.log("Verified with", result.image);
+                }
+            }
+
+            if (bestMatch) {
+                console.log("Best match image:", bestMatch.image, "with score", bestMatch.result.confidence)
+            } else {
+                console.log("No match found");
+            }
+        });
+
+        socket.on('error', function (data) {
+            console.error("Error:", data.message);
+        });
+    </script>
+</body>
+
+</html>
