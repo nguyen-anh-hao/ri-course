@@ -8,9 +8,7 @@ describe('Login functionality', () => {
         cy.get('input[type="password"]').type('user1');
         cy.get('input[type="password"]').should('have.value', 'user1');
         cy.get('button[type="submit"]').contains('Đăng nhập').click();
-        cy.get('.MuiAlert-message')
-            .should('be.visible')
-            .should('have.text', 'Đăng nhập thành công!');
+        cy.url().should('eq', `${cypress_base_url}/`);
     });
 
     it('should display error message with invalid credentials', () => {
