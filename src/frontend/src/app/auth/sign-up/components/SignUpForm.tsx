@@ -41,6 +41,15 @@ const SignUpForm: React.FC<{ userAgent: string, secret: string }> = ({ userAgent
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!username || !password || !confirmPassword) {
+            if (!username)
+                setMessage('Tên đăng nhập không được để trống!');
+            else if (!password)
+                setMessage('Mật khẩu không được để trống!');
+            else if (!confirmPassword)
+                setMessage('Xác nhận mật khẩu không được để trống!');
+            return;
+        }
         if (password !== confirmPassword) {
             setPasswordMismatch(true);
             setMessage('Mật khẩu và xác nhận mật khẩu không trùng khớp!');
