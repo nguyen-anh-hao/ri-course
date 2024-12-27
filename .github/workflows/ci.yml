@@ -42,11 +42,7 @@ jobs:
 
       - name: Deploy to Vercel
         run: |
-          vercel --token ${{ secrets.VERCEL_TOKEN }} --prod --yes > result.txt
-          echo "Vercel deployment URL is:"
-          cat result.txt
-          DEPLOY_URL=$(cat result.txt | grep -o 'https://[a-zA-Z0-9.-]*\.vercel\.app')
-          echo "DEPLOY_URL=${DEPLOY_URL}" >> $GITHUB_ENV
+          vercel --token ${{ secrets.VERCEL_TOKEN }} --prod --yes
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
@@ -111,6 +107,6 @@ jobs:
       - name: Run Cypress tests for frontend
         working-directory: ./src/frontend
         env:
-          CYPRESS_BASE_URL: ${{ env.DEPLOY_URL }}
+          CYPRESS_BASE_URL: ${{ secrets.CYPRESS_BASE_URL }}
         run: |
-          npx cypress run --browser chrome
+          npx cypress run
