@@ -7,8 +7,8 @@ export class AppController {
     constructor(private readonly appService: AppService) {}
 
     @ApiExcludeEndpoint()
-    @Delete("test")
-    test(@Query() q) {
-        return this.appService.test(q.username);
+    @Get("test")
+    test() {
+        return this.appService.test();
     }
 }

@@ -7,6 +7,7 @@ import configuration from "./config/configuration";
 import { ConfigModule } from "@nestjs/config";
 import { CoursesModule } from "./courses/courses.module";
 import { PrismaModule } from "./prisma/prisma.module";
+import { UploadModule } from "./cloudinary/upload.module";
 
 @Module({
     imports: [
@@ -17,7 +18,8 @@ import { PrismaModule } from "./prisma/prisma.module";
             load: [configuration],
         }),
         CoursesModule,
-        PrismaModule
+        PrismaModule,
+        UploadModule
     ],
     controllers: [AppController],
     providers: [AppService],

@@ -43,6 +43,9 @@ model Course {
 
   title       String
   description String
+  thumbnailUrl String?
+
+  chapters Chapter[]
 
   users   Enrollment[]
   mentors MentorPermission[]
@@ -91,4 +94,29 @@ model MentorPermission {
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@id([mentorId, courseId])
+}
+
+model Chapter {
+  id        Int      @id @default(autoincrement())
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  courseId Int
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  title String
+  description String
+  lessons Lesson[]
+}
+
+model Lesson {
+  id        Int      @id @default(autoincrement())
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  chapterId Int
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  type String
+  contentUrl String
 }

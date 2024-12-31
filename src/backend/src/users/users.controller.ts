@@ -5,10 +5,11 @@ import { InfoUpdateGuard } from "src/users/guards";
 import { UsersService } from "./users.service";
 import { UserEntity } from "./entities/user.entity";
 import { CourseEntity } from "src/courses/entities/course.entity";
-import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiForbiddenResponse, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiForbiddenResponse, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { CreateUserDto } from "./dtos";
 import { AuditLogsService } from "src/audit-logs/audit-logs.service";
 
+@ApiTags("Users")
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @UseInterceptors(ClassSerializerInterceptor)

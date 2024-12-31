@@ -8,12 +8,7 @@ declare const module: any;
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
-    app.use(
-        cors({
-            origin: process.env.CLIENT_URL || "http://localhost:3000",
-            methods: "GET, HEAD, PUT, PATCH, POST, DELETE",
-        }),
-    );
+    app.use(cors());
 
     const config = new DocumentBuilder()
         .setTitle('RiCourse')
@@ -21,7 +16,10 @@ async function bootstrap() {
         .addBearerAuth()
         .build();
 
-    const document = SwaggerModule.createDocument(app, config);
+    const document = SwaggerModule.createDocument(app, config, {
+        include: []
+    });
+
     SwaggerModule.setup('api', app, document);
     
     await app.listen(3123, () =>

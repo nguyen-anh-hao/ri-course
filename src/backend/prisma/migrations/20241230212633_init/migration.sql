@@ -24,6 +24,7 @@ CREATE TABLE "Course" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
+    "thumbnailUrl" TEXT,
 
     CONSTRAINT "Course_pkey" PRIMARY KEY ("id")
 );
@@ -59,6 +60,30 @@ CREATE TABLE "MentorPermission" (
     CONSTRAINT "MentorPermission_pkey" PRIMARY KEY ("mentorId","courseId")
 );
 
+-- CreateTable
+CREATE TABLE "Chapter" (
+    "id" SERIAL NOT NULL,
+    "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "courseId" INTEGER NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+
+    CONSTRAINT "Chapter_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Lesson" (
+    "id" SERIAL NOT NULL,
+    "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "chapterId" INTEGER NOT NULL,
+    "type" TEXT NOT NULL,
+    "contentUrl" TEXT NOT NULL,
+
+    CONSTRAINT "Lesson_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
@@ -79,3 +104,9 @@ ALTER TABLE "MentorPermission" ADD CONSTRAINT "MentorPermission_mentorId_fkey" F
 
 -- AddForeignKey
 ALTER TABLE "MentorPermission" ADD CONSTRAINT "MentorPermission_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Chapter" ADD CONSTRAINT "Chapter_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Lesson" ADD CONSTRAINT "Lesson_chapterId_fkey" FOREIGN KEY ("chapterId") REFERENCES "Chapter"("id") ON DELETE CASCADE ON UPDATE CASCADE;

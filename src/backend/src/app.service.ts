@@ -10,13 +10,21 @@ export class AppService {
         return "Hello World!";
     }
 
-    async test(username : string) {
-        const user = await this.prisma.user.delete({
-            where: {
-                username
+    async test() {
+        const result = await this.prisma.course.findMany({
+            select: {
+                id: true,
+                createAt: true,
+                updatedAt: true, 
+                title: true,
+                users: {
+                    select: {
+                        user: true
+                    }
+                }
             }
-        });
+        }) 
 
-        return new UserEntity(user);
+        return result;
     }
 }

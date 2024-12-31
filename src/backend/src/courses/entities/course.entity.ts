@@ -1,11 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Course } from "@prisma/client";
+import { UserEntity } from "src/users/entities/user.entity";
 
 export class CourseEntity implements Course {
-    constructor(partial : Partial<CourseEntity>) {
-        Object.assign(this, partial);
-    }
-
     @ApiProperty()
     id : number;
     @ApiProperty()
@@ -21,4 +18,13 @@ export class CourseEntity implements Course {
         example: "provided description"
     })
     description: string;
+
+    thumbnailUrl: string;
+    
+    users?: UserEntity[];
+    mentors?: UserEntity[];
+
+    constructor(partial : Partial<CourseEntity>) {
+        Object.assign(this, partial);
+    }
 }

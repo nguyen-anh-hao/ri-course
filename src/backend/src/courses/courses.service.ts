@@ -1,16 +1,41 @@
 import { Injectable } from "@nestjs/common";
-import { CreateCourseDto } from "./dto/create-course.dto";
+import { CreateCourseDto } from "./dtos/create-course.dto";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CourseEntity } from "./entities/course.entity";
 import { UserEntity } from "src/users/entities/user.entity";
-import { UpdateCourseDto } from "./dto/update-course.dto";
+import { UpdateCourseDto } from "./dtos/update-course.dto";
 
 @Injectable()
 export class CoursesService {
     constructor(private prisma : PrismaService) {}
 
-    async findAll() : Promise<CourseEntity[]> {
-        const courses = await this.prisma.course.findMany();
+    async findAll(query: any) : Promise<CourseEntity[]> {
+        const precourses = await this.prisma.course.findMany({
+            where: query,
+            select: {
+                id: true,
+                createAt: true,
+                updatedAt: true, 
+                title: true,
+                description: true,
+                users: {
+                    select: {
+                        user: true
+                    }
+                },
+                mentors: {
+                    select: {
+                        mentor: true
+                    }
+                }
+            }
+        });
+
+        const courses = precourses.map(course => ({
+            ...course,
+            users: course.users.map(u => u.user),
+            mentors: course.mentors.map(u => u.mentor),
+        }));
 
         return courses.map(course => new CourseEntity(course));
     }
@@ -32,7 +57,7 @@ export class CoursesService {
         return new CourseEntity(course);
     }
 
-    async deleteOne(id: number) {
+    async deleteOne(id: number) : Promise<CourseEntity> {
         const course = await this.prisma.course.delete({
             where: {
                 id
@@ -42,27 +67,7 @@ export class CoursesService {
         return new CourseEntity(course);
     }
 
-    async findById(id: number) : Promise<CourseEntity> {
-        const course = await this.prisma.course.findUnique({
-            where: {
-                id
-            }
-        });
-
-        return new CourseEntity(course);
-    }
-
-    async findByTitle(title: string) : Promise<CourseEntity[]> {
-        const courses = await this.prisma.course.findMany({
-            where: {
-                title
-            }
-        });
-
-        return courses.map(course => new CourseEntity(course));
-    }
-
-    async findAllLearners(id: number) {
+    async findAllLearners(id: number) : Promise<UserEntity[]> {
         const users = await this.prisma.user.findMany({
             where: {
                 courses: {
@@ -76,7 +81,7 @@ export class CoursesService {
         return users.map(user => new UserEntity(user));
     }
 
-    async findAllMentors(id: number) {
+    async findAllMentors(id: number) : Promise<UserEntity[]> {
         const users = await this.prisma.user.findMany({
             where: {
                 authorizedCourses: {
