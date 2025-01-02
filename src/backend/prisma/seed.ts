@@ -87,27 +87,27 @@ async function main() {
 
     const enrollments = [
         {
-            userId: 1,
+            learnerId: 1,
             courseId: 1,
         },
         {
-            userId: 1,
+            learnerId: 1,
             courseId: 2,
         },
         {
-            userId: 2,
+            learnerId: 2,
             courseId: 2,
         },
         {
-            userId: 2,
+            learnerId: 2,
             courseId: 3,
         },
         {
-            userId: 4,
+            learnerId: 4,
             courseId: 3,
         },
         {
-            userId: 5,
+            learnerId: 5,
             courseId: 1,
         },
     ];
@@ -115,8 +115,8 @@ async function main() {
     for (let enrollment of enrollments) {
         const newEnrollment = await prisma.enrollment.upsert({
             where: {
-                userId_courseId: {
-                    userId: enrollment.userId,
+                learnerId_courseId: {
+                    learnerId: enrollment.learnerId,
                     courseId: enrollment.courseId,
                 },
             },

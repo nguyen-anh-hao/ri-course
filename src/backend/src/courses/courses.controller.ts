@@ -11,25 +11,25 @@ import {
     Param,
     Request,
     Patch,
+    UseInterceptors,
+    ClassSerializerInterceptor,
 } from "@nestjs/common";
 import { CoursesService } from "./courses.service";
 import { CreateCourseDto } from "./dtos/create-course.dto";
 import { JwtAuthGuard, RolesGuard } from "src/auth/guards";
 import { Role, Roles } from "src/auth/role";
-import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiExcludeController, ApiExcludeEndpoint, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { CourseEntity } from "./entities/course.entity";
 import { EnrollmentsService } from "src/enrollments/enrollments.service";
 import { MentorPermissionsService } from "src/mentor-permissions/mentor-permissions.service";
 import { UpdateCourseDto } from "./dtos/update-course.dto";
 import { ChaptersService } from "src/chapters/chapters.service";
-import { LessonsService } from "src/lessons/lessons.service";
 import { CreateChapterDto } from "src/chapters/dtos/create-chapter.dto";
-import { UpdateChapterDto } from "src/chapters/dtos/update-chapter.dto";
 import { ChapterEntity } from "src/chapters/entities/chapter.entity";
-import { CreateLessonDto } from "src/lessons/dtos/create-lesson.dto";
-import { UpdateLessonDto } from "src/lessons/dtos/update-lesson.dto";
-import { LessonEntity } from "src/lessons/entities/lesson.entity";
+import { CourseAccessGuard } from "./guards/course-access.guard";
+import { MentorGuard } from "./guards/mentor.guard";
 
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller("courses")
 export class CoursesController {
     constructor(
@@ -37,7 +37,6 @@ export class CoursesController {
         private readonly enrollmentsService: EnrollmentsService,
         private readonly mentorPermissionsService: MentorPermissionsService,
         private readonly chaptersService: ChaptersService,
-        private readonly lessonsService: LessonsService,
     ) {}
 
     @ApiOperation({
@@ -70,6 +69,53 @@ export class CoursesController {
             throw new BadRequestException("Only one of id or title of the course can be passed into the query");
 
         return await this.coursesService.findAll({ id: +id || undefined, title });
+    }
+
+    // -----------------------------------------------
+
+    @ApiOperation({
+        summary: "Get detail chapter and lesson of a course (Admin, permitted Mentor or enrolled Learner)"
+    })
+    @ApiParam({
+        name: "id",
+        description: "course's id you want to get"
+    })
+    @ApiOkResponse({
+        description: "Fetch all satisfied courses successfully",
+        type: [CourseEntity]
+    })
+    @ApiUnauthorizedResponse({
+        description: "Missing JWT"
+    })
+    @ApiForbiddenResponse({
+        description: "Not Admin or permitted Mentor or enrolled Learner"
+    })
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    @UseGuards(CourseAccessGuard)
+    @Get(":id")
+    async getCourseDetail(@Param("id", ParseIntPipe) id: number) : Promise<CourseEntity> {
+        return await this.coursesService.findDetail(id);
+    }
+
+    // -----------------------------------------------
+
+    @ApiOperation({
+        summary: "NOT IMPLEMENTED"
+    })
+    @Post(":id/thumbnail")
+    async uploadThumbnail() {
+        return true;
+    }
+    
+    // -----------------------------------------------
+    
+    @ApiOperation({
+        summary: "NOT IMPLEMENTED"
+    })
+    @Patch(":id/thumbnail")
+    async updateThumbnail() {
+        return false;
     }
 
     // -----------------------------------------------
@@ -119,7 +165,7 @@ export class CoursesController {
     @UseGuards(RolesGuard)
     @Roles(Role.Admin)
     @Delete(":id")
-    async deleteCourse(@Param("id", ParseIntPipe) id: number) {
+    async deleteCourse(@Param("id", ParseIntPipe) id: number) : Promise<CourseEntity> {
         return await this.coursesService.deleteOne(id);
     }
 
@@ -144,7 +190,7 @@ export class CoursesController {
     @Post(":id/learners")
     async createLearnerEnrollment(@Param("id", ParseIntPipe) id : number, @Request() req) {
         return await this.enrollmentsService.createOne({
-            userId: req.user.id,
+            learnerId: req.user.id,
             courseId: id
         });
     }
@@ -168,7 +214,10 @@ export class CoursesController {
     @UseGuards(RolesGuard)
     @Roles(Role.Admin, Role.Mentor)
     @Delete(":courseId/learners/:learnerId")
-    async kickLearner(@Param("courseId", ParseIntPipe) courseId: number, @Param("learnerId", ParseIntPipe) learnerId: number) {
+    async kickLearner(
+        @Param("courseId", ParseIntPipe) courseId: number,
+        @Param("learnerId", ParseIntPipe) learnerId: number
+    ) {
         return await this.enrollmentsService.kickLearnerFromCourse(learnerId, courseId);
     }
 
@@ -201,7 +250,10 @@ export class CoursesController {
     @UseGuards(RolesGuard)
     @Roles(Role.Admin)
     @Post(":id/mentors")
-    async createMentorPermission(@Param("id", ParseIntPipe) courseId : number, @Body("mentorId", ParseIntPipe) mentorId) {
+    async createMentorPermission(
+        @Param("id", ParseIntPipe) courseId : number,
+        @Body("mentorId", ParseIntPipe) mentorId : number
+    ) {
         return await this.mentorPermissionsService.permit({
             mentorId: mentorId,
             courseId: courseId
@@ -227,7 +279,10 @@ export class CoursesController {
     @UseGuards(RolesGuard)
     @Roles(Role.Admin)
     @Delete(":courseId/mentors/:mentorId")
-    async kickMentor(@Param("courseId", ParseIntPipe) courseId: number, @Param("mentorId", ParseIntPipe) mentorId: number) {
+    async kickMentor(
+        @Param("courseId", ParseIntPipe) courseId: number,
+        @Param("mentorId", ParseIntPipe) mentorId: number
+    ) {
         return await this.mentorPermissionsService.unpermit({
             courseId,
             mentorId
@@ -258,63 +313,44 @@ export class CoursesController {
     @UseGuards(RolesGuard)
     @Roles(Role.Admin) 
     @Patch(":id")
-    async update(@Param("id", ParseIntPipe) id: number, @Body() updateCourseDto:UpdateCourseDto): Promise<CourseEntity> {
+    async update(
+        @Param("id", ParseIntPipe) id: number,
+        @Body() updateCourseDto: UpdateCourseDto
+    ): Promise<CourseEntity> {
         return await this.coursesService.updateOne(id, updateCourseDto);
     }
 
     // ----------------------------------------------------------------------
-
-    @Get(":courseId/chapters")
-    async findAllChapters(@Param("courseId", ParseIntPipe) courseId : number) : Promise<ChapterEntity[]> {
-        return await this.chaptersService.findAll({ courseId });
-    }
     
-    @Post(":courseId/chapters")
+    @ApiOperation({
+        summary: "Create a new chapter (Permitted Mentor only)"
+    })
+    @ApiParam({
+        name: "id",
+        description: "course's id you want to create a chapter in"
+    })
+    @ApiBody({
+        type: CreateChapterDto
+    })
+    @ApiCreatedResponse({
+        description: "Created a chapter in specified course successfully"
+    })
+    @ApiUnauthorizedResponse({
+        description: "Missing JWT"
+    })
+    @ApiForbiddenResponse({
+        description: "Not Admin or permitted Mentor or enrolled Learner"
+    })
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    @Roles(Role.Mentor)
+    @UseGuards(RolesGuard)
+    @UseGuards(MentorGuard)
+    @Post(":id/chapters")
     async createChapter(
-        @Param("courseId", ParseIntPipe) courseId: number,
+        @Param("id", ParseIntPipe) id: number,
         @Body() createChapterDto: CreateChapterDto
     ) : Promise<ChapterEntity> {
-        return await this.chaptersService.createOne(courseId, createChapterDto);
-    }
-    
-    @Patch(":courseId/chapters/:chapterId")
-    async updateChapter(
-        @Param("chapterId", ParseIntPipe) chapterId: number,
-        @Body() updateChapterDto: UpdateChapterDto
-    ) : Promise<ChapterEntity> {
-        return await this.chaptersService.updateOne(chapterId, updateChapterDto);
-    }
-    
-    @Delete(":courseId/chapters/:chapterId")
-    async deleteChapter(@Param("chapterId", ParseIntPipe) chapterId: number) : Promise<ChapterEntity> {
-        return await this.chaptersService.deleteOne(chapterId);
-    }
-    
-    // ----------------------------------------------------------------------
-    
-    @Get(":courseId/chapters/:chapterId/lessons")
-    async findAllLessons(@Param("chapterId", ParseIntPipe) chapterId: number) : Promise<LessonEntity[]> {
-        return await this.lessonsService.findAll({ chapterId });
-    }
-    
-    @Post(":courseId/chapters/:chapterId/lessons")
-    async createLesson(
-        @Param("chapterId", ParseIntPipe) chapterId: number,
-        @Body() createLessonDto: CreateLessonDto
-    ) : Promise<LessonEntity> {
-        return await this.lessonsService.createOne(chapterId, createLessonDto);
-    }
-    
-    @Patch(":courseId/chapters/:chapterId/lessons/:lessonId")
-    async updateLesson(
-        @Param("lessonId", ParseIntPipe) lessonId: number,
-        @Body() updateLessonDto: UpdateLessonDto
-    ) : Promise<LessonEntity> {
-        return await this.lessonsService.updateOne(lessonId, updateLessonDto);
-    }
-    
-    @Delete(":courseId/chapters/:chapterId/lessons/:lessonId")
-    async deleteLesson(@Param("lessonId", ParseIntPipe) lessonId: number) : Promise<LessonEntity> {
-        return await this.lessonsService.deleteOne(lessonId);
+        return await this.chaptersService.createOne(id, createChapterDto);
     }
 }

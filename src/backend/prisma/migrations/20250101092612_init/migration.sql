@@ -31,12 +31,12 @@ CREATE TABLE "Course" (
 
 -- CreateTable
 CREATE TABLE "Enrollment" (
-    "userId" INTEGER NOT NULL,
+    "learnerId" INTEGER NOT NULL,
     "courseId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "level" TEXT,
 
-    CONSTRAINT "Enrollment_pkey" PRIMARY KEY ("userId","courseId")
+    CONSTRAINT "Enrollment_pkey" PRIMARY KEY ("learnerId","courseId")
 );
 
 -- CreateTable
@@ -88,7 +88,7 @@ CREATE TABLE "Lesson" (
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- AddForeignKey
-ALTER TABLE "Enrollment" ADD CONSTRAINT "Enrollment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Enrollment" ADD CONSTRAINT "Enrollment_learnerId_fkey" FOREIGN KEY ("learnerId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Enrollment" ADD CONSTRAINT "Enrollment_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;

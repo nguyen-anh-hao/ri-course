@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Course } from "@prisma/client";
+import { Transform } from "class-transformer";
 import { UserEntity } from "src/users/entities/user.entity";
 
 export class CourseEntity implements Course {
@@ -21,8 +22,15 @@ export class CourseEntity implements Course {
 
     thumbnailUrl: string;
     
-    users?: UserEntity[];
-    mentors?: UserEntity[];
+    @Transform(({ value } : { value: UserEntity[] }) =>
+        value.map((user) => new UserEntity(user))
+    )
+    learners: UserEntity[];
+
+    @Transform(({ value } : { value: UserEntity[] }) =>
+        value.map((user) => new UserEntity(user))
+    )
+    mentors: UserEntity[];
 
     constructor(partial : Partial<CourseEntity>) {
         Object.assign(this, partial);

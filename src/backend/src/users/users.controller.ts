@@ -1,18 +1,16 @@
-import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, ParseArrayPipe, ParseIntPipe, Patch, Post, Query, Req, Request, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Req, Request, UseGuards, UseInterceptors } from "@nestjs/common";
 import { Role, Roles } from "src/auth/role";
 import { RolesGuard, JwtAuthGuard } from "src/auth/guards";
 import { InfoUpdateGuard } from "src/users/guards";
 import { UsersService } from "./users.service";
 import { UserEntity } from "./entities/user.entity";
 import { CourseEntity } from "src/courses/entities/course.entity";
-import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiForbiddenResponse, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiForbiddenResponse, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { CreateUserDto } from "./dtos";
 import { AuditLogsService } from "src/audit-logs/audit-logs.service";
 
-@ApiTags("Users")
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-@UseInterceptors(ClassSerializerInterceptor)
 @Controller("users")
 export class UsersController {
     constructor(

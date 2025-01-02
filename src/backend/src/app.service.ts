@@ -17,9 +17,9 @@ export class AppService {
                 createAt: true,
                 updatedAt: true, 
                 title: true,
-                users: {
+                learners: {
                     select: {
-                        user: true
+                        learner: true
                     }
                 }
             }

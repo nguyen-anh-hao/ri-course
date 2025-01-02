@@ -47,13 +47,13 @@ model Course {
 
   chapters Chapter[]
 
-  users   Enrollment[]
+  learners   Enrollment[]
   mentors MentorPermission[]
 }
 
 model Enrollment {
-  userId Int
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  learnerId Int
+  learner   User @relation(fields: [learnerId], references: [id], onDelete: Cascade)
 
   courseId Int
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
@@ -61,7 +61,7 @@ model Enrollment {
   createdAt DateTime @default(now())
   level     String?
 
-  @@id([userId, courseId])
+  @@id([learnerId, courseId])
 }
 
 enum Role {

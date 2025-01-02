@@ -10,7 +10,10 @@ export class ChaptersService {
 
     async findAll(query: any) : Promise<ChapterEntity[]> {
         const chapters = await this.prisma.chapter.findMany({
-            where: query
+            where: query,
+            include: {
+                lessons: true
+            }
         });
 
         return chapters.map(chapter => new ChapterEntity(chapter));
