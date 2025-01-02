@@ -22,10 +22,10 @@ export class EnrollmentsService {
         return new EnrollmentEntity(enrollment);
     }
 
-    async findByUserId(userId: number) : Promise<EnrollmentEntity[]> {
+    async findByUserId(learnerId: number) : Promise<EnrollmentEntity[]> {
         const enrollments = await this.prisma.enrollment.findMany({
             where: {
-                userId
+                learnerId
             }
         });
 
@@ -35,24 +35,38 @@ export class EnrollmentsService {
     async findByCourseId(courseId: number) : Promise<UserEntity[]> {
         const enrollments = await this.prisma.enrollment.findMany({
             select: {
-                user: true
+                learner: true
             },
             where: {
                 courseId
             }
         });
     
-        return enrollments.map(enrollments => new UserEntity(enrollments.user));
+        return enrollments.map(enrollments => new UserEntity(enrollments.learner));
     }
 
     async kickLearnerFromCourse(learnerId: number, courseId: number) {
         return await this.prisma.enrollment.delete({
             where: {
-                userId_courseId: {
-                    userId: learnerId,
+                learnerId_courseId: {
+                    learnerId,
                     courseId
                 }
             }
         })
     }
+
+    async enrolled(learnerId: number, courseId: number) {
+        const enrollment =  await this.prisma.enrollment.findUnique({
+            where: {
+                learnerId_courseId: {
+                    learnerId,
+                    courseId
+                }
+            }
+        });
+
+        return !!enrollment;
+    }
+
 }
