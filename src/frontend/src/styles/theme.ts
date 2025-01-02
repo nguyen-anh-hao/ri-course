@@ -61,7 +61,6 @@ const lightTheme: ThemeOptions = {
             styleOverrides: {
                 paper: {
                     backdropFilter: 'blur(10px)',
-                    boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
                     backgroundColor: colors.light.background.paper,
                 },
             },
@@ -96,6 +95,14 @@ const lightTheme: ThemeOptions = {
                 paper: {
                     backdropFilter: 'blur(10px)',
                     backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                },
+            },
+        },
+        MuiPaper: {
+            styleOverrides: {
+                root: {
+                    boxShadow: '0px 0px 6px rgba(0, 0, 0, 0.1)',
+                    borderRadius: '10px',
                 },
             },
         },
@@ -160,7 +167,6 @@ const darkTheme: ThemeOptions = {
             styleOverrides: {
                 paper: {
                     backdropFilter: 'blur(10px)',
-                    boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
                     backgroundColor: colors.dark.background.paper,
                 },
             },
@@ -197,7 +203,15 @@ const darkTheme: ThemeOptions = {
                     backgroundColor: 'rgba(0, 0, 0, 0.9)',
                 },
             },
-        }
+        },
+        MuiPaper: {
+            styleOverrides: {
+                root: {
+                    boxShadow: '0px 0px 6px rgba(0, 0, 0, 0.1)',
+                    borderRadius: '10px',
+                },
+            },
+        },
     },
 };
 

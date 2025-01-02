@@ -26,7 +26,7 @@ const ProfileInfo = () => {
         };
 
         fetchUser();
-    }, [user === null]);
+    }, [user]);
 
     return (
         <Grid container spacing={2}>

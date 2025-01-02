@@ -1,0 +1,17 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/src/frontend"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "fix"
+    versioning-strategy: "increase"
+
+  - package-ecosystem: "npm"
+    directory: "/src/backend"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "fix"
+    versioning-strategy: "increase"

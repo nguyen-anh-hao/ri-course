@@ -1,15 +1,21 @@
 'use client'
 
 // React and Next.js
-import React, { useState } from 'react';
-import Link from 'next/link';
+import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
+import Image from 'next/image';
+import { getCookie } from 'cookies-next';
+import Link from 'next/link';
 
 // Material-UI components
-import { AppBar, Toolbar, Typography, Container, Box, Button, IconButton, Avatar, Menu, MenuItem, Drawer, List, ListItem, ListItemText, ListItemButton } from '@mui/material';
+import { AppBar, Toolbar, Typography, Container, Box, Button, IconButton, Avatar, Menu, MenuItem, Drawer, List, ListItem, ListItemText, ListItemButton, ListItemIcon } from '@mui/material';
 import Brightness2OutlinedIcon from '@mui/icons-material/Brightness2Outlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
+import SchoolIcon from '@mui/icons-material/School';
+import BookIcon from '@mui/icons-material/Book';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import PeopleIcon from '@mui/icons-material/People';
 
 // Custom components
 import NavItem from '@/components/ui/NavItem';
@@ -30,6 +36,13 @@ const Header: React.FC = () => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [drawerOpen, setDrawerOpen] = useState(false);
 
+    useEffect(() => {
+        const _token = getCookie('token');
+        const _user = sessionStorage.getItem('user');
+        if (!_token || !_user)
+            signout();
+    });
+
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -46,7 +59,7 @@ const Header: React.FC = () => {
     const handleLogout = () => {
         handleMenuClose();
         signout();
-        router.push('/');
+        window.location.href = '/';
     };
 
     const handleDrawerToggle = () => {
@@ -54,24 +67,19 @@ const Header: React.FC = () => {
     };
 
     const learnerNavItems = [
-        { key: 1, text: 'Học tập', path: '/my-courses' },
-        { key: 2, text: 'Khóa học', path: '/all-courses' },
-        { key: 3, text: 'Bài giảng', path: '/lectures' },
-        { key: 4, text: 'Bài tập', path: '/assignments' },
-        { key: 5, text: 'Kiểm tra', path: '/exams' },
+        { key: 1, text: 'Học tập', path: '/my-courses', icon: <SchoolIcon /> },
+        { key: 2, text: 'Khóa học', path: '/all-courses', icon: <BookIcon /> },
+        { key: 3, text: 'Kỳ thi', path: '/exams', icon: <AssignmentIcon /> },
     ];
 
     const mentorNavItems = [
-        { key: 1, 'text': 'Quản lý khóa học', 'path': '/mentor/courses' },
-        { key: 2, 'text': 'Quản lý bài giảng', 'path': '/mentor/lectures' },
-        { key: 3, 'text': 'Quản lý bài kiểm tra', 'path': '/mentor/exams' },
-        { key: 4, 'text': 'Quản lý bài thi', 'path': '/mentor/tests' },
-        { key: 5, 'text': 'Quản lý bài tập', 'path': '/mentor/assignments' },
+        { key: 1, text: 'Quản lý khóa học', path: '/mentor/courses', icon: <BookIcon /> },
+        { key: 3, text: 'Quản lý kỳ thi', path: '/mentor/exams', icon: <AssignmentIcon /> },
     ];
 
     const adminNavItems = [
-        { key: 1, text: 'Quản lý người dùng', path: '/admin/user-accounts' },
-        { key: 2, text: 'Quản lý khóa học', path: '/admin/all-courses' },
+        { key: 1, text: 'Quản lý người dùng', path: '/admin/user-accounts', icon: <PeopleIcon /> },
+        { key: 2, text: 'Quản lý khóa học', path: '/admin/all-courses', icon: <BookIcon /> },
     ];
 
     const navItems = sessionStorage.getItem('role') === '"Mentor"' ? mentorNavItems :
@@ -86,7 +94,12 @@ const Header: React.FC = () => {
                         color="inherit"
                         aria-label="menu"
                         onClick={handleDrawerToggle}
-                        sx={{ display: { xs: 'block', md: 'none' } }}
+                        sx={{
+                            display: { xs: 'block', md: 'none' },
+                            marginRight: 2,
+                            width: 40,
+                            height: 40,
+                        }}
                     >
                         <MenuIcon />
                     </IconButton>
@@ -97,10 +110,25 @@ const Header: React.FC = () => {
                         PaperProps={{
                             sx: {
                                 backdropFilter: 'blur(10px)',
+                                width: 300,
                             },
                         }}
                     >
-                        <List>
+                        <List sx={{ padding: 0 }}>
+                            <Box display='flex' alignItems='center' gap='16px' sx={{ width: '80%', padding: '8px 16px' }}>
+                                {isDarkMode ? (
+                                    <Image src='/logo-dark.png' alt='Logo' width={40} height={40} />
+                                ) : (
+                                    <Image src='/logo.png' alt='Logo' width={40} height={40} />
+                                )}
+                                <Typography
+                                    variant='h6'
+                                    component='div'
+                                    sx={{ color: theme.palette.text.primary }}
+                                >
+                                    RiCourse
+                                </Typography>
+                            </Box>
                             {navItems.map((item) => (
                                 <ListItem key={item.key} disablePadding>
                                     <ListItemButton
@@ -113,19 +141,22 @@ const Header: React.FC = () => {
                                             }
                                         }}
                                     >
+                                        <ListItemIcon>
+                                            {item.icon}
+                                        </ListItemIcon>
                                         <ListItemText primary={item.text} />
                                     </ListItemButton>
                                 </ListItem>
                             ))}
                         </List>
                     </Drawer>
-                    <Box display='flex' alignItems='center' flexGrow={1} gap='8px'>
+                    <Box display='flex' alignItems='center' flexGrow={1} gap='8px' >
                         <Link href='/' passHref style={{ textDecoration: 'none' }}>
                             <Box display='flex' alignItems='center' gap='16px' sx={{ padding: '0px 12px 0px 0px' }}>
                                 {isDarkMode ? (
-                                    <img src='/logo-dark.png' alt='Logo' style={{ width: '40px', height: '40px' }} />
+                                    <Image src='/logo-dark.png' alt='Logo' width={40} height={40} />
                                 ) : (
-                                    <img src='/logo.png' alt='Logo' style={{ width: '40px', height: '40px' }} />
+                                    <Image src='/logo.png' alt='Logo' width={40} height={40} />
                                 )}
                                 <Typography
                                     variant='h6'
@@ -142,12 +173,12 @@ const Header: React.FC = () => {
                             ))}
                         </Box>
                     </Box>
+                    <IconButton sx={{ mx: 0.25, height: 40, width: 40 }} onClick={() => toggleDarkMode()} >
+                        <Brightness2OutlinedIcon />
+                    </IconButton>
                     {user ? (
                         <>
-                            <IconButton sx={{ mx: 0.25 }} onClick={() => toggleDarkMode()}>
-                                <Brightness2OutlinedIcon />
-                            </IconButton>
-                            <IconButton sx={{ mx: 0.25 }}>
+                            <IconButton sx={{ mx: 0.25, height: 40, width: 40 }}>
                                 <NotificationsOutlinedIcon />
                             </IconButton>
                             <Avatar
@@ -180,24 +211,31 @@ const Header: React.FC = () => {
                             </Menu>
                         </>
                     ) : (
-                        <Box display='flex' alignItems='center' gap='16px'>
-                            <Button
-                                variant='contained'
-                                onClick={() => router.push('/auth/sign-in')}
-                                sx={{
-                                    color: theme.palette.text.primary,
-                                    backgroundColor: 'transparent',
-                                }}
-                            >
-                                Đăng nhập
-                            </Button>
-                            <Button
-                                variant='contained'
-                                onClick={() => router.push('/auth/sign-up')}
-                            >
-                                Đăng ký
-                            </Button>
-                        </Box>
+                        <>
+                            <Box display='flex' alignItems='center'>
+                                <Button
+                                    variant='contained'
+                                    onClick={() => router.push('/auth/sign-in')}
+                                    sx={{
+                                        color: theme.palette.text.primary,
+                                        backgroundColor: 'transparent',
+                                        display: { xs: 'none', sm: 'block' },
+                                        mx: 1,
+                                    }}
+                                >
+                                    Đăng nhập
+                                </Button>
+                                <Button
+                                    variant='contained'
+                                    onClick={() => router.push('/auth/sign-up')}
+                                    sx={{
+                                        mx: 1,
+                                    }}
+                                >
+                                    Đăng ký
+                                </Button>
+                            </Box>
+                        </>
                     )}
                 </Toolbar>
             </Container>

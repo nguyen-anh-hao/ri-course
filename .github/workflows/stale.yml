@@ -1,0 +1,20 @@
+name: Stale Issues and PRs
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Mark stale issues and PRs
+        uses: actions/stale@v3
+        with:
+          daysUntilStale: 30
+          daysUntilClose: 7
+          staleLabel: "stale"
+          closeIssue: true

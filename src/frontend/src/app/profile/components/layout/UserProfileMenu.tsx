@@ -18,7 +18,7 @@ const UserProfileMenu: React.FC<UserProfileMenuProps> = ({ activeButton }) => {
 
     const handleProfileButtonClick = () => { router.push('/profile'); }
     const handleChangePasswordButtonClick = () => { router.push('/profile/change-password'); }
-    const handleLogoutButtonClick = () => { signout(); router.push('/'); }
+    const handleLogoutButtonClick = () => { signout(); window.location.href = '/'; }
 
     return (
         <Paper elevation={3} sx={{ py: 2, gap: 2, display: 'flex', flexDirection: 'column', borderRadius: 2 }}>
