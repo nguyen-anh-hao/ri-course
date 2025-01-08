@@ -22,4 +22,11 @@ describe('Login functionality', () => {
             .should('be.visible')
             .should('have.text', 'Tên đăng nhập hoặc mật khẩu không đúng!');
     });
+    it('should display error message with invalid credentials', () => {
+        cy.visit(`${cypress_base_url}/auth/sign-in`);
+        cy.get('button[type="submit"]').contains('Đăng nhập').click();
+        cy.get('.MuiAlert-message')
+            .should('be.visible')
+            .should('have.text', 'Tên đăng nhập và mật khẩu không được để trống!');
+    });
 });
