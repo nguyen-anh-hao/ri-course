@@ -11,19 +11,19 @@ export class CourseAccessGuard implements CanActivate {
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
-        const { user, params } = context.switchToHttp().getRequest();
+        const { user, query } = context.switchToHttp().getRequest();
 
-        if (user.roles.include(Role.Admin))
+        if (user.roles.includes(Role.Admin))
             return true;
         
-        const courseId = +params.id;
+        const courseId = +query.courseId;
         
-        if (user.roles.include(Role.Mentor)) {
+        if (user.roles.includes(Role.Mentor)) {
             const mentorId = user.id;
             return this.mentorPermissionsService.isMentorPermitted(mentorId, courseId);
         }
 
-        if (user.roles.include(Role.Learner)) {
+        if (user.roles.includes(Role.Learner)) {
             const learnerId = user.id;
             return this.enrollmentsService.enrolled(learnerId, courseId);
         }

@@ -1,6 +1,7 @@
 // prisma/seed.ts
 
 import { PrismaClient, Role } from "@prisma/client";
+import * as bcrypt from "bcrypt";
 
 // initialize Prisma Client
 const prisma = new PrismaClient();
@@ -10,8 +11,7 @@ async function main() {
         {
             fullname: "User 1",
             username: "user1",
-            password:
-                "$2b$11$iF.vIFWlXJdkhQCnDIrgxuC/VeD4CvI4qH9B5puZrr83My2NiKF2S",
+            password: await bcrypt.hash("user1", 1),
             email: "user1@ricourse.com",
             roles: [Role.Learner],
             dob: new Date("2004-09-20"),
@@ -19,8 +19,7 @@ async function main() {
         {
             fullname: "User 2",
             username: "user2",
-            password:
-                "$2b$11$hlcxykhjO.YlVstp.z2zAOgj90mGK1Q3ejieZCnliOwlIsZ6mSwxu",
+            password: await bcrypt.hash("user2", 1),
             email: "user2@ricourse.com",
             roles: [Role.Learner],
             dob: new Date("2005-09-20"),
@@ -28,8 +27,7 @@ async function main() {
         {
             fullname: "User 3",
             username: "user3",
-            password:
-                "$2b$11$fWN8U2inFKp9bxiXzLK7N.ZW7pKr2G/X1kA3ZWBJBFpN2nRtgluYC",
+            password: await bcrypt.hash("user3", 1),
             email: "user3@ricourse.com",
             roles: [Role.Learner],
             dob: new Date("2006-09-20"),
@@ -37,8 +35,7 @@ async function main() {
         {
             fullname: "User 4",
             username: "user4",
-            password:
-                "$2b$11$x33wC4RG7xiWWNDix8HABO4NK67XpOei9hIX/ZrAdrjdDCZnvasri",
+            password: await bcrypt.hash("user4", 1),
             email: "user4@ricourse.com",
             roles: [Role.Mentor],
             dob: new Date("2007-09-20"),
@@ -46,16 +43,30 @@ async function main() {
         {
             fullname: "User 5",
             username: "user5",
-            password:
-                "$2b$11$ezrTdQZaPAxN6jacU9lhPefzcVfbRWUIZaxN01kSDS/gY2Nj..tDu",
+            password: await bcrypt.hash("user5", 1),
             email: "user5@ricourse.com",
             roles: [Role.Admin],
             dob: new Date("2008-09-20"),
         },
+        {
+            fullname: "User 6",
+            username: "user6",
+            password: await bcrypt.hash("user6", 1),
+            email: "user6@ricourse.com",
+            roles: [Role.Admin],
+            dob: new Date("2008-09-20"),
+        },
+        {
+            fullname: "User 7",
+            username: "user7",
+            password: await bcrypt.hash("user7", 1),
+            email: "user7@ricourse.com",
+            roles: [Role.Mentor],
+            dob: new Date("2007-09-20"),
+        },
     ];
 
     for (let user of users) {
-        // const { username, password, email, roles, dob } = user;
         const newUser = await prisma.user.upsert({
             where: { username: user.username }, // only create if the info does not match this condition
             update: {},
@@ -130,57 +141,9 @@ async function main() {
         });
     }
 
-    const auditLogs = [
-        {
-            actionType: "Update",
-            userId: 1,
-            adminId: 5,
-            before: {
-                username: "user1",
-                password:
-                    "$2b$11$iF.vIFWlXJdkhQCnDIrgxuC/VeD4CvI4qH9B5puZrr83My2NiKF2S",
-                email: "user1@ricourse.com",
-                roles: [Role.Learner],
-                dob: new Date("2004-09-20"),
-            },
-            after: {
-                username: "user1",
-                password:
-                    "$2b$11$iF.vIFWlXJdkhQCnDIrgxuC/VeD4CvI4qH9B5puZrr83My2NiKF2S",
-                email: "user1new@ricourse.com",
-                roles: [Role.Learner],
-                dob: new Date("2004-09-20"),
-            }
-        },
-        {
-            actionType: "Update",
-            userId: 3,
-            adminId: 5,
-            before: {
-                username: "user3",
-                password:
-                    "$2b$11$fWN8U2inFKp9bxiXzLK7N.ZW7pKr2G/X1kA3ZWBJBFpN2nRtgluYC",
-                email: "user3@ricourse.com",
-                roles: [Role.Learner],
-                dob: new Date("2006-09-20"),
-            },
-            after: {
-                username: "user3",
-                password:
-                    "$2b$11$fWN8U2inFKp9bxiXzLK7N.ZW7pKr2G/X1kA3ZWBJBFpN2nRtgluYC",
-                email: "user3@ricourse.com",
-                roles: [Role.Learner],
-                dob: new Date("2008-09-20"),
-            }
-        }
-    ];
-
-    for (let auditLog of auditLogs) {
-        const newAuditLog = await prisma.auditLog.create({
-            data: auditLog
-        })
-    }
 }
+
+
 
 // execute the main function
 main()

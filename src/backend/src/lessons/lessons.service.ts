@@ -3,7 +3,9 @@ import { LessonEntity } from "./entities/lesson.entity";
 import { CreateLessonDto } from "./dtos/create-lesson.dto";
 import { UpdateLessonDto } from "./dtos/update-lesson.dto";
 import { CloudinaryService } from "src/cloudinary/cloudinary.service";
+import { Injectable } from "@nestjs/common";
 
+@Injectable()
 export class LessonsService {
     constructor(
         private prisma: PrismaService,
@@ -51,7 +53,7 @@ export class LessonsService {
     }
 
     async updateContent(file: Express.Multer.File, oldUrl: string) {
-        return await this.cloudinary.uploadFile(file);
+        return await this.cloudinary.updateFile(file, oldUrl);
     }
 
     async uploadText(content: string) {

@@ -19,7 +19,7 @@ export class ChaptersController {
     ) {}
 
     @ApiOperation({
-        summary: "Get all chapters in a specified Course (usage /chapter?courseId=...)"
+        summary: "Get all chapters in a specified Course (usage /chapters?courseId=...)"
     })
     @ApiOkResponse({
         description: "Fetch chapter successfully"
@@ -60,7 +60,7 @@ export class ChaptersController {
         description: "Forbidden: Not Admin or permitted Mentor"
     })
     @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard, RolesGuard, MentorGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Mentor)
     @Post(":id/lessons")
     async createLesson(
