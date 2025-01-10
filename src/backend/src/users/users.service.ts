@@ -71,16 +71,76 @@ export class UsersService {
         });
     }
 
-    async getMyCourses(id : number) : Promise<CourseEntity[]> {
-        const courses = await this.prisma.course.findMany({
+    async getMyCourses(learnerId : number) : Promise<CourseEntity[]> {
+        const precourses = await this.prisma.course.findMany({
             where: {
                 learners: {
                     some: {
-                        learnerId: id
+                        learnerId
+                    }
+                }
+            },
+            select: {
+                id: true,
+                createAt: true,
+                updatedAt: true, 
+                title: true,
+                description: true,
+                learners: {
+                    select: {
+                        learner: true
+                    }
+                },
+                mentors: {
+                    select: {
+                        mentor: true
                     }
                 }
             }
         });
+
+        const courses = precourses.map(course => ({
+            ...course,
+            learners: course.learners.map(u => u.learner),
+            mentors: course.mentors.map(u => u.mentor),
+        }));
+
+        return courses.map(course => new CourseEntity(course));
+    }
+
+    async getMyPermittedCourses(mentorId : number) : Promise<CourseEntity[]> {
+        const precourses = await this.prisma.course.findMany({
+            where: {
+                mentors: {
+                    some: {
+                        mentorId
+                    }
+                }
+            },
+            select: {
+                id: true,
+                createAt: true,
+                updatedAt: true, 
+                title: true,
+                description: true,
+                learners: {
+                    select: {
+                        learner: true
+                    }
+                },
+                mentors: {
+                    select: {
+                        mentor: true
+                    }
+                }
+            }
+        });
+
+        const courses = precourses.map(course => ({
+            ...course,
+            learners: course.learners.map(u => u.learner),
+            mentors: course.mentors.map(u => u.mentor),
+        }));
 
         return courses.map(course => new CourseEntity(course));
     }

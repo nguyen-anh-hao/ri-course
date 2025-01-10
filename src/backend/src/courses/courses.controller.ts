@@ -68,16 +68,7 @@ export class CoursesController {
         description: "May be both id and title are presented on the query string"
     })
     @Get()
-    async findAllCourses(@Query("id") id? : number, @Query("title") title? : string, @Query("mentorId") mentorId?: number) : Promise<CourseEntity[]> {
-        if (mentorId)
-            return await this.coursesService.findAll({
-                mentors: {
-                    some: {
-                        mentorId: +mentorId
-                    }
-                }
-            });
-
+    async findAllCourses(@Query("id") id? : number, @Query("title") title? : string) : Promise<CourseEntity[]> {
         if (id && title) 
             throw new BadRequestException("Only one of id or title of the course can be passed into the query");
 
