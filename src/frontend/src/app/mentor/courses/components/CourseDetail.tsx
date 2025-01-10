@@ -9,7 +9,7 @@ import FileUpload from '@/components/ui/FileUpload';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import { useTheme } from '@mui/material/styles'
-import { getToken } from '@/utils/getToken';
+import { getCookie } from 'cookies-next';
 import axios from 'axios';
 import appConfig from '@/config/appConfig';
 
@@ -18,9 +18,27 @@ interface CourseDetailProps {
 }
 
 const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
-    const token = getToken();
+    const token = getCookie('token');
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
+    interface Chapter {
+        id: number;
+        title: string;
+        lessons: string[];
+    }
+
+    interface Lesson {
+        id: number;
+        chapterId: number;
+        order: number;
+        title: string;
+        description: string;
+        type: string;
+        contentUrl: string;
+    }
+
+    const [chapterList, setChapterList] = useState<Chapter[]>([]);
+    const [lessonList, setLessonList] = useState<{ [chapterId: number]: Lesson[] }>({});
     const [anchorAddEl, setAnchorAddEl] = useState<null | HTMLElement>(null);
     const [anchorMoreEl, setAnchorMoreEl] = useState<null | HTMLElement>(null);
     const openAddMenu = Boolean(anchorAddEl);
@@ -38,25 +56,6 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
         setAnchorMoreEl(null);
     };
 
-    const chapters = [
-        {
-            title: 'Biến và các kiểu dữ liệu',
-            lessons: [
-                'Bài giảng lý thuyết',
-                'Bài tập 1: Lorem Ipsum',
-                'Bài tập 2: Lorem Ipsum',
-            ],
-        },
-        {
-            title: 'Các toán tử đầu vào',
-            lessons: [
-                'Bài giảng lý thuyết',
-                'Bài tập 1: Lorem Ipsum',
-                'Bài tập 2: Lorem Ipsum',
-            ],
-        },
-    ];
-
     const [openTopicDialog, setOpenTopicDialog] = useState(false);
     const [newTopic, setNewTopic] = useState('');
 
@@ -67,7 +66,8 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
     const [openExerciseDialog, setOpenExerciseDialog] = useState(false);
     const [newExercise, setNewExercise] = useState('');
 
-    const [selectedChapter, setSelectedChapter] = useState('');
+    const [selectedChapter, setSelectedChapter] = useState<number | ''>('');
+    const [edit, setEdit] = useState(false);
 
     const handleChange = (e: any) => {
         setSelectedChapter(e.target.value);
@@ -75,12 +75,14 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
 
     const handleSaveTopic = () => {
         // console.log(newTopic);
-        axios.post(`${appConfig.API_BASE_URL}/courses/${courseId}/chapters}`, {
+        axios.post(`${appConfig.API_BASE_URL}/courses/${courseId}/chapters`, {
             title: newTopic,
             description: '',
+            order: Math.floor(Date.now() / 1000),
         })
             .then(response => {
-                console.log(response.data);
+                // console.log(response.data);
+                chapterList.push(response.data);
             })
             .catch(error => {
                 console.error('Error creating new topic:', error);
@@ -89,12 +91,57 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
     };
 
     const handleSaveLesson = () => {
-        console.log(newLesson);
+        // console.log(newLesson);
+        axios.post(`${appConfig.API_BASE_URL}/chapters/${selectedChapter}/lessons`, {
+            order: Math.floor(Date.now() / 1000),
+            title: 'Bài giảng: ' + newLesson,
+            type: 'Lecture',
+            description: '',
+            contentUrl: '',
+        })
+            .then(response => {
+                // console.log(response.data);
+                setLessonList((prev) => ({
+                    ...prev,
+                    [selectedChapter as number]: [...prev[selectedChapter as number], response.data],
+                }));
+            })
+            .catch(error => {
+                console.error('Error creating new lesson:', error);
+            });
+
         setOpenLessonDialog(false);
     }
 
     const handleSaveExercise = () => {
-        console.log(newExercise);
+        // console.log(newExercise);
+        const [newLessonId, setNewLessonId] = useState<number>(0);
+
+        axios.post(`${appConfig.API_BASE_URL}/chapters/${selectedChapter}/lessons`, {
+            order: Math.floor(Date.now() / 1000),
+            title: 'Bài tập: ' + newExercise,
+            type: 'Exercise',
+            description: '',
+            contentUrl: '',
+        }).then(response => {
+            // console.log(response.data);
+            setNewLessonId(response.data.id);
+            setLessonList((prev) => ({
+                ...prev,
+                [selectedChapter as number]: [...prev[selectedChapter as number], response.data],
+            }));
+        }).catch(error => {
+            console.error('Error creating new exercise:', error);
+        });
+
+        axios.post(`${appConfig.API_BASE_URL}/lessons/${newLessonId}/content?isText=true`, {
+            content: lessonContent,
+        }).then(response => {
+            console.log(response.data);
+        }).catch(error => {
+            console.error('Error creating new exercise content:', error);
+        });
+
         setOpenExerciseDialog(false);
     }
 
@@ -113,6 +160,43 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
             }, 0);
         }
     }, [openLessonDialog, isDarkMode]);
+
+    // get all chapters
+    useEffect(() => {
+        axios
+            .get(`${appConfig.API_BASE_URL}/chapters?courseId=${courseId}`)
+            .then((response) => {
+                console.log(response.data);
+                setChapterList(response.data);
+            })
+            .catch((error) => {
+                console.error("Error fetching chapters:", error);
+            });
+    }, [courseId]);
+
+    // get all lessons
+    useEffect(() => {
+        function getLessons(chapterId: number) {
+            axios
+                .get(`${appConfig.API_BASE_URL}/lessons?chapterId=${chapterId}`)
+                .then((response) => {
+                    console.log(response.data);
+                    setLessonList((prev) => ({
+                        ...prev,
+                        [chapterId]: response.data,
+                    }));
+                })
+                .catch((error) => {
+                    console.error("Error fetching lessons:", error);
+                });
+        }
+
+        chapterList.forEach((chapter) => {
+            getLessons(chapter.id);
+        });
+    }, [chapterList]);
+
+    // console.log(lessonList);
 
     return (
         <>
@@ -153,12 +237,14 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
                             labelId="demo-simple-select-standard-label"
                             id="demo-simple-select-standard"
                             label="Topic"
-                            onChange={handleChange}
                             value={selectedChapter}
+                            onChange={handleChange}
                         >
-                            <MenuItem value={10}>Biến và các kiểu dữ liệu</MenuItem>
-                            <MenuItem value={20}>Các toán tử đầu vào</MenuItem>
-                            <MenuItem value={30}>Vòng lặp</MenuItem>
+                            {chapterList.map((chapter) => (
+                                <MenuItem key={chapter.id} value={chapter.id}>
+                                    {chapter.title}
+                                </MenuItem>
+                            ))}
                         </Select>
                     </FormControl>
 
@@ -219,12 +305,14 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
                             labelId="demo-simple-select-standard-label"
                             id="demo-simple-select-standard"
                             label="Topic"
-                            onChange={handleChange}
                             value={selectedChapter}
+                            onChange={handleChange}
                         >
-                            <MenuItem value={10}>Biến và các kiểu dữ liệu</MenuItem>
-                            <MenuItem value={20}>Các toán tử đầu vào</MenuItem>
-                            <MenuItem value={30}>Vòng lặp</MenuItem>
+                            {chapterList.map((chapter) => (
+                                <MenuItem key={chapter.id} value={chapter.id}>
+                                    {chapter.title}
+                                </MenuItem>
+                            ))}
                         </Select>
                     </FormControl>
 
@@ -291,29 +379,29 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
                         }}
                         sx={{ mt: -1 }}
                     >
-                        <MenuItem onClick={() => setOpenTopicDialog(true)}>Chủ đề</MenuItem>
-                        <MenuItem onClick={() => setOpenLessonDialog(true)}>Bài giảng</MenuItem>
-                        <MenuItem onClick={() => setOpenExerciseDialog(true)}>Bài tập</MenuItem>
+                        <MenuItem onClick={() => { setOpenTopicDialog(true); setEdit(false) }}>Chủ đề</MenuItem>
+                        <MenuItem onClick={() => { setOpenLessonDialog(true); setEdit(false) }}>Bài giảng</MenuItem>
+                        <MenuItem onClick={() => { setOpenExerciseDialog(true); setEdit(false) }}>Bài tập</MenuItem>
                     </Menu>
                 </Box>
             </Container>
             <Container maxWidth='lg'>
                 <Box mt={4}>
-                    {chapters.map((chapter, index) => (
-                        <Box key={index} mb={2}>
+                    {chapterList.map((chapter) => (
+                        <Box key={chapter.id} mb={2}>
                             <Typography variant='h4' mb={2} mt={4}>{chapter.title}</Typography>
-                            {chapter.lessons.map((lesson, idx) => (
-                                <div key={idx}>
-                                    <Box key={idx} mt={1} border='0.5px solid #ddd' borderRadius='8px' display='flex' justifyContent='space-between' alignItems='center'>
+                            {lessonList[chapter.id]?.map((lesson) => (
+                                <div key={lesson.id}>
+                                    <Box key={lesson.id} mt={1} border='0.5px solid #ddd' borderRadius='8px' display='flex' justifyContent='space-between' alignItems='center'>
                                         <Box sx={{ width: '100%', height: '100%', marginLeft: 2.5 }}>
-                                            <Link href={`${window.location.href}/1`} passHref style={{ textDecoration: 'none' }}>
+                                            <Link href={`${window.location.href}/${lesson.id}`} passHref style={{ textDecoration: 'none' }}>
                                                 <Typography variant='body1' sx={{ pl: 2 }}>
-                                                    {lesson}
+                                                    {lesson.title}
                                                 </Typography>
                                             </Link>
                                         </Box>
                                         <IconButton
-                                            aria-controls={`menu-${index}-${idx}`}
+                                            aria-controls={`menu-${chapter.id}-${lesson.id}`}
                                             aria-haspopup="true"
                                             onClick={(event) => {
                                                 setAnchorMoreEl(event.currentTarget);
@@ -323,7 +411,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
                                             <MoreVertIcon />
                                         </IconButton>
                                         <Menu
-                                            id={`menu-${index}-${idx}`}
+                                            id={`menu-${chapter.id}-${lesson.id}`}
                                             anchorEl={anchorMoreEl}
                                             open={Boolean(anchorMoreEl)}
                                             onClose={handleMoreClose}
@@ -336,7 +424,16 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
                                                 horizontal: 'right',
                                             }}
                                         >
-                                            <MenuItem onClick={() => { setOpenLessonDialog(true) }}>Chỉnh sửa</MenuItem>
+                                            <MenuItem onClick={() => {
+                                                console.log(`menu-${chapter.id}-${lesson.id}`);
+                                                if (lesson.title.startsWith('Bài giảng: ')) {
+                                                    setOpenLessonDialog(true);
+                                                    setEdit(true);
+                                                } else {
+                                                    setOpenExerciseDialog(true);
+                                                    setEdit(true);
+                                                }
+                                            }}>Chỉnh sửa</MenuItem>
                                             <MenuItem onClick={() => { /* handle delete */ }}>Xóa</MenuItem>
                                         </Menu>
                                     </Box>
