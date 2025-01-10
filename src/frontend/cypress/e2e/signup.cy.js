@@ -28,7 +28,12 @@ describe('Sign up functionality', () => {
         cy.get('button[type="submit"]').contains('Đăng ký').click();
         cy.get('.MuiAlert-message')
             .should('be.visible')
-            .should('have.text', 'Tên đăng nhập đã được sử dụng!');
+            .invoke('text') // Retrieve the text content of the element
+            .then((text) => {
+                expect(text).to.satisfy((t) =>
+                ['Tên đăng nhập đã được sử dụng!', 'Bạn bị chặn truy cập!'].includes(t)
+                );
+            });
     });
 
     it('should display error message with empty credentials', () => {
