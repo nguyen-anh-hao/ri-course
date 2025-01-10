@@ -86,7 +86,11 @@ const Header: React.FC = () => {
         sessionStorage.getItem('role') === '"Admin"' ? adminNavItems : learnerNavItems;
 
     return (
-        <AppBar>
+        <AppBar
+            sx={{
+                borderRadius: '0px 0px 8px 8px',
+            }}
+        >
             <Container maxWidth={false}>
                 <Toolbar disableGutters>
                     <IconButton

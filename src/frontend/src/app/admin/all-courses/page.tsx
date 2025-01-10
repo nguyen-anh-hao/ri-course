@@ -66,6 +66,7 @@ const CoursePage: React.FC = () => {
         if (!confirm) return;
         deleteCourse(course.id);
         setCourses(courses.filter(c => c.id !== course.id));
+        window.alert('Xóa khóa học thành công');
     };
 
     const handleCreate = () => {

@@ -57,19 +57,23 @@ const CourseForm: React.FC<CourseFormProps> = ({ open, onClose, course }) => {
             }
         };
 
-        const fetchMentor = async () => {
+        const fetchMentor = async (
+            data: { id: number }
+        ) => {
             try {
-                const response = await axios.get(`${appConfig.API_BASE_URL}/courses/${course.id}/mentors`);
-                setMentor(response.data);
-                setOldMentor(response.data);
+                const response = await axios.get(`${appConfig.API_BASE_URL}/courses`);
+                const mentors = response.data.filter((course: { id: number }) => course.id === data.id)[0].mentors;
+                console.log(mentors);
+                setMentor(mentors);
+                setOldMentor(mentors);
             } catch (error) {
                 console.error('Lỗi khi lấy danh sách mentor của khóa học:', error);
             }
         }
 
         fetchAllMentor();
-        fetchMentor();
-    }, []);
+        fetchMentor({ id: course.id });
+    }, [course]);
 
     // Hàm để cập nhật khóa học
     const patchCourse = async (

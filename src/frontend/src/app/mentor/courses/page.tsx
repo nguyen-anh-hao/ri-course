@@ -26,7 +26,7 @@ export default function AllCourses() {
     const [allCourses, setAllCourses] = useState<Course[]>([]);
     const mentorCoursesMap: { [key: number]: Course[] } = {};
 
-    // Fetch mentor data
+    // Fetch this mentor data
     useEffect(() => {
         axios.get(`${appConfig.API_BASE_URL}/users/me`)
             .then(response => {
@@ -55,17 +55,25 @@ export default function AllCourses() {
 
     // Fetch courses list for each mentor
     useEffect(() => {
-        const requests = allCourses.map(course =>
-            axios.get(`${appConfig.API_BASE_URL}/courses/${course.id}/mentors`)
+        const requests = allCourses.map(course => {
+            axios.get(`${appConfig.API_BASE_URL}/courses`, {
+                params: {
+                    id: course.id
+                }
+            })
                 .then(response => {
-                    response.data.forEach((mentor: User) => {
+                    const mentors = response.data.filter((data: { id: number }) => course.id === data.id)[0].mentors;
+                    mentors.forEach((mentor: User) => {
+                        // console.log(mentor, ' ', course.title);
                         if (!mentorCoursesMap[mentor.id]) {
                             mentorCoursesMap[mentor.id] = [];
                         }
                         mentorCoursesMap[mentor.id].push(course);
                     });
                 })
-        );
+        });
+
+        console.log(mentorCoursesMap);
 
         Promise.all(requests)
             .then(() => {
