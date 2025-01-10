@@ -52,6 +52,11 @@ export class CoursesController {
         required: false,
         description: "Pass this key to query based on the course's title"
     })
+    @ApiQuery({
+        name: "mentorId",
+        required: false,
+        description: "Pass this key to query based on the course's permitted mentor"
+    })
     @ApiOkResponse({
         description: "Fetch all satisfied courses successfully",
         type: [CourseEntity]
@@ -63,7 +68,15 @@ export class CoursesController {
         description: "May be both id and title are presented on the query string"
     })
     @Get()
-    async findAllCourses(@Query("id") id? : number, @Query("title") title? : string) : Promise<CourseEntity[]> {
+    async findAllCourses(@Query("id") id? : number, @Query("title") title? : string, @Query("mentorId") mentorId?: number) : Promise<CourseEntity[]> {
+        if (mentorId)
+            return await this.coursesService.findAll({
+                mentors: {
+                    some: {
+                        mentorId: +mentorId
+                    }
+                }
+            });
 
         if (id && title) 
             throw new BadRequestException("Only one of id or title of the course can be passed into the query");
