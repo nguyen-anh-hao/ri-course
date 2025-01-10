@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { cookies } from 'next/headers';
+import { getToken } from '@/utils/getToken';
 import { notFound } from 'next/navigation';
 import CourseInfo from '../components/CourseInfo';
+import CourseDetail from '../components/CourseDetail';
 import appConfig from '@/config/appConfig';
 import generateSlug from '@/utils/generateSlug';
-import { getToken } from '@/utils/getToken';
 
 interface PageProps {
     params: Promise<{ slug: string }>;
@@ -36,10 +36,13 @@ export default async function CoursePage({ params }: PageProps) {
     }
 
     return (
-        <CourseInfo
-            courseName={courseData.title}
-            mentor={courseData.mentors.map((mentor: { fullname: string }) => mentor.fullname).join(', ')}
-            description={courseData.description}
-        />
+        <>
+            <CourseInfo
+                courseName={courseData.title}
+                mentor={courseData.mentors.map((mentor: { fullname: string }) => mentor.fullname).join(', ')}
+                description={courseData.description}
+            />
+            <CourseDetail courseId={courseData.id} />
+        </>
     );
 }
