@@ -130,7 +130,7 @@ export class LessonsController {
         description: "Forbidden: access denied"
     })
     @ApiBearerAuth()
-    @UseGuards(RolesGuard, MentorGuard)
+    @UseGuards(RolesGuard)
     @Roles(Role.Mentor)
     @UseInterceptors(FileInterceptor('file'))
     @Patch(":id/content")
@@ -174,7 +174,7 @@ export class LessonsController {
         description: "Forbidden: access denied"
     })
     @ApiBearerAuth()
-    @UseGuards(RolesGuard, MentorGuard)
+    @UseGuards(RolesGuard)
     @Roles(Role.Mentor)
     @Patch(":id")
     async updateLesson(
@@ -199,18 +199,31 @@ export class LessonsController {
         description: "Forbidden: access denied"
     })
     @ApiBearerAuth()
-    @UseGuards(RolesGuard, MentorGuard)
+    @UseGuards(RolesGuard)
     @Roles(Role.Mentor)
     @Delete(":id")
     async deleteLesson(@Param("id", ParseIntPipe) id: number) : Promise<LessonEntity> {
         return await this.lessonsService.deleteOne(id);
     }
 
+    @ApiOperation({
+        summary: "Delete a lesson (Permitted Mentor only)"
+    })
+    @ApiOkResponse({
+        description: "Lesson deleted successfully"
+    })
+    @ApiUnauthorizedResponse({
+        description: "Unauthorized: missing JWT"
+    })
+    @ApiForbiddenResponse({
+        description: "Forbidden: access denied"
+    })
+    @ApiBearerAuth()
     @Post(":id/submissions")
     async addSubmission(
         @Param("id", ParseIntPipe) id : number,
         @UploadedFile() file: Express.Multer.File,
-        @Request() req
+        @Request() req: any
     ) {
         const uploadResult = await this.lessonsService.uploadContent(file);
         const result = await this.submissionsService.addSubmission(

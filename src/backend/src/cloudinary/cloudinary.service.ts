@@ -94,4 +94,8 @@ export class CloudinaryService {
 
         return result;
     }
+
+    async deleteFile(publicId: string) {
+        return await cloudinary.uploader.destroy(publicId);
+    }
 }

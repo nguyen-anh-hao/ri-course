@@ -5,6 +5,25 @@ import { PrismaService } from "src/prisma/prisma.service";
 export class SubmissionsService {
     constructor(private prisma: PrismaService) {}
 
+    async findAll(query: any) {
+        const result = await this.prisma.submission.findMany({
+            where: query
+        })
+
+        return result;
+    }
+
+    async grade(id: number, point: number) {
+        const result = await this.prisma.submission.update({
+            where: { id },
+            data: {
+                grade: point
+            }
+        })
+
+        return result;
+    }
+
     async addSubmission(learnerId: number, lessonId: number, contentUrl: string) {
         const result = await this.prisma.submission.create({
             data: {
@@ -19,7 +38,7 @@ export class SubmissionsService {
 
     async deleteSubmission(id: number) {
         const result = await this.prisma.submission.delete({
-            where: {id}
+            where: { id }
         });
 
         return result;
