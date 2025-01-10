@@ -3,12 +3,11 @@ import React from 'react';
 
 interface CourseInfoProps {
     courseName: string;
-    mentor1: string;
-    mentor2: string;
+    mentor: string;
     description: string;
 }
 
-const CourseInfo: React.FC<CourseInfoProps> = ({ courseName, mentor1, mentor2, description }) => {
+const CourseInfo: React.FC<CourseInfoProps> = ({ courseName, mentor, description }) => {
     return (
         <Container maxWidth='lg'>
             <Grid container spacing={3}>
@@ -20,11 +19,7 @@ const CourseInfo: React.FC<CourseInfoProps> = ({ courseName, mentor1, mentor2, d
                         <Box display='flex' flexDirection='column' gap={1}>
                             <Typography variant='body1'>
                                 <strong>Giáo viên: </strong>
-                                <span>{mentor1}</span>
-                            </Typography>
-                            <Typography variant='body1'>
-                                <strong>Giáo viên: </strong>
-                                <span>{mentor2}</span>
+                                <span>{mentor}</span>
                             </Typography>
                         </Box>
                         <Typography variant='body1' color='textSecondary' paragraph>

@@ -17,7 +17,7 @@ export default function AllCourses() {
         createdAt: string;
         updatedAt: string;
         title: string;
-        mentor: string;
+        mentors: User[];
         description: string;
     };
 
@@ -55,40 +55,14 @@ export default function AllCourses() {
 
     // Fetch courses list for each mentor
     useEffect(() => {
-        const requests = allCourses.map(course => {
-            axios.get(`${appConfig.API_BASE_URL}/courses`, {
-                params: {
-                    id: course.id
-                }
-            })
-                .then(response => {
-                    const mentors = response.data.filter((data: { id: number }) => course.id === data.id)[0].mentors;
-                    mentors.forEach((mentor: User) => {
-                        // console.log(mentor, ' ', course.title);
-                        if (!mentorCoursesMap[mentor.id]) {
-                            mentorCoursesMap[mentor.id] = [];
-                        }
-                        mentorCoursesMap[mentor.id].push(course);
-                    });
-                })
-        });
+        const fetchPermittedCourses = async () => {
+            const response = await axios.get(`${appConfig.API_BASE_URL}/users/me/permitted-courses`);
+            console.log(response.data);
+            setCourses(response.data);
+        };
 
-        console.log(mentorCoursesMap);
-
-        Promise.all(requests)
-            .then(() => {
-                if (!thisMentor) return;
-                const coursesData = (mentorCoursesMap[thisMentor.id] || []).reduce((acc: { [key: number]: Course }, course: Course) => {
-                    acc[course.id] = course;
-                    return acc;
-                }, {});
-                setCourses(coursesData);
-            })
-            .catch(error => {
-                console.error('Error fetching mentor data:', error);
-            });
-
-    }, [allCourses]);
+        fetchPermittedCourses();
+    }, []);
 
     return (
         <Container component='main' maxWidth='lg'>
@@ -100,7 +74,7 @@ export default function AllCourses() {
                         <Grid item xs={12} sm={6} md={4} lg={3} key={courseKey}>
                             <CourseCard
                                 name={courses[courseKey].title}
-                                mentor={courses[courseKey].mentor}
+                                mentor={courses[courseKey].mentors.map((m) => m.fullname).join(', ')}
                             />
                         </Grid>
                     );

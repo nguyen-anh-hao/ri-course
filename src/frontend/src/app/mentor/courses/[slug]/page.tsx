@@ -39,11 +39,10 @@ export default async function CoursePage({ params }: PageProps) {
         <>
             <CourseInfo
                 courseName={courseData.title}
-                mentor1="Mentor 1"
-                mentor2="Mentor 2"
+                mentor={courseData.mentors.map((mentor: { fullname: string }) => mentor.fullname).join(', ')}
                 description={courseData.description}
             />
-            <CourseDetail />
+            <CourseDetail courseId={courseData.id} />
         </>
     );
 }

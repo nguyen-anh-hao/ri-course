@@ -9,8 +9,18 @@ import FileUpload from '@/components/ui/FileUpload';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import { useTheme } from '@mui/material/styles'
+import { getToken } from '@/utils/getToken';
+import axios from 'axios';
+import appConfig from '@/config/appConfig';
 
-const CourseDetail: React.FC = () => {
+interface CourseDetailProps {
+    courseId: number;
+}
+
+const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
+    const token = getToken();
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
     const [anchorAddEl, setAnchorAddEl] = useState<null | HTMLElement>(null);
     const [anchorMoreEl, setAnchorMoreEl] = useState<null | HTMLElement>(null);
     const openAddMenu = Boolean(anchorAddEl);
@@ -64,7 +74,17 @@ const CourseDetail: React.FC = () => {
     }
 
     const handleSaveTopic = () => {
-        console.log(newTopic);
+        // console.log(newTopic);
+        axios.post(`${appConfig.API_BASE_URL}/courses/${courseId}/chapters}`, {
+            title: newTopic,
+            description: '',
+        })
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.error('Error creating new topic:', error);
+            });
         setOpenTopicDialog(false);
     };
 
