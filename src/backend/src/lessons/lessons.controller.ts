@@ -55,9 +55,8 @@ export class LessonsController {
         description: "Forbidden: access denied"
     })
     @ApiBearerAuth()
+    @UseGuards(RolesGuard, MentorGuard)
     @Roles(Role.Mentor)
-    @UseGuards(RolesGuard)
-    @UseGuards(MentorGuard)
     @Post(":id/content")
     @UseInterceptors(FileInterceptor('file'))
     async uploadContent(
@@ -109,9 +108,8 @@ export class LessonsController {
         description: "Forbidden: access denied"
     })
     @ApiBearerAuth()
+    @UseGuards(RolesGuard, MentorGuard)
     @Roles(Role.Mentor)
-    @UseGuards(RolesGuard)
-    @UseGuards(MentorGuard)
     @UseInterceptors(FileInterceptor('file'))
     @Patch(":id/content")
     async updateContent(
@@ -154,9 +152,8 @@ export class LessonsController {
         description: "Forbidden: access denied"
     })
     @ApiBearerAuth()
+    @UseGuards(RolesGuard, MentorGuard)
     @Roles(Role.Mentor)
-    @UseGuards(RolesGuard)
-    @UseGuards(MentorGuard)
     @Patch(":id")
     async updateLesson(
         @Param("id", ParseIntPipe) id: number,
@@ -180,9 +177,8 @@ export class LessonsController {
         description: "Forbidden: access denied"
     })
     @ApiBearerAuth()
+    @UseGuards(RolesGuard, MentorGuard)
     @Roles(Role.Mentor)
-    @UseGuards(RolesGuard)
-    @UseGuards(MentorGuard)
     @Delete(":id")
     async deleteLesson(@Param("id", ParseIntPipe) id: number) : Promise<LessonEntity> {
         return await this.lessonsService.deleteOne(id);

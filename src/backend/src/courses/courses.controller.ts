@@ -91,8 +91,7 @@ export class CoursesController {
         description: "Not Admin or permitted Mentor or enrolled Learner"
     })
     @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
-    @UseGuards(CourseAccessGuard)
+    @UseGuards(JwtAuthGuard, CourseAccessGuard)
     @Get(":id")
     async getCourseDetail(@Param("id", ParseIntPipe) id: number) : Promise<CourseEntity> {
         return await this.coursesService.findDetail(id);
@@ -138,8 +137,7 @@ export class CoursesController {
         description: "Forbidden: The user with the JWT must be an Admin"
     })
     @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
-    @UseGuards(RolesGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Post()
     async createCourse(@Body() createCourseDto: CreateCourseDto) : Promise<CourseEntity> {
@@ -161,8 +159,7 @@ export class CoursesController {
         description: "Forbidden: The user with the JWT must be an Admin"
     })
     @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
-    @UseGuards(RolesGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Delete(":id")
     async deleteCourse(@Param("id", ParseIntPipe) id: number) : Promise<CourseEntity> {
@@ -184,8 +181,7 @@ export class CoursesController {
         description: "The user with JWT must be a Learner"
     })
     @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
-    @UseGuards(RolesGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Learner)
     @Post(":id/learners")
     async createLearnerEnrollment(@Param("id", ParseIntPipe) id : number, @Request() req) {
@@ -210,8 +206,7 @@ export class CoursesController {
         description: "Forbidden: The user with the JWT must be an Admin"
     })
     @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
-    @UseGuards(RolesGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin, Role.Mentor)
     @Delete(":courseId/learners/:learnerId")
     async kickLearner(
@@ -246,8 +241,7 @@ export class CoursesController {
         description: "Forbidden: The user with the JWT must be an Admin"
     })
     @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
-    @UseGuards(RolesGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Post(":id/mentors")
     async createMentorPermission(
@@ -275,8 +269,7 @@ export class CoursesController {
         description: "Forbidden: The user with the JWT must be an Admin"
     })
     @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
-    @UseGuards(RolesGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin)
     @Delete(":courseId/mentors/:mentorId")
     async kickMentor(
@@ -309,8 +302,7 @@ export class CoursesController {
         description: "Forbidden: The user with the JWT must be an Admin"
     })
     @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
-    @UseGuards(RolesGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Admin) 
     @Patch(":id")
     async update(
@@ -342,10 +334,8 @@ export class CoursesController {
         description: "Not Admin or permitted Mentor or enrolled Learner"
     })
     @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard, MentorGuard)
     @Roles(Role.Mentor)
-    @UseGuards(RolesGuard)
-    @UseGuards(MentorGuard)
     @Post(":id/chapters")
     async createChapter(
         @Param("id", ParseIntPipe) id: number,

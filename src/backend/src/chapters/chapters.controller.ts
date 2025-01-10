@@ -34,8 +34,7 @@ export class ChaptersController {
         description: "Chapter not found with specified courseId"
     })
     @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
-    @UseGuards(CourseAccessGuard)
+    @UseGuards(JwtAuthGuard, CourseAccessGuard)
     @Get("")
     async findAll(@Query("courseId", ParseIntPipe) courseId: number) : Promise<ChapterEntity[]> {
         const chapters = await this.chaptersService.findAll({ courseId });
@@ -61,10 +60,8 @@ export class ChaptersController {
         description: "Forbidden: Not Admin or permitted Mentor"
     })
     @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard, MentorGuard)
     @Roles(Role.Mentor)
-    @UseGuards(RolesGuard)
-    @UseGuards(MentorGuard)
     @Post(":id/lessons")
     async createLesson(
         @Param("id", ParseIntPipe) id: number,
@@ -93,10 +90,8 @@ export class ChaptersController {
         description: "Forbidden: Not Admin or permitted Mentor"
     })
     @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard, MentorGuard)
     @Roles(Role.Mentor)
-    @UseGuards(RolesGuard)
-    @UseGuards(MentorGuard)
     @Patch(":id")
     async updateChapter(
         @Param("id", ParseIntPipe) id: number,
@@ -120,10 +115,8 @@ export class ChaptersController {
         description: "Forbidden: Not Admin or permitted Mentor"
     })
     @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard, MentorGuard)
     @Roles(Role.Mentor)
-    @UseGuards(RolesGuard)
-    @UseGuards(MentorGuard)
     @Delete(":id")
     async deleteChapter(@Param("id", ParseIntPipe) id: number) : Promise<ChapterEntity> {
         return await this.chaptersService.deleteOne(id);
