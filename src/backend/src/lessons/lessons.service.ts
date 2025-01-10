@@ -20,6 +20,14 @@ export class LessonsService {
         return lessons.map(lesson => new LessonEntity(lesson));
     }
     
+    async findOne(id: number) : Promise<LessonEntity> {
+        const lesson = await this.prisma.lesson.findUnique({
+            where: { id }
+        });
+
+        return lesson;
+    }
+
     async createOne(chapterId: number, createLessonDto: CreateLessonDto) : Promise<LessonEntity> {
         const newLesson = await this.prisma.lesson.create({
             data: {

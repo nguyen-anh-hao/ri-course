@@ -7,6 +7,8 @@ import { JwtAuthGuard } from "src/auth/guards";
 export class SubmissionsController {
     constructor(private submissionsService: SubmissionsService) {}
 
+    
+
     @Delete(":id")
     async deleteSubmission(@Param("id", ParseIntPipe) id: number) {
         return await this.submissionsService.deleteSubmission(id);
