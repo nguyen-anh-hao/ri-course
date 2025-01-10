@@ -104,6 +104,7 @@ model Chapter {
   courseId Int
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
+  order Int
   title String
   description String
   lessons Lesson[]
@@ -117,6 +118,9 @@ model Lesson {
   chapterId Int
   chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
+  order Int
+  title String
+  description String
   type String
   contentUrl String
 }

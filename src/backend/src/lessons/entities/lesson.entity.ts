@@ -9,6 +9,9 @@ export class LessonEntity implements Lesson {
     createAt: Date;
     updatedAt: Date;
 
+    order: number;
+    title: string;
+    description: string;
     chapterId: number;
     type: string;
     contentUrl: string;

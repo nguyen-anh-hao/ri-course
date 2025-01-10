@@ -67,6 +67,7 @@ export class ChaptersController {
         @Param("id", ParseIntPipe) id: number,
         @Body() createLessonDto: CreateLessonDto
     ) : Promise<LessonEntity> {
+        
         const lesson = await this.lessonsService.createOne(id, createLessonDto);
         
         return new LessonEntity(lesson);
