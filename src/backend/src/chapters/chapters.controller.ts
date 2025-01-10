@@ -19,7 +19,7 @@ export class ChaptersController {
     ) {}
 
     @ApiOperation({
-        summary: "Get all chapters in a specified Course (usage /chapter?courseId=...)"
+        summary: "Get all chapters in a specified Course (usage /chapters?courseId=...)"
     })
     @ApiOkResponse({
         description: "Fetch chapter successfully"

@@ -183,4 +183,19 @@ export class LessonsController {
     async deleteLesson(@Param("id", ParseIntPipe) id: number) : Promise<LessonEntity> {
         return await this.lessonsService.deleteOne(id);
     }
+
+    @Post(":id/submission")
+    async addSubmission(
+        @Param("id", ParseIntPipe) id : number
+    ) {
+        // const uploadResult = await this.lessonsService.uploadContent()
+    }
+
+    @Delete(":lessonId/submission/:submissionId")
+    async deleteSubmission(
+        @Param("lessonId", ParseIntPipe) lessonId: number,
+        @Param("submissionId", ParseIntPipe) submissionId: number
+    ) {
+
+    }
 }

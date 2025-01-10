@@ -22,7 +22,7 @@ async function bootstrap() {
     SwaggerModule.setup('api', app, document);
 
     await app.listen(3123, () =>
-        console.log("listening at http://localhost:3123"),
+        console.log("Document at http://localhost:3123/api"),
     );
 
     if (module.hot) {

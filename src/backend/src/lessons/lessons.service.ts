@@ -51,7 +51,7 @@ export class LessonsService {
     }
 
     async updateContent(file: Express.Multer.File, oldUrl: string) {
-        return await this.cloudinary.uploadFile(file);
+        return await this.cloudinary.updateFile(file, oldUrl);
     }
 
     async uploadText(content: string) {
