@@ -5,23 +5,23 @@ import { PrismaService } from "src/prisma/prisma.service";
 export class SubmissionsService {
     constructor(private prisma: PrismaService) {}
 
-    // async addSubmission(learnerId: number, lessonId: number, submissionUrl: string) {
-    //     const result = await this.prisma.submission.create({
-    //         data: {
-    //             learnerId,
-    //             lessonId,
-    //             submissionUrl                 
-    //         }
-    //     });
+    async addSubmission(learnerId: number, lessonId: number, contentUrl: string) {
+        const result = await this.prisma.submission.create({
+            data: {
+                learnerId,
+                lessonId,
+                contentUrl                 
+            }
+        });
 
-    //     return result;
-    // }
+        return result;
+    }
 
-    // async deleteSubmission(id: number) {
-    //     const result = await this.prisma.submission.delete({
-    //         where: {id}
-    //     });
+    async deleteSubmission(id: number) {
+        const result = await this.prisma.submission.delete({
+            where: {id}
+        });
 
-    //     return result;
-    // }
+        return result;
+    }
 }

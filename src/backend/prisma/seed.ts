@@ -406,7 +406,7 @@ async function main() {
             order: 1,
             title: "Giới thiệu về C# và .NET",
             description: "Tìm hiểu về lịch sử và kiến trúc của .NET.",
-            type: "lecture",
+            type: "Lecture",
             contentUrl: "",
         },
         {
@@ -414,7 +414,7 @@ async function main() {
             order: 2,
             title: "Bài tập thực hành cơ bản với C#",
             description: "Tạo chương trình Hello World đầu tiên trong C#.",
-            type: "exercise",
+            type: "Exercise",
             contentUrl: "",
         },
         {
@@ -423,7 +423,7 @@ async function main() {
             title: "Cài đặt môi trường phát triển",
             description:
                 "Hướng dẫn cài đặt Visual Studio và các công cụ cần thiết.",
-            type: "lecture",
+            type: "Lecture",
             contentUrl: "",
         },
         {
@@ -431,7 +431,7 @@ async function main() {
             order: 2,
             title: "Bài tập cấu hình môi trường",
             description: "Tạo và chạy một dự án console C# đơn giản.",
-            type: "exercise",
+            type: "Exercise",
             contentUrl: "",
         },
         {
@@ -439,7 +439,7 @@ async function main() {
             order: 1,
             title: "Tìm hiểu WinForms và WPF",
             description: "So sánh và lựa chọn giữa WinForms và WPF.",
-            type: "lecture",
+            type: "Lecture",
             contentUrl: "",
         },
         {
@@ -447,7 +447,7 @@ async function main() {
             order: 2,
             title: "Bài tập xây dựng giao diện cơ bản",
             description: "Tạo một giao diện đơn giản với WinForms.",
-            type: "exercise",
+            type: "Exercise",
             contentUrl: "",
         },
         {
@@ -456,7 +456,7 @@ async function main() {
             title: "Xây dựng ứng dụng Windows cơ bản",
             description:
                 "Tìm hiểu cách xây dựng ứng dụng Windows với các chức năng cơ bản.",
-            type: "lecture",
+            type: "Lecture",
             contentUrl: "",
         },
         {
@@ -464,7 +464,7 @@ async function main() {
             order: 2,
             title: "Bài tập xây dựng ứng dụng",
             description: "Tạo ứng dụng quản lý danh bạ đơn giản.",
-            type: "exercise",
+            type: "Exercise",
             contentUrl: "",
         },
         {
@@ -472,7 +472,7 @@ async function main() {
             order: 1,
             title: "Làm việc với cơ sở dữ liệu",
             description: "Hướng dẫn kết nối ứng dụng với SQL Server.",
-            type: "lecture",
+            type: "Lecture",
             contentUrl: "",
         },
         {
@@ -481,7 +481,7 @@ async function main() {
             title: "Bài tập thao tác với dữ liệu",
             description:
                 "Thực hiện các thao tác thêm, sửa, xóa dữ liệu từ ứng dụng.",
-            type: "exercise",
+            type: "Exercise",
             contentUrl: "",
         },
         {
@@ -489,7 +489,7 @@ async function main() {
             order: 1,
             title: "Tích hợp API và dịch vụ web",
             description: "Tìm hiểu cách tích hợp API vào ứng dụng.",
-            type: "lecture",
+            type: "Lecture",
             contentUrl: "",
         },
         {
@@ -497,7 +497,7 @@ async function main() {
             order: 2,
             title: "Bài tập sử dụng API",
             description: "Tạo ứng dụng hiển thị dữ liệu từ API mở.",
-            type: "exercise",
+            type: "Exercise",
             contentUrl: "",
         },
         {
@@ -506,7 +506,7 @@ async function main() {
             title: "Xử lý sự kiện và đa luồng",
             description:
                 "Học cách xử lý sự kiện và cải thiện hiệu năng bằng đa luồng.",
-            type: "lecture",
+            type: "Lecture",
             contentUrl: "",
         },
         {
@@ -514,7 +514,7 @@ async function main() {
             order: 2,
             title: "Bài tập xử lý sự kiện",
             description: "Tạo ứng dụng phản hồi các thao tác người dùng.",
-            type: "exercise",
+            type: "Exercise",
             contentUrl: "",
         },
         {
@@ -522,7 +522,7 @@ async function main() {
             order: 1,
             title: "Đóng gói và triển khai ứng dụng",
             description: "Hướng dẫn đóng gói ứng dụng Windows để triển khai.",
-            type: "lecture",
+            type: "Lecture",
             contentUrl: "",
         },
         {
@@ -531,7 +531,7 @@ async function main() {
             title: "Bài tập triển khai ứng dụng",
             description:
                 "Triển khai ứng dụng trên hệ thống Windows và kiểm tra.",
-            type: "exercise",
+            type: "Exercise",
             contentUrl: "",
         },
     ];
