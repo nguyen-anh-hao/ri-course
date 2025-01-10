@@ -6,14 +6,20 @@ import React, { useEffect, useState, use } from 'react';
 import Comment from './components/Comments';
 import FileUpload from '@/components/ui/FileUpload';
 import SubmissionsTable from './components/SubmissionsTable';
+import { getCookie } from 'cookies-next';
+import axios from 'axios';
+import appConfig from '@/config/appConfig';
 
 interface PageProps {
     params: Promise<{
         id: string;
     }>;
-}
+};
 
 export default function Page({ params }: PageProps) {
+    const token = getCookie('token');
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
     const { id } = use(params); // Dùng React.use() để unwrap params
 
     const deltaJson = {
@@ -66,13 +72,25 @@ export default function Page({ params }: PageProps) {
     };
 
     const [htmlContent, setHtmlContent] = useState('');
+    const [obj, setObj] = useState({ ops: [] });
+    const [title, setTitle] = useState('');
+    const [type, setType] = useState('');
 
     useEffect(() => {
+        const fetchData = async () => {
+            const response = await axios.get(`${appConfig.API_BASE_URL}/lessons/${id}`);
+            const result = await fetch(`https://res.cloudinary.com/dv7bzo2r7/raw/upload/v1735326452/${response.data.contentUrl}`);
+            setTitle(response.data.title);
+            setType(response.data.type);
+            // const object = await result.json();
+            setObj(await result.json());
+        };
+        fetchData();
         // Chuyển đổi Delta JSON thành HTML
-        const converter = new QuillDeltaToHtmlConverter(deltaJson.ops, {});
+        const converter = new QuillDeltaToHtmlConverter(obj.ops, {});
         const html = converter.convert();
         setHtmlContent(html); // Lưu HTML vào state
-    }, []);
+    }, [obj]);
 
     useEffect(() => {
         // Áp dụng font Roboto cho phần tử chứa HTML (ql-editor)
@@ -103,7 +121,7 @@ export default function Page({ params }: PageProps) {
         <Container>
             <Paper elevation={3} style={{ padding: '20px', marginTop: '20px', marginBottom: '40px' }}>
                 <Typography variant="h4" component="h1" gutterBottom>
-                    Bài tập 1: Lorem Ipsum {id}
+                    {title}
                 </Typography>
                 <div
                     className="ql-editor"
@@ -128,12 +146,14 @@ export default function Page({ params }: PageProps) {
             </Paper>
 
             {/* Submissions Table */}
-            <Paper elevation={3} style={{ padding: '20px', marginTop: '20px', marginBottom: '40px' }}>
-                <Typography variant="h5" component="h2" gutterBottom style={{ marginBottom: '40px' }}>
-                    Bài nộp
-                </Typography>
-                <SubmissionsTable submissions={submissions} />
-            </Paper>
+            {type === 'Lecture' || type === 'lecture' ? null : (
+                <Paper elevation={3} style={{ padding: '20px', marginTop: '20px', marginBottom: '40px' }}>
+                    <Typography variant="h5" component="h2" gutterBottom>
+                        Bài nộp
+                    </Typography>
+                    <SubmissionsTable submissions={submissions} />
+                </Paper>
+            )}
         </Container>
     );
 }

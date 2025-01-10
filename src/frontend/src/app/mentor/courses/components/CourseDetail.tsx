@@ -1,12 +1,12 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import ReactQuill from 'react-quill';
 import { Box, Typography, Button, Menu, MenuItem, Container, Dialog, DialogTitle, IconButton, TextField, DialogContent, DialogActions, FormControl, InputLabel, Select } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Link from 'next/link';
 import FileUpload from '@/components/ui/FileUpload';
-import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import { useTheme } from '@mui/material/styles'
 import { getCookie } from 'cookies-next';
@@ -90,9 +90,19 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
         setOpenTopicDialog(false);
     };
 
+    const quillRef = useRef<ReactQuill>(null);
+
+    const getDelta = () => {
+        if (!quillRef.current) return null;
+        const delta = quillRef.current.getEditor().getContents();
+        return delta;
+    };
+
     // const [newLessonId, setNewLessonId] = useState<number>(0);
     const handleSaveLesson = () => {
         var newLessonId: number = 0;
+        var delta = JSON.stringify(getDelta());
+
         // console.log(newLesson);
         axios.post(`${appConfig.API_BASE_URL}/chapters/${selectedChapter}/lessons`, {
             order: Math.floor(Date.now() / 1000),
@@ -112,7 +122,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
             console.error('Error creating new lesson:', error);
         }).finally(() => {
             axios.post(`${appConfig.API_BASE_URL}/lessons/${newLessonId}/content?isText=true`, {
-                content: lessonContent,
+                content: delta,
             }).then(response => {
                 console.log(response.data);
             }).catch(error => {
@@ -127,6 +137,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
     const handleSaveExercise = () => {
         // console.log(newExercise);
         var newExerciseId: number = 0;
+        var delta = JSON.stringify(getDelta());
         axios.post(`${appConfig.API_BASE_URL}/chapters/${selectedChapter}/lessons`, {
             order: Math.floor(Date.now() / 1000),
             title: 'Bài tập: ' + newExercise,
@@ -145,7 +156,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
             console.error('Error creating new exercise:', error);
         }).finally(() => {
             axios.post(`${appConfig.API_BASE_URL}/lessons/${newExerciseId}/content?isText=true`, {
-                content: lessonContent,
+                content: delta,
             }).then(response => {
                 console.log(response.data);
             }).catch(error => {
@@ -268,6 +279,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
                             <ReactQuill
                                 theme="bubble"
                                 value={lessonContent}
+                                ref={quillRef}
                                 onChange={setLessonContent}
                                 modules={{
                                     toolbar: [
@@ -336,6 +348,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
                             <ReactQuill
                                 theme="bubble"
                                 value={lessonContent}
+                                ref={quillRef}
                                 onChange={setLessonContent}
                                 modules={{
                                     toolbar: [
