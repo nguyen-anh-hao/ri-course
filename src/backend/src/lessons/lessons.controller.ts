@@ -5,7 +5,6 @@ import { UpdateLessonDto } from "./dtos/update-lesson.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { JwtAuthGuard, RolesGuard } from "src/auth/guards";
-import { CourseAccessGuard } from "src/courses/guards/course-access.guard";
 import { Role, Roles } from "src/auth/role";
 import { MentorGuard } from "src/courses/guards/mentor.guard";
 
@@ -27,7 +26,6 @@ export class LessonsController {
         description: "Forbidden: access denied"
     })
     @ApiBearerAuth()
-    @UseGuards(CourseAccessGuard)
     @Get()
     async findAll(@Query("chapterId", ParseIntPipe) chapterId: number) : Promise<LessonEntity[]> {
         return await this.lessonsService.findAll({ chapterId });
