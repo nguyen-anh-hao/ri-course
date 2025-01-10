@@ -1,7 +1,8 @@
-import { NestFactory } from "@nestjs/core";
+import { NestFactory, Reflector } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import * as cors from "cors";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { ClassSerializerInterceptor } from "@nestjs/common";
 
 declare const module: any;
 
@@ -17,6 +18,7 @@ async function bootstrap() {
         .build();
 
     const document = SwaggerModule.createDocument(app, config);
+
     SwaggerModule.setup('api', app, document);
 
     await app.listen(3123, () =>

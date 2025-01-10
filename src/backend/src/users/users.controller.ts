@@ -1,4 +1,4 @@
-import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, ParseArrayPipe, ParseIntPipe, Patch, Post, Query, Req, Request, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Req, Request, UseGuards, UseInterceptors } from "@nestjs/common";
 import { Role, Roles } from "src/auth/role";
 import { RolesGuard, JwtAuthGuard } from "src/auth/guards";
 import { InfoUpdateGuard } from "src/users/guards";
@@ -11,7 +11,6 @@ import { AuditLogsService } from "src/audit-logs/audit-logs.service";
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-@UseInterceptors(ClassSerializerInterceptor)
 @Controller("users")
 export class UsersController {
     constructor(

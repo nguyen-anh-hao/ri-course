@@ -5,7 +5,7 @@ export class EnrollmentEntity implements Enrollment {
         Object.assign(this, partial);
     }
 
-    userId: number;
+    learnerId: number;
     courseId: number;
     createdAt: Date;
     level: string | null;

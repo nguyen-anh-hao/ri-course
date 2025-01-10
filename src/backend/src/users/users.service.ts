@@ -74,9 +74,9 @@ export class UsersService {
     async getMyCourses(id : number) : Promise<CourseEntity[]> {
         const courses = await this.prisma.course.findMany({
             where: {
-                users: {
+                learners: {
                     some: {
-                        userId: id
+                        learnerId: id
                     }
                 }
             }

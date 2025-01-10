@@ -43,14 +43,17 @@ model Course {
 
   title       String
   description String
+  thumbnailUrl String?
 
-  users   Enrollment[]
+  chapters Chapter[]
+
+  learners   Enrollment[]
   mentors MentorPermission[]
 }
 
 model Enrollment {
-  userId Int
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  learnerId Int
+  learner   User @relation(fields: [learnerId], references: [id], onDelete: Cascade)
 
   courseId Int
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
@@ -58,7 +61,7 @@ model Enrollment {
   createdAt DateTime @default(now())
   level     String?
 
-  @@id([userId, courseId])
+  @@id([learnerId, courseId])
 }
 
 enum Role {
@@ -91,4 +94,29 @@ model MentorPermission {
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@id([mentorId, courseId])
+}
+
+model Chapter {
+  id        Int      @id @default(autoincrement())
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  courseId Int
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  title String
+  description String
+  lessons Lesson[]
+}
+
+model Lesson {
+  id        Int      @id @default(autoincrement())
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  chapterId Int
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  type String
+  contentUrl String
 }
