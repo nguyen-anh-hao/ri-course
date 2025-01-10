@@ -29,7 +29,7 @@ const CoursePage: React.FC = () => {
                 </Box>
             ) : (
                 <Box>
-                    <CourseDetail />
+                    <CourseDetail courseId={0} />
                     <Box mt={4} display="flex" justifyContent="center">
                         <Button
                             variant="contained"

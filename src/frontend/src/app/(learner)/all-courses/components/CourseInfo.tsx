@@ -1,14 +1,19 @@
+'use client';
+
 import { Box, Typography, Container, Button, Grid, Skeleton } from '@mui/material';
 import React from 'react';
 
 interface CourseInfoProps {
     courseName: string;
-    mentor1: string;
-    mentor2: string;
+    mentor: string;
     description: string;
 }
 
-const CourseInfo: React.FC<CourseInfoProps> = ({ courseName, mentor1, mentor2, description }) => {
+const CourseInfo: React.FC<CourseInfoProps> = ({ courseName, mentor, description }) => {
+    const handleEnroll = () => {
+        console.log('Enroll button clicked');
+    };
+
     return (
         <Container maxWidth='lg'>
             <Grid container spacing={3}>
@@ -20,18 +25,14 @@ const CourseInfo: React.FC<CourseInfoProps> = ({ courseName, mentor1, mentor2, d
                         <Box display='flex' flexDirection='column' gap={1}>
                             <Typography variant='body1'>
                                 <strong>Giáo viên: </strong>
-                                <span>{mentor1}</span>
-                            </Typography>
-                            <Typography variant='body1'>
-                                <strong>Giáo viên: </strong>
-                                <span>{mentor2}</span>
+                                <span>{mentor}</span>
                             </Typography>
                         </Box>
                         <Typography variant='body1' color='textSecondary' paragraph>
                             {description}
                         </Typography>
                         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                            <Button variant='contained' sx={{ width: 'fit-content' }}>
+                            <Button variant='contained' sx={{ width: 'fit-content' }} onClick={() => { handleEnroll() }}>
                                 Đăng ký khóa học
                             </Button>
                         </Box>

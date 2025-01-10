@@ -12,6 +12,7 @@ import { useTheme } from '@mui/material/styles'
 import { getCookie } from 'cookies-next';
 import axios from 'axios';
 import appConfig from '@/config/appConfig';
+import shadows from '@mui/material/styles/shadows';
 
 interface CourseDetailProps {
     courseId: number;
@@ -379,7 +380,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
                 </DialogActions>
             </Dialog>
 
-            <Container maxWidth='lg' sx={{ position: 'relative', display: 'flex', justifyContent: 'flex-end' }}>
+            {/* <Container maxWidth='lg' sx={{ position: 'relative', display: 'flex', justifyContent: 'flex-end' }}>
                 <Box position='fixed' bottom={32} zIndex={999}>
                     <Button
                         variant='contained'
@@ -408,7 +409,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
                         <MenuItem onClick={() => { setOpenExerciseDialog(true); setEdit(false) }}>Bài tập</MenuItem>
                     </Menu>
                 </Box>
-            </Container>
+            </Container> */}
             <Container maxWidth='lg'>
                 <Box mt={4}>
                     {chapterList.map((chapter) => (
@@ -448,7 +449,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
                                                 horizontal: 'right',
                                             }}
                                         >
-                                            <MenuItem onClick={() => {
+                                            {/* <MenuItem onClick={() => {
                                                 console.log(`menu-${chapter.id}-${lesson.id}`);
                                                 if (lesson.title.startsWith('Bài giảng: ')) {
                                                     setOpenLessonDialog(true);
@@ -457,8 +458,8 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
                                                     setOpenExerciseDialog(true);
                                                     setEdit(true);
                                                 }
-                                            }}>Chỉnh sửa</MenuItem>
-                                            <MenuItem onClick={() => { /* handle delete */ }}>Xóa</MenuItem>
+                                            }}>Chỉnh sửa</MenuItem> */}
+                                            <MenuItem onClick={() => { /* handle delete */ }}>Báo cáo</MenuItem>
                                         </Menu>
                                     </Box>
                                 </div>

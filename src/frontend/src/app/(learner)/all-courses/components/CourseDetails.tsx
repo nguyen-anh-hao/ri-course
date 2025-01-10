@@ -7,8 +7,7 @@ const CourseDetail: React.FC = () => {
 
     const courseData = {
         courseName: "Khóa học ABC",
-        mentor1: "A",
-        mentor2: "B",
+        mentor: "A",
         description: "Đây là một khóa học tuyệt vời.",
     };
 
@@ -47,10 +46,9 @@ const CourseDetail: React.FC = () => {
 
     return (
         <Container maxWidth="lg">
-            <CourseInfo 
+            <CourseInfo
                 courseName={courseData.courseName}
-                mentor1={courseData.mentor1}
-                mentor2={courseData.mentor2}
+                mentor={courseData.mentor}
                 description={courseData.description}
             />
 
