@@ -9,6 +9,7 @@ export class ChapterEntity implements Chapter {
     createAt: Date;
     updatedAt: Date;
 
+    order: number;
     courseId: number;
     title: string;
     description: string;
