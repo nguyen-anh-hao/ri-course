@@ -16,6 +16,7 @@ const Footer: React.FC = () => {
                 top: 'auto',
                 bottom: 0,
                 boxShadow: 'none',
+                borderRadius: '8px 8px 0 0',
             }}
         >
             <Container maxWidth='lg'>

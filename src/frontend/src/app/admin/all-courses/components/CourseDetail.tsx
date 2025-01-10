@@ -1,3 +1,5 @@
+// Author: Kiên - 169
+
 import React, { useState } from 'react';
 import { Box, Typography, Button, Dialog, DialogActions, DialogContent, DialogTitle, Container } from '@mui/material';
 import CourseInfo from '@/app/(learner)/all-courses/components/CourseInfo'
