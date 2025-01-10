@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import appConfig from '@/config/appConfig';
 import { getCookie } from 'cookies-next';
 import { getToken } from '@/utils/getToken';
+import { User } from '@/interfaces/user.interfaces';
 
 export default function AllCourses() {
     const token = getCookie('token');
@@ -17,7 +18,7 @@ export default function AllCourses() {
         createdAt: string;
         updatedAt: string;
         title: string;
-        mentor: string;
+        mentors: User[];
         description: string;
     };
 
@@ -47,7 +48,7 @@ export default function AllCourses() {
                         <Grid item xs={12} sm={6} md={4} lg={3} key={courseKey}>
                             <CourseCard
                                 name={courses[courseKey].title}
-                                mentor={courses[courseKey].mentor}
+                                mentor={courses[courseKey].mentors.map(m => m.fullname).join(', ')}
                             />
                         </Grid>
                     );

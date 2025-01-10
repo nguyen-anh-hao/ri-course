@@ -2,6 +2,7 @@ import React, { use } from 'react';
 import { Card, Paper, Typography, LinearProgress, Skeleton, Box } from '@mui/material';
 import { useRouter, usePathname } from 'next/navigation';
 import generateSlug from '@/utils/generateSlug';
+import Image from 'next/image';
 
 
 interface CourseCardProps {
@@ -18,6 +19,17 @@ const CourseCard: React.FC<CourseCardProps> = ({ name, mentor, progress }) => {
     const handleClick = () => {
         router.push(`${pathname}/${slug}`);
     };
+
+    function convertToEncodedUrl(text: string) {
+        return encodeURIComponent(text.trim().replace(/\s+/g, ' '));
+    }
+
+    const imageGenerator = (name: string) => {
+        // https://dummyimage.com/854x480/FF5733/FFFFFF&text=L%E1%BA%ADp+tr%C3%ACnh+Web+Full+Stack
+        const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+        name = convertToEncodedUrl(name);
+        return `https://dummyimage.com/854x480/${randomColor}/FFFFFF&text=${name}`;
+    }
 
     return (
         <Paper
@@ -40,11 +52,17 @@ const CourseCard: React.FC<CourseCardProps> = ({ name, mentor, progress }) => {
                     backgroundColor: 'transparent',
                 }}
             >
-                <Skeleton
-                    variant='rectangular'
-                    width='100%'
-                    height='100%'
-                    sx={{ position: 'absolute', top: 0, left: 0 }}
+                <img
+                    src={imageGenerator(name)}
+                    alt={name}
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        objectFit: 'cover',
+                    }}
                 />
             </Box>
             <Box sx={{ px: 2, py: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>

@@ -2,17 +2,36 @@
 
 import { Box, Typography, Container, Button, Grid, Skeleton } from '@mui/material';
 import React from 'react';
+import axios from 'axios';
+import appConfig from '@/config/appConfig';
+import { getCookie } from 'cookies-next';
 
 interface CourseInfoProps {
     courseName: string;
     mentor: string;
     description: string;
+    courseId: number;
 }
 
-const CourseInfo: React.FC<CourseInfoProps> = ({ courseName, mentor, description }) => {
+const CourseInfo: React.FC<CourseInfoProps> = ({ courseName, mentor, description, courseId }) => {
+    const token = getCookie('token');
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
     const handleEnroll = () => {
-        console.log('Enroll button clicked');
+        axios.post(`${appConfig.API_BASE_URL}/courses/${courseId}/learners`);
+        window.alert('Đăng ký khóa học thành công!');
     };
+
+    function convertToEncodedUrl(text: string) {
+        return encodeURIComponent(text.trim().replace(/\s+/g, ' '));
+    }
+
+    const imageGenerator = (name: string) => {
+        // https://dummyimage.com/854x480/FF5733/FFFFFF&text=L%E1%BA%ADp+tr%C3%ACnh+Web+Full+Stack
+        const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+        name = convertToEncodedUrl(name);
+        return `https://dummyimage.com/854x480/${randomColor}/FFFFFF&text=${name}`;
+    }
 
     return (
         <Container maxWidth='lg'>
@@ -38,8 +57,22 @@ const CourseInfo: React.FC<CourseInfoProps> = ({ courseName, mentor, description
                         </Box>
                     </Box>
                 </Grid>
-                <Grid item sm={12} md={6} sx={{ order: { xs: 1, md: 2 } }}>
-                    <Skeleton variant='rectangular' width='100%' height='300px' />
+                <Grid item sm={12} md={6} sx={{ order: { xs: 1, md: 2 }, display: { xs: 'none', sm: 'block' } }}>
+                    {/* <Skeleton variant='rectangular' width='100%' height='300px' /> */}
+                    <Box position='relative' width='100%' height='300px'>
+                        <img
+                            src={imageGenerator(courseName)}
+                            alt={courseName}
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                objectFit: 'cover',
+                            }}
+                        />
+                    </Box>
                 </Grid>
             </Grid>
         </Container>

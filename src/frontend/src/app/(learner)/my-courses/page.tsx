@@ -6,17 +6,23 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import appConfig from '@/config/appConfig';
 import { getCookie } from 'cookies-next';
+import { User } from '@/interfaces/user.interfaces';
 
 export default function AllCourses() {
     const token = getCookie('token');
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+    const randomInt = (min: number, max: number) => {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+    };
+
 
     type Course = {
         id: number;
         createdAt: string;
         updatedAt: string;
         title: string;
-        mentor: string;
+        mentors: User[];
         description: string;
     };
 
@@ -46,7 +52,8 @@ export default function AllCourses() {
                         <Grid item xs={12} sm={6} md={4} lg={3} key={courseKey}>
                             <CourseCard
                                 name={courses[courseKey].title}
-                                mentor={courses[courseKey].mentor}
+                                mentor={courses[courseKey].mentors.map(m => m.fullname).join(', ')}
+                                progress={randomInt(0, 100)}
                             />
                         </Grid>
                     );

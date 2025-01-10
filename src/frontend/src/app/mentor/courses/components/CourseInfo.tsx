@@ -8,6 +8,17 @@ interface CourseInfoProps {
 }
 
 const CourseInfo: React.FC<CourseInfoProps> = ({ courseName, mentor, description }) => {
+    function convertToEncodedUrl(text: string) {
+        return encodeURIComponent(text.trim().replace(/\s+/g, ' '));
+    }
+
+    const imageGenerator = (name: string) => {
+        // https://dummyimage.com/854x480/FF5733/FFFFFF&text=L%E1%BA%ADp+tr%C3%ACnh+Web+Full+Stack
+        const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+        name = convertToEncodedUrl(name);
+        return `https://dummyimage.com/854x480/${randomColor}/FFFFFF&text=${name}`;
+    }
+
     return (
         <Container maxWidth='lg'>
             <Grid container spacing={3}>
@@ -27,8 +38,22 @@ const CourseInfo: React.FC<CourseInfoProps> = ({ courseName, mentor, description
                         </Typography>
                     </Box>
                 </Grid>
-                <Grid item sm={12} md={6} sx={{ order: { xs: 1, md: 2 } }}>
-                    <Skeleton variant='rectangular' width='100%' height='300px' />
+                <Grid item sm={12} md={6} sx={{ order: { xs: 1, md: 2 }, display: { xs: 'none', sm: 'block' } }}>
+                    {/* <Skeleton variant='rectangular' width='100%' height='300px' /> */}
+                    <Box position='relative' width='100%' height='300px'>
+                        <img
+                            src={imageGenerator(courseName)}
+                            alt={courseName}
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                objectFit: 'cover',
+                            }}
+                        />
+                    </Box>
                 </Grid>
             </Grid>
         </Container>

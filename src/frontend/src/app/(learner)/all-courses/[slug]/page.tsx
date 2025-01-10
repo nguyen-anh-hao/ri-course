@@ -38,8 +38,9 @@ export default async function CoursePage({ params }: PageProps) {
     return (
         <CourseInfo
             courseName={courseData.title}
-            mentor={courseData.mentors.map((mentor: { fullname: string }) => mentor.fullname).join(', ')}
+            mentor={courseData.mentors.map((m: { fullname: string }) => m.fullname).join(', ')}
             description={courseData.description}
+            courseId={courseData.id}
         />
     );
 }
