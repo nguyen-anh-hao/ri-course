@@ -34,6 +34,26 @@ export class LessonsController {
     async findAll(@Query("chapterId", ParseIntPipe) chapterId: number) : Promise<LessonEntity[]> {
         return await this.lessonsService.findAll({ chapterId });
     }
+    
+    // -----------------------------------------------
+    
+    @ApiOperation({
+        summary: "Get a lesson with the specified id"
+    })
+    @ApiOkResponse({
+        description: "Fetch all lessons in the specified chapter successfully"
+    })
+    @ApiUnauthorizedResponse({
+        description: "Unauthorized: missing JWT"
+    })
+    @ApiForbiddenResponse({
+        description: "Forbidden: access denied"
+    })
+    @ApiBearerAuth()
+    @Get(":id")
+    async findOne(@Param("id", ParseIntPipe) id: number) : Promise<LessonEntity> {
+        return await this.lessonsService.findOne(id);
+    }
 
     // -----------------------------------------------
 
