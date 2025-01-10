@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Req, Request, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Req, Request, UseGuards, UseInterceptors } from "@nestjs/common";
 import { Role, Roles } from "src/auth/role";
 import { RolesGuard, JwtAuthGuard } from "src/auth/guards";
 import { InfoUpdateGuard } from "src/users/guards";
@@ -11,6 +11,7 @@ import { AuditLogsService } from "src/audit-logs/audit-logs.service";
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller("users")
 export class UsersController {
     constructor(
@@ -241,5 +242,24 @@ export class UsersController {
     @Get("me/courses")
     async getMyCourses(@Request() req) {
         return await this.usersService.getMyCourses(+req.user.id);
+    }
+
+    // -----------------------------------------------
+    
+    @ApiOperation({
+        summary: "Get all current mentor's enrolled courses with provided JWT"
+    })
+    @ApiOkResponse({
+        description: "Ok: Fetch all current user's enrolled courses successfully",
+        type: [CourseEntity]
+    })
+    @ApiUnauthorizedResponse({
+        description: "Unauthorized: missing JWT"
+    })
+    @UseGuards(RolesGuard)
+    @Roles(Role.Mentor)
+    @Get("me/permitted-courses")
+    async getMyPermittedCourses(@Request() req) {
+        return await this.usersService.getMyPermittedCourses(+req.user.id);
     }
 }
