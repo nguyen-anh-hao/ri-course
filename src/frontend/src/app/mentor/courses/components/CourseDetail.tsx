@@ -90,7 +90,9 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
         setOpenTopicDialog(false);
     };
 
+    // const [newLessonId, setNewLessonId] = useState<number>(0);
     const handleSaveLesson = () => {
+        var newLessonId: number = 0;
         // console.log(newLesson);
         axios.post(`${appConfig.API_BASE_URL}/chapters/${selectedChapter}/lessons`, {
             order: Math.floor(Date.now() / 1000),
@@ -98,25 +100,33 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
             type: 'Lecture',
             description: '',
             contentUrl: '',
-        })
-            .then(response => {
-                // console.log(response.data);
-                setLessonList((prev) => ({
-                    ...prev,
-                    [selectedChapter as number]: [...prev[selectedChapter as number], response.data],
-                }));
-            })
-            .catch(error => {
-                console.error('Error creating new lesson:', error);
+        }).then(response => {
+            // console.log(response.data);
+            // setNewLessonId(response.data.id);
+            newLessonId = response.data.id;
+            setLessonList((prev) => ({
+                ...prev,
+                [selectedChapter as number]: [...prev[selectedChapter as number], response.data],
+            }));
+        }).catch(error => {
+            console.error('Error creating new lesson:', error);
+        }).finally(() => {
+            axios.post(`${appConfig.API_BASE_URL}/lessons/${newLessonId}/content?text=true`, {
+                content: lessonContent,
+            }).then(response => {
+                console.log(response.data);
+            }).catch(error => {
+                console.error('Error creating new exercise content:', error);
             });
+        });
 
         setOpenLessonDialog(false);
     }
 
+    // const [newExerciseId, setNewExerciseId] = useState<number>(0);
     const handleSaveExercise = () => {
         // console.log(newExercise);
-        const [newLessonId, setNewLessonId] = useState<number>(0);
-
+        var newExerciseId: number = 0;
         axios.post(`${appConfig.API_BASE_URL}/chapters/${selectedChapter}/lessons`, {
             order: Math.floor(Date.now() / 1000),
             title: 'Bài tập: ' + newExercise,
@@ -125,21 +135,22 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
             contentUrl: '',
         }).then(response => {
             // console.log(response.data);
-            setNewLessonId(response.data.id);
+            // setNewExerciseId(response.data.id);
+            newExerciseId = response.data.id;
             setLessonList((prev) => ({
                 ...prev,
                 [selectedChapter as number]: [...prev[selectedChapter as number], response.data],
             }));
         }).catch(error => {
             console.error('Error creating new exercise:', error);
-        });
-
-        axios.post(`${appConfig.API_BASE_URL}/lessons/${newLessonId}/content?isText=true`, {
-            content: lessonContent,
-        }).then(response => {
-            console.log(response.data);
-        }).catch(error => {
-            console.error('Error creating new exercise content:', error);
+        }).finally(() => {
+            axios.post(`${appConfig.API_BASE_URL}/lessons/${newExerciseId}/content?text=true`, {
+                content: lessonContent,
+            }).then(response => {
+                console.log(response.data);
+            }).catch(error => {
+                console.error('Error creating new exercise content:', error);
+            });
         });
 
         setOpenExerciseDialog(false);
