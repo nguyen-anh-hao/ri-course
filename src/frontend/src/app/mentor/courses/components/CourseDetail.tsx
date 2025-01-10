@@ -111,7 +111,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
         }).catch(error => {
             console.error('Error creating new lesson:', error);
         }).finally(() => {
-            axios.post(`${appConfig.API_BASE_URL}/lessons/${newLessonId}/content?text=true`, {
+            axios.post(`${appConfig.API_BASE_URL}/lessons/${newLessonId}/content?isText=true`, {
                 content: lessonContent,
             }).then(response => {
                 console.log(response.data);
@@ -144,7 +144,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ courseId }) => {
         }).catch(error => {
             console.error('Error creating new exercise:', error);
         }).finally(() => {
-            axios.post(`${appConfig.API_BASE_URL}/lessons/${newExerciseId}/content?text=true`, {
+            axios.post(`${appConfig.API_BASE_URL}/lessons/${newExerciseId}/content?isText=true`, {
                 content: lessonContent,
             }).then(response => {
                 console.log(response.data);
