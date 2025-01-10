@@ -141,6 +141,34 @@ async function main() {
         });
     }
 
+    const mentorPermissions = [
+        {
+            mentorId: 4,
+            courseId: 1
+        },
+        {
+            mentorId: 4,
+            courseId: 2
+        },
+        {
+            mentorId: 4,
+            courseId: 3
+        },
+        {
+            mentorId: 7,
+            courseId: 2
+        },
+        {
+            mentorId: 7,
+            courseId: 4
+        },
+    ];
+
+    for (const mentorPermission of mentorPermissions) {
+        const newMentorPermission = await prisma.mentorPermission.create({
+            data: mentorPermission
+        });
+    }
 }
 
 

@@ -66,6 +66,7 @@ CREATE TABLE "Chapter" (
     "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "courseId" INTEGER NOT NULL,
+    "order" INTEGER NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
 
@@ -78,6 +79,9 @@ CREATE TABLE "Lesson" (
     "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "chapterId" INTEGER NOT NULL,
+    "order" INTEGER NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
     "type" TEXT NOT NULL,
     "contentUrl" TEXT NOT NULL,
 
