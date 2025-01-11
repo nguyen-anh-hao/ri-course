@@ -50,6 +50,22 @@ export async function middleware(req: NextRequest) {
         }
     }
 
+    if (req.nextUrl.pathname === '/' && userRoles && userRoles[0] === 'Learner') {
+        return NextResponse.redirect(new URL('/my-courses', req.url));
+    }
+
+    if (req.nextUrl.pathname === '/' && userRoles && userRoles[0] === 'Mentor') {
+        return NextResponse.redirect(new URL('/mentor/courses', req.url));
+    }
+
+    if (req.nextUrl.pathname === '/' && userRoles && userRoles[0] === 'Admin') {
+        return NextResponse.redirect(new URL('/admin/user-accounts', req.url));
+    }
+
+    if (req.nextUrl.pathname === '/' && !userRoles) {
+        return NextResponse.redirect(new URL('/all-courses', req.url));
+    }
+
     return NextResponse.next();
 }
 
