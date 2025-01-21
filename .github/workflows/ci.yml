@@ -38,16 +38,12 @@ jobs:
         run: |
           npm install
 
-      # - name: Run Jest tests for backend
-      #   working-directory: ./src/backend
-      #   run: |
-      #     npm test -- --coverage
-
       - name: Install Cypress for frontend tests
         working-directory: ./src/frontend
         run: |
           npm install cypress
 
+      # Start backend server in the background and keep it running
       - name: Start backend server
         working-directory: ./src/backend
         env:
@@ -57,11 +53,11 @@ jobs:
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
           CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
-
         run: |
-          npm start &&
-          sleep 10 &
+          nohup npm start & 
+          sleep 10
 
+      # Start frontend server
       - name: Start frontend server
         working-directory: ./src/frontend
         env:
@@ -70,9 +66,9 @@ jobs:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
         run: |
           npm run build &&
-          npm run start &
-          sleep 60
+          nohup npm run start
 
+      # Run Cypress tests for frontend
       - name: Run Cypress tests for frontend
         working-directory: ./src/frontend
         env:
