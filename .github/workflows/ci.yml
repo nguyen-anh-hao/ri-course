@@ -11,43 +11,7 @@ on:
       - develop
 
 jobs:
-  deploy_backend:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Deploy to Render
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
-        run: |
-          curl -X POST \
-            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
-            -H "Content-Type: application/json" \
-            -d '{"serviceId": "${{ secrets.RENDER_SERVICE_ID }}", "branch": "main"}' \
-            https://api.render.com/v1/deploys
-
-  deploy_frontend:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install Vercel CLI
-        run: |
-          npm install -g vercel
-
-      - name: Deploy to Vercel
-        run: |
-          vercel --token ${{ secrets.VERCEL_TOKEN }} --prod --yes
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-
-  test:
-    needs: [deploy_backend, deploy_frontend]
+  testing:
     runs-on: ubuntu-latest
 
     steps:
@@ -90,6 +54,10 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           SIGN_UP_SECRET: ${{ secrets.SIGN_UP_SECRET }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+
         run: |
           npm start &
           sleep 10
