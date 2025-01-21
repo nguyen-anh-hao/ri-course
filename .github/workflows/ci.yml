@@ -59,11 +59,8 @@ jobs:
           CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
 
         run: |
-          npm start &
+          npm start &&
           sleep 10 &
-
-      - name: Wait for backend
-        run: npx wait-on http://localhost:3123
 
       - name: Start frontend server
         working-directory: ./src/frontend
