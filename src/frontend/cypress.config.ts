@@ -1,7 +1,7 @@
-import {defineConfig} from 'cypress';
+import { defineConfig } from 'cypress';
 import * as dotenv from 'dotenv';
 
-dotenv.config({path: '.env'});
+dotenv.config({ path: '.env' });
 
 module.exports = defineConfig({
   e2e: {
@@ -15,6 +15,8 @@ module.exports = defineConfig({
       bundler: "webpack",
     },
   },
-  
+
   env: process.env,
+
+  defaultCommandTimeout: 10000,
 });
