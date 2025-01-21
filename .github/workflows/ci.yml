@@ -66,7 +66,7 @@ jobs:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
         run: |
           npm run build &&
-          nohup npm run start
+          npm run start
 
       # Run Cypress tests for frontend
       - name: Run Cypress tests for frontend
