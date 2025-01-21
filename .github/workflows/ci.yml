@@ -67,6 +67,7 @@ jobs:
         env:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           SIGN_UP_SECRET: ${{ secrets.SIGN_UP_SECRET }}
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
         run: |
           npm run build &&
           npm run start &
