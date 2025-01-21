@@ -60,7 +60,10 @@ jobs:
 
         run: |
           npm start &
-          sleep 10
+          sleep 10 &
+
+      - name: Wait for backend
+        run: npx wait-on http://localhost:3123
 
       - name: Start frontend server
         working-directory: ./src/frontend
