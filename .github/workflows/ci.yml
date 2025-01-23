@@ -19,6 +19,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Taoj file .env chung
+      - name: Create .env
+        run: |
+          echo "DB_USER=username" >> src/.env
+          echo "DB_PASSWORD=password" >> src/.env
+          echo "DB_NAME=db" >> src/.env
+          echo "DB_PORT=5432" >> src/.env
+          echo "FE_PORT=3000" >> src/.env
+          echo "BE_PORT=3123" >> src/.env
+
       # Tạo file .env cho frontend
       - name: Create Frontend .env
         run: |
@@ -47,20 +57,10 @@ jobs:
       # Thiết lập Docker Compose
       - name: Set up Docker Compose
         run: |
-          DB_USER=username \
-          DB_PASSWORD=password \
-          DB_NAME=db \
-          DB_PORT=5432 \
-          FE_PORT=3000 \
-          BE_PORT=3123 \
-          docker-compose -f src/docker-compose.yml up --build -d
-
-      - name: Run Cypress tests
-        run: |
-          # Chờ một chút để các container có thể khởi động xong
-          sleep 10
-          # Chạy Cypress tests trong container frontend
-          docker-compose -f src/docker-compose.yml exec frontend npm run cypress run
+          cd src
+          docker-compose up
 
       - name: Shut down containers
-        run: docker-compose -f src/docker-compose.yml down
+        run: |
+          cd src
+          docker-compose down
