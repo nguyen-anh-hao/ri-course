@@ -78,8 +78,7 @@ jobs:
 
       - name: Run Cypress tests
         run: |
-          cd src/frontend
-          npx cypress run
+          npx ts-node --esm ./node_modules/.bin/cypress run --config-file src/frontend/cypress.config.ts
 
       - name: Shut down containers
         run: |
