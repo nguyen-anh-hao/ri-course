@@ -19,36 +19,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Cài đặt Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "14"
-
-      # Cài đặt các dependencies
-      - name: Install dependencies
-        run: npm install
-
       # Tạo file .env cho frontend
       - name: Create Frontend .env
         run: |
-          mkdir -p ./frontend
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> ./frontend/.env
-          echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET }}" >> ./frontend/.env
-          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> ./frontend/.env
-          echo "API_DESTINATION=${{ secrets.API_DESTINATION }}" >> ./frontend/.env
-          echo "CYPRESS_BASE_URL=${{ secrets.CYPRESS_BASE_URL }}" >> ./frontend/.env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> ./src/frontend/.env
+          echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET }}" >> ./src/frontend/.env
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> ./src/frontend/.env
+          echo "API_DESTINATION=${{ secrets.API_DESTINATION }}" >> ./src/frontend/.env
+          echo "CYPRESS_BASE_URL=${{ secrets.CYPRESS_BASE_URL }}" >> ./src/frontend/.env
 
       # Tạo file .env cho backend
       - name: Create Backend .env
         run: |
-          mkdir -p ./backend
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> ./backend/.env
-          echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET }}" >> ./backend/.env
-          echo "DATABASE_URL=postgresql://username:password@db:5432/db" >> ./backend/.env
-          echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> ./backend/.env
-          echo "CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}" >> ./backend/.env
-          echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> ./backend/.env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> ./src/backend/.env
+          echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET }}" >> ./src/backend/.env
+          echo "DATABASE_URL=postgresql://username:password@db:5432/db" >> ./src/backend/.env
+          echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> ./src/backend/.env
+          echo "CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}" >> ./src/backend/.env
+          echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> ./src/backend/.env
 
       # Cài đặt Docker Compose
       - name: Install Docker Compose
@@ -66,3 +54,13 @@ jobs:
           FE_PORT=3000 \
           BE_PORT=3123 \
           docker-compose -f src/docker-compose.yml up --build -d
+
+      - name: Run Cypress tests
+        run: |
+          # Chờ một chút để các container có thể khởi động xong
+          sleep 10
+          # Chạy Cypress tests trong container frontend
+          docker-compose -f src/docker-compose.yml exec frontend npm run cypress run
+
+      - name: Shut down containers
+        run: docker-compose -f src/docker-compose.yml down
