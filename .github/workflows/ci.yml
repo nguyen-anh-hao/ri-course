@@ -15,14 +15,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      # Kiểm tra mã nguồn
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v2
+      # Cài đặt Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14"
 
-     - name: Create Backend .env
-       run: |
+      # Cài đặt các dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Tạo file .env cho frontend
+      - name: Create Frontend .env
+        run: |
           mkdir -p ./frontend
           echo "JWT_SECRET=${{ secrets.FE_JWT_SECRET }}" >> ./frontend/.env
           echo "SIGN_UP_SECRET=${{ secrets.FE_SIGN_UP_SECRET }}" >> ./frontend/.env
@@ -30,6 +39,7 @@ jobs:
           echo "API_DESTINATION=${{ secrets.FE_API_DESTINATION }}" >> ./frontend/.env
           echo "CYPRESS_BASE_URL=${{ secrets.FE_CYPRESS_BASE_URL }}" >> ./frontend/.env
 
+      # Tạo file .env cho backend
       - name: Create Backend .env
         run: |
           mkdir -p ./backend
@@ -41,6 +51,13 @@ jobs:
           echo "CLOUDINARY_API_SECRET=${{ secrets.BE_CLOUDINARY_API_SECRET }}" >> ./backend/.env
           echo "CLOUDINARY_CLOUD_NAME=${{ secrets.BE_CLOUDINARY_CLOUD_NAME }}" >> ./backend/.env
 
-
-      - name: Build and Run Docker Compose
-        run: docker-compose up --build -d
+      # Thiết lập Docker Compose
+      - name: Set up Docker Compose
+        run: |
+          DB_USER=db_user \
+          DB_PASSWORD=db_password \
+          DB_NAME=db_name \
+          DB_PORT=5432 \
+          FE_PORT=3000 \
+          BE_PORT=3123 \
+          docker-compose -f docker-compose.yml up --build -d
