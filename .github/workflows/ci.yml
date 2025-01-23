@@ -58,7 +58,18 @@ jobs:
       - name: Set up Docker Compose
         run: |
           cd src
-          docker-compose up
+          docker-compose up -d
+
+      - name: Show logs for a few minutes
+        run: |
+          cd src
+          timeout 5m docker-compose logs -f
+
+      - name: Run Cypress tests
+        run: |
+          cd src
+          cd frontend
+          npx cypress run
 
       - name: Shut down containers
         run: |
