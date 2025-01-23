@@ -59,11 +59,7 @@ jobs:
         run: |
           cd src
           docker-compose up -d
-
-      - name: Show logs for a few minutes
-        run: |
-          cd src
-          timeout 5m docker-compose logs -f
+          sleep 2m
 
       - name: Run Cypress tests
         run: |
