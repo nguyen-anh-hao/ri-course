@@ -24,9 +24,10 @@ jobs:
         with:
           node-version: '18' # Đảm bảo sử dụng phiên bản Node.js phù hợp
 
-      - name: Install ts-node and typescript
+      - name: Install dependencies
         run: |
-          npm install ts-node typescript --save-dev
+          cd src/frontend
+          npm install
 
       # Taoj file .env chung
       - name: Create .env
@@ -78,7 +79,8 @@ jobs:
 
       - name: Run Cypress tests
         run: |
-          npx cypress run --config-file src/frontend/cypress.config.ts
+          cd src/frontend
+          npx cypress run
 
       - name: Shut down containers
         run: |
