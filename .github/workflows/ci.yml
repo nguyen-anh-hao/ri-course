@@ -19,6 +19,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Đảm bảo sử dụng phiên bản Node.js phù hợp
+
+      - name: Install dependencies
+        run: |
+          npm install
+
+      - name: Install ts-node and typescript
+        run: |
+          npm install ts-node typescript --save-dev
+
       # Taoj file .env chung
       - name: Create .env
         run: |
@@ -59,12 +72,17 @@ jobs:
         run: |
           cd src
           docker-compose up -d
-          sleep 2m
+
+      - name: Wait for app to be ready
+        run: |
+          until curl --silent --fail http://localhost:3000; do
+            echo "Waiting for the app to start..."
+            sleep 5
+          done
 
       - name: Run Cypress tests
         run: |
-          cd src
-          cd frontend
+          cd src/frontend
           npx cypress run
 
       - name: Shut down containers
