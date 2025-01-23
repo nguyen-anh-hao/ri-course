@@ -33,31 +33,36 @@ jobs:
       - name: Create Frontend .env
         run: |
           mkdir -p ./frontend
-          echo "JWT_SECRET=${{ secrets.FE_JWT_SECRET }}" >> ./frontend/.env
-          echo "SIGN_UP_SECRET=${{ secrets.FE_SIGN_UP_SECRET }}" >> ./frontend/.env
-          echo "NEXT_PUBLIC_API_URL=${{ secrets.FE_NEXT_PUBLIC_API_URL }}" >> ./frontend/.env
-          echo "API_DESTINATION=${{ secrets.FE_API_DESTINATION }}" >> ./frontend/.env
-          echo "CYPRESS_BASE_URL=${{ secrets.FE_CYPRESS_BASE_URL }}" >> ./frontend/.env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> ./frontend/.env
+          echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET }}" >> ./frontend/.env
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> ./frontend/.env
+          echo "API_DESTINATION=${{ secrets.API_DESTINATION }}" >> ./frontend/.env
+          echo "CYPRESS_BASE_URL=${{ secrets.CYPRESS_BASE_URL }}" >> ./frontend/.env
 
       # Tạo file .env cho backend
       - name: Create Backend .env
         run: |
           mkdir -p ./backend
-          echo "JWT_SECRET=${{ secrets.BE_JWT_SECRET }}" >> ./backend/.env
-          echo "SIGN_UP_SECRET=${{ secrets.BE_SIGN_UP_SECRET }}" >> ./backend/.env
-          echo "DATABASE_URL=${{ secrets.BE_DATABASE_URL }}" >> ./backend/.env
-          echo "CLIENT_URL=${{ secrets.BE_CLIENT_URL }}" >> ./backend/.env
-          echo "CLOUDINARY_API_KEY=${{ secrets.BE_CLOUDINARY_API_KEY }}" >> ./backend/.env
-          echo "CLOUDINARY_API_SECRET=${{ secrets.BE_CLOUDINARY_API_SECRET }}" >> ./backend/.env
-          echo "CLOUDINARY_CLOUD_NAME=${{ secrets.BE_CLOUDINARY_CLOUD_NAME }}" >> ./backend/.env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> ./backend/.env
+          echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET }}" >> ./backend/.env
+          echo "DATABASE_URL=postgresql://username:password@db:5432/db" >> ./backend/.env
+          echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> ./backend/.env
+          echo "CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}" >> ./backend/.env
+          echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> ./backend/.env
+
+      # Cài đặt Docker Compose
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
 
       # Thiết lập Docker Compose
       - name: Set up Docker Compose
         run: |
-          DB_USER=db_user \
-          DB_PASSWORD=db_password \
-          DB_NAME=db_name \
+          DB_USER=username \
+          DB_PASSWORD=password \
+          DB_NAME=db \
           DB_PORT=5432 \
           FE_PORT=3000 \
           BE_PORT=3123 \
-          docker-compose -f docker-compose.yml up --build -d
+          docker-compose -f src/docker-compose.yml up --build -d
