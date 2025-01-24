@@ -34,7 +34,7 @@ jobs:
       # Tạo file .env chung
       - name: Create .env
         run: |
-          echo "DB_USER=username" > src/.env
+          echo "DB_USER=username" >> src/.env
           echo "DB_PASSWORD=password" >> src/.env
           echo "DB_NAME=db" >> src/.env
           echo "DB_PORT=5432" >> src/.env
@@ -63,6 +63,12 @@ jobs:
           echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> ./src/backend/.env
           echo "CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}" >> ./src/backend/.env
           echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> ./src/backend/.env
+
+      # Cài đặt Docker Compose
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
 
       # Thiết lập Docker Compose
       - name: Set up Docker Compose
