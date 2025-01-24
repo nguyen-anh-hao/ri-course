@@ -15,21 +15,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Kiểm tra mã nguồn
+      # Checkout mã nguồn
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Cài đặt Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "20" # Đảm bảo sử dụng phiên bản Node.js phù hợp
+          node-version: "20"
 
+      # Cài đặt dependencies
       - name: Install dependencies
         run: |
           cd src/frontend
           npm install
 
-      # Taoj file .env chung
+      # Tạo file .env chung
       - name: Create .env
         run: |
           echo "DB_USER=username" >> src/.env
@@ -42,16 +44,20 @@ jobs:
       # Tạo file .env cho frontend
       - name: Create Frontend .env
         run: |
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> ./src/frontend/.env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > ./src/frontend/.env
           echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET }}" >> ./src/frontend/.env
           echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> ./src/frontend/.env
           echo "API_DESTINATION=${{ secrets.API_DESTINATION }}" >> ./src/frontend/.env
           echo "CYPRESS_BASE_URL=${{ secrets.CYPRESS_BASE_URL }}" >> ./src/frontend/.env
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api' }}
+          API_DESTINATION: ${{ secrets.API_DESTINATION || 'http://localhost:3123' }}
+          CYRESS_BASE_URL: ${{ secrets.CYPRESS_BASE_URL || 'http://localhost:3000' }}
 
       # Tạo file .env cho backend
       - name: Create Backend .env
         run: |
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> ./src/backend/.env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > ./src/backend/.env
           echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET }}" >> ./src/backend/.env
           echo "DATABASE_URL=postgresql://username:password@db:5432/db" >> ./src/backend/.env
           echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> ./src/backend/.env
@@ -70,18 +76,27 @@ jobs:
           cd src
           docker-compose up -d
 
+      # Chờ ứng dụng sẵn sàng
       - name: Wait for app to be ready
         run: |
-          until curl --silent --fail http://localhost:3000; do
+          n=0
+          until [ $n -ge 24 ] || curl --silent --fail http://localhost:3000; do
+            n=$((n+1))
             echo "Waiting for the app to start..."
             sleep 5
           done
+          if [ $n -ge 24 ]; then
+            echo "App failed to start in 120 seconds."
+            exit 1
+          fi
 
+      # Chạy kiểm thử Cypress
       - name: Run Cypress tests
         run: |
           cd src/frontend
           npx cypress run
 
+      # Dừng Docker containers
       - name: Shut down containers
         run: |
           cd src
