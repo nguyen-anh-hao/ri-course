@@ -22,7 +22,7 @@ services:
       context: ./frontend
     container_name: frontend
     ports:
-      - "${FE_PORT}:$3000"
+      - "${FE_PORT}:3000"
     depends_on:
       - db
     networks:
@@ -34,7 +34,7 @@ services:
       context: ./backend
     container_name: backend
     ports:
-      - "${BE_PORT}:$3123"
+      - "${BE_PORT}:3123"
     depends_on:
       - frontend  # Wait for db service to start
     networks:

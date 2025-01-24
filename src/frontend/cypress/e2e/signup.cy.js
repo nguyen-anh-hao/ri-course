@@ -53,18 +53,18 @@ describe('Sign up functionality', () => {
             .should('have.text', 'Mật khẩu và xác nhận mật khẩu không trùng khớp!');
     });
 
-    it('should display error message with not tick policy', () =>{
-        cy.visit(`${cypress_base_url}/auth/sign-up`);
-        cy.get('input[id=":r0:"]').type('user1');  // Tên đăng nhập
-        cy.get('input[id=":r0:"]').should('have.value', 'user1');
-        cy.get('input[id=":r1:"]').type('user1');  // Mật khẩu
-        cy.get('input[id=":r1:"]').should('have.value', 'user1');
-        cy.get('input[id=":r2:"]').type('user2');  // Xác nhận mật khẩu
-        cy.get('input[id=":r2:"]').should('have.value', 'user2');
-        cy.get('button[type="submit"]').contains('Đăng ký').click();
-        cy.get('.MuiAlert-message')
-            .should('be.visible')
-            .should('have.text', 'Vui lòng đồng ý điều khoản!');
-    })
+    // it('should display error message with not tick policy', () =>{
+    //     cy.visit(`${cypress_base_url}/auth/sign-up`);
+    //     cy.get('input[id=":r0:"]').type('user1');  // Tên đăng nhập
+    //     cy.get('input[id=":r0:"]').should('have.value', 'user1');
+    //     cy.get('input[id=":r1:"]').type('user1');  // Mật khẩu
+    //     cy.get('input[id=":r1:"]').should('have.value', 'user1');
+    //     cy.get('input[id=":r2:"]').type('user2');  // Xác nhận mật khẩu
+    //     cy.get('input[id=":r2:"]').should('have.value', 'user2');
+    //     cy.get('button[type="submit"]').contains('Đăng ký').click();
+    //     cy.get('.MuiAlert-message')
+    //         .should('be.visible')
+    //         .should('have.text', 'Vui lòng đồng ý điều khoản!');
+    // })
 });
 

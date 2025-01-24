@@ -9,6 +9,7 @@ const CourseDetail: React.FC = () => {
         courseName: "Khóa học ABC",
         mentor: "A",
         description: "Đây là một khóa học tuyệt vời.",
+        courseId: 1,
     };
 
     const chapters = [
@@ -50,6 +51,7 @@ const CourseDetail: React.FC = () => {
                 courseName={courseData.courseName}
                 mentor={courseData.mentor}
                 description={courseData.description}
+                courseId={courseData.courseId}
             />
 
             <Box mt={4} display="flex" justifyContent="flex-end" gap={2}>
