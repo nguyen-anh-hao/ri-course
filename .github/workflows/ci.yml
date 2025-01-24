@@ -22,7 +22,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18' # Đảm bảo sử dụng phiên bản Node.js phù hợp
+          node-version: "20" # Đảm bảo sử dụng phiên bản Node.js phù hợp
 
       - name: Install dependencies
         run: |
