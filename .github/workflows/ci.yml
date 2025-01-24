@@ -52,7 +52,7 @@ jobs:
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api' }}
           API_DESTINATION: ${{ secrets.API_DESTINATION || 'http://localhost:3123' }}
-          CYRESS_BASE_URL: ${{ secrets.CYPRESS_BASE_URL || 'http://localhost:3000' }}
+          CYPRESS_BASE_URL: ${{ secrets.CYPRESS_BASE_URL || 'http://localhost:3000' }}
 
       # Tạo file .env cho backend
       - name: Create Backend .env
