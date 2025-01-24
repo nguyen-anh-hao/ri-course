@@ -12,6 +12,7 @@ const getRole = async (token: string | null): Promise<string[] | null> => {
         const response = await axios.get<User>(`${appConfig.API_BASE_URL}/users/me`, {
             headers: { Authorization: `Bearer ${token}` },
         });
+        console.log('response: ', response.data);
         return response.data.roles;
     } catch (error) {
         return null;
@@ -74,3 +75,12 @@ export const config = {
         .filter(route => !route.url.startsWith('/auth'))
         .map(route => route.url),
 };
+
+/* 
+Lỗi khi gọi API từ phía server
+- Nếu gọi từ client: localhost:3123
+- Nếu gọi từ server: backend:3123
+
+Giải pháp:
+Proxy Server
+*/
