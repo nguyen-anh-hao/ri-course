@@ -9,9 +9,9 @@ const CourseDetail: React.FC = () => {
 
     const courseData = {
         courseName: "Khóa học ABC",
-        mentor1: "A",
-        mentor2: "B",
+        mentor: "B",
         description: "Đây là một khóa học tuyệt vời.",
+        courseId: 1,
     };
 
     const chapters = [
@@ -51,9 +51,9 @@ const CourseDetail: React.FC = () => {
         <Container maxWidth="lg">
             <CourseInfo
                 courseName={courseData.courseName}
-                mentor1={courseData.mentor1}
-                mentor2={courseData.mentor2}
+                mentor={courseData.mentor}
                 description={courseData.description}
+                courseId={courseData.courseId}
             />
 
             <Box mt={4} display="flex" justifyContent="flex-end" gap={2}>
