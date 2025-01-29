@@ -44,21 +44,17 @@ jobs:
       # Tạo file .env cho frontend
       - name: Create Frontend .env
         run: |
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > ./src/frontend/.env
-          echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET }}" >> ./src/frontend/.env
-          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> ./src/frontend/.env
-          echo "API_DESTINATION=${{ secrets.API_DESTINATION }}" >> ./src/frontend/.env
-          echo "CYPRESS_BASE_URL=${{ secrets.CYPRESS_BASE_URL }}" >> ./src/frontend/.env
-        env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api' }}
-          API_DESTINATION: ${{ secrets.API_DESTINATION || 'http://localhost:3123' }}
-          CYPRESS_BASE_URL: ${{ secrets.CYPRESS_BASE_URL || 'http://localhost:3000' }}
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET || 'default_jwt_secret' }}" > ./src/frontend/.env
+          echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET || 'default_sign_up_secret' }}" >> ./src/frontend/.env
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api' }}" >> ./src/frontend/.env
+          echo "API_DESTINATION=${{ secrets.API_DESTINATION || 'http://localhost:3123' }}" >> ./src/frontend/.env
+          echo "CYPRESS_BASE_URL=${{ secrets.CYPRESS_BASE_URL || 'http://localhost:3000' }}" >> ./src/frontend/.env
 
       # Tạo file .env cho backend
       - name: Create Backend .env
         run: |
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > ./src/backend/.env
-          echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET }}" >> ./src/backend/.env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET || 'default_jwt_secret' }}" > ./src/frontend/.env
+          echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET || 'default_sign_up_secret' }}" >> ./src/frontend/.env
           echo "DATABASE_URL=postgresql://username:password@db:5432/db" >> ./src/backend/.env
           echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> ./src/backend/.env
           echo "CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}" >> ./src/backend/.env
