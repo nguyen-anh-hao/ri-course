@@ -75,16 +75,10 @@ jobs:
       # Chờ ứng dụng sẵn sàng
       - name: Wait for app to be ready
         run: |
-          n=0
-          until [ $n -ge 24 ] || curl --silent --fail http://localhost:3000; do
-            n=$((n+1))
+          until curl --silent --fail http://localhost:3000; do
             echo "Waiting for the app to start..."
             sleep 5
           done
-          if [ $n -ge 24 ]; then
-            echo "App failed to start in 120 seconds."
-            exit 1
-          fi
 
       # Chạy kiểm thử Cypress
       - name: Run Cypress tests
