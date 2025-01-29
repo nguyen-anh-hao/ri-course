@@ -44,21 +44,40 @@ jobs:
       # Tạo file .env cho frontend
       - name: Create Frontend .env
         run: |
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET || 'default_jwt_secret' }}" > ./src/frontend/.env
-          echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET || 'default_sign_up_secret' }}" >> ./src/frontend/.env
-          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api' }}" >> ./src/frontend/.env
-          echo "API_DESTINATION=${{ secrets.API_DESTINATION || 'http://localhost:3123' }}" >> ./src/frontend/.env
-          echo "CYPRESS_BASE_URL=${{ secrets.CYPRESS_BASE_URL || 'http://localhost:3000' }}" >> ./src/frontend/.env
+          if [[ "${GITHUB_ACTOR}" != "dependabot[bot]" ]]; then
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > ./src/frontend/.env
+            echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET }}" >> ./src/frontend/.env
+            echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> ./src/frontend/.env
+            echo "API_DESTINATION=${{ secrets.API_DESTINATION }}" >> ./src/frontend/.env
+            echo "CYPRESS_BASE_URL=${{ secrets.CYPRESS_BASE_URL }}" >> ./src/frontend/.env
+          else
+            echo "Dependabot detected: skipping secret injection" > ./src/frontend/.env
+            echo "JWT_SECRET=default_jwt_secret" >> ./src/frontend/.env
+            echo "SIGN_UP_SECRET=default_sign_up_secret" >> ./src/frontend/.env
+            echo "NEXT_PUBLIC_API_URL=http://localhost:3000/api" >> ./src/frontend/.env
+            echo "API_DESTINATION=http://localhost:3123" >> ./src/frontend/.env
+            echo "CYPRESS_BASE_URL=http://localhost:3000" >> ./src/frontend/.env
+          fi
 
       # Tạo file .env cho backend
       - name: Create Backend .env
         run: |
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET || 'default_jwt_secret' }}" > ./src/frontend/.env
-          echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET || 'default_sign_up_secret' }}" >> ./src/frontend/.env
-          echo "DATABASE_URL=postgresql://username:password@db:5432/db" >> ./src/backend/.env
-          echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> ./src/backend/.env
-          echo "CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}" >> ./src/backend/.env
-          echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> ./src/backend/.env
+          if [[ "${GITHUB_ACTOR}" != "dependabot[bot]" ]]; then
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > ./src/backend/.env
+            echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET }}" >> ./src/backend/.env
+            echo "DATABASE_URL=postgresql://username:password@db:5432/db" >> ./src/backend/.env
+            echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> ./src/backend/.env
+            echo "CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}" >> ./src/backend/.env
+            echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> ./src/backend/.env
+          else
+            echo "Dependabot detected: skipping secret injection" > ./src/backend/.env
+            echo "JWT_SECRET=default_jwt_secret" >> ./src/backend/.env
+            echo "SIGN_UP_SECRET=default_sign_up_secret" >> ./src/backend/.env
+            echo "DATABASE_URL=postgresql://username:password@db:5432/db" >> ./src/backend/.env
+            echo "CLOUDINARY_API_KEY=default_cloudinary_api_key" >> ./src/backend/.env
+            echo "CLOUDINARY_API_SECRET=default_cloudinary_api_secret" >> ./src/backend/.env
+            echo "CLOUDINARY_CLOUD_NAME=default_cloudinary_cloud_name" >> ./src/backend/.env
+          fi
 
       # Cài đặt Docker Compose
       - name: Install Docker Compose
