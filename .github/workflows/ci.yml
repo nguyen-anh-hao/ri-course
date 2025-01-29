@@ -15,23 +15,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout mã nguồn
+      # Checkout source code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Cài đặt Node.js
+      # Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "20"
 
-      # Cài đặt dependencies
+      # Install dependencies
       - name: Install dependencies
         run: |
           cd src/frontend
           npm install
 
-      # Tạo file .env chung
+      # Create a common .env file
       - name: Create .env
         run: |
           echo "DB_USER=username" >> src/.env
@@ -41,42 +41,108 @@ jobs:
           echo "FE_PORT=3000" >> src/.env
           echo "BE_PORT=3123" >> src/.env
 
-      # Tạo file .env cho frontend
+      # Create frontend .env file
       - name: Create Frontend .env
         run: |
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > ./src/frontend/.env
-          echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET }}" >> ./src/frontend/.env
-          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> ./src/frontend/.env
-          echo "API_DESTINATION=${{ secrets.API_DESTINATION }}" >> ./src/frontend/.env
-          echo "CYPRESS_BASE_URL=${{ secrets.CYPRESS_BASE_URL }}" >> ./src/frontend/.env
-        env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api' }}
-          API_DESTINATION: ${{ secrets.API_DESTINATION || 'http://localhost:3123' }}
-          CYPRESS_BASE_URL: ${{ secrets.CYPRESS_BASE_URL || 'http://localhost:3000' }}
+          # Check and write JWT_SECRET
+          if [ -z "${{ secrets.JWT_SECRET }}" ]; then
+            echo "JWT_SECRET is missing, using default value"
+            echo "JWT_SECRET=default_jwt_secret" > ./src/frontend/.env
+          else
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > ./src/frontend/.env
+          fi
+      
+          # Check and write SIGN_UP_SECRET
+          if [ -z "${{ secrets.SIGN_UP_SECRET }}" ]; then
+            echo "SIGN_UP_SECRET is missing, using default value"
+            echo "SIGN_UP_SECRET=default_sign_up_secret" >> ./src/frontend/.env
+          else
+            echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET }}" >> ./src/frontend/.env
+          fi
+      
+          # Check and write NEXT_PUBLIC_API_URL
+          if [ -z "${{ secrets.NEXT_PUBLIC_API_URL }}" ]; then
+            echo "NEXT_PUBLIC_API_URL is missing, using default value"
+            echo "NEXT_PUBLIC_API_URL=http://localhost:3000/api" >> ./src/frontend/.env
+          else
+            echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> ./src/frontend/.env
+          fi
+      
+          # Check and write API_DESTINATION
+          if [ -z "${{ secrets.API_DESTINATION }}" ]; then
+            echo "API_DESTINATION is missing, using default value"
+            echo "API_DESTINATION=http://localhost:3123" >> ./src/frontend/.env
+          else
+            echo "API_DESTINATION=${{ secrets.API_DESTINATION }}" >> ./src/frontend/.env
+          fi
+      
+          # Check and write CYPRESS_BASE_URL
+          if [ -z "${{ secrets.CYPRESS_BASE_URL }}" ]; then
+            echo "CYPRESS_BASE_URL is missing, using default value"
+            echo "CYPRESS_BASE_URL=http://localhost:3000" >> ./src/frontend/.env
+          else
+            echo "CYPRESS_BASE_URL=${{ secrets.CYPRESS_BASE_URL }}" >> ./src/frontend/.env
+          fi
 
-      # Tạo file .env cho backend
+      # Create backend .env file
       - name: Create Backend .env
         run: |
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > ./src/backend/.env
-          echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET }}" >> ./src/backend/.env
+          # Check and write JWT_SECRET
+          if [ -z "${{ secrets.JWT_SECRET }}" ]; then
+            echo "JWT_SECRET is missing, using default value"
+            echo "JWT_SECRET=default_jwt_secret" > ./src/backend/.env
+          else
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > ./src/backend/.env
+          fi
+      
+          # Check and write SIGN_UP_SECRET
+          if [ -z "${{ secrets.SIGN_UP_SECRET }}" ]; then
+            echo "SIGN_UP_SECRET is missing, using default value"
+            echo "SIGN_UP_SECRET=default_sign_up_secret" >> ./src/backend/.env
+          else
+            echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET }}" >> ./src/backend/.env
+          fi
+      
+          # Write DATABASE_URL with default value if missing
           echo "DATABASE_URL=postgresql://username:password@db:5432/db" >> ./src/backend/.env
-          echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> ./src/backend/.env
-          echo "CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}" >> ./src/backend/.env
-          echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> ./src/backend/.env
+      
+          # Check and write CLOUDINARY_API_KEY
+          if [ -z "${{ secrets.CLOUDINARY_API_KEY }}" ]; then
+            echo "CLOUDINARY_API_KEY is missing, using default value"
+            echo "CLOUDINARY_API_KEY=default_cloudinary_api_key" >> ./src/backend/.env
+          else
+            echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> ./src/backend/.env
+          fi
+      
+          # Check and write CLOUDINARY_API_SECRET
+          if [ -z "${{ secrets.CLOUDINARY_API_SECRET }}" ]; then
+            echo "CLOUDINARY_API_SECRET is missing, using default value"
+            echo "CLOUDINARY_API_SECRET=default_cloudinary_api_secret" >> ./src/backend/.env
+          else
+            echo "CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}" >> ./src/backend/.env
+          fi
+      
+          # Check and write CLOUDINARY_CLOUD_NAME
+          if [ -z "${{ secrets.CLOUDINARY_CLOUD_NAME }}" ]; then
+            echo "CLOUDINARY_CLOUD_NAME is missing, using default value"
+            echo "CLOUDINARY_CLOUD_NAME=default_cloudinary_cloud_name" >> ./src/backend/.env
+          else
+            echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> ./src/backend/.env
+          fi
 
-      # Cài đặt Docker Compose
+      # Install Docker Compose
       - name: Install Docker Compose
         run: |
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      # Thiết lập Docker Compose
+      # Set up Docker Compose
       - name: Set up Docker Compose
         run: |
           cd src
           docker-compose up -d
 
-      # Chờ ứng dụng sẵn sàng
+      # Wait for the app to be ready
       - name: Wait for app to be ready
         run: |
           n=0
@@ -90,13 +156,13 @@ jobs:
             exit 1
           fi
 
-      # Chạy kiểm thử Cypress
+      # Run Cypress tests
       - name: Run Cypress tests
         run: |
           cd src/frontend
           npx cypress run
 
-      # Dừng Docker containers
+      # Shut down Docker containers
       - name: Shut down containers
         run: |
           cd src
