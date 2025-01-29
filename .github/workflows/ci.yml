@@ -44,25 +44,91 @@ jobs:
       # Tạo file .env cho frontend
       - name: Create Frontend .env
         run: |
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > ./src/frontend/.env
-          echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET }}" >> ./src/frontend/.env
-          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> ./src/frontend/.env
-          echo "API_DESTINATION=${{ secrets.API_DESTINATION }}" >> ./src/frontend/.env
-          echo "CYPRESS_BASE_URL=${{ secrets.CYPRESS_BASE_URL }}" >> ./src/frontend/.env
-        env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api' }}
-          API_DESTINATION: ${{ secrets.API_DESTINATION || 'http://localhost:3123' }}
-          CYPRESS_BASE_URL: ${{ secrets.CYPRESS_BASE_URL || 'http://localhost:3000' }}
+          # Kiểm tra và ghi JWT_SECRET
+          if [ -z "${{ secrets.JWT_SECRET }}" ]; then
+            echo "JWT_SECRET không có giá trị, sử dụng giá trị mặc định"
+            echo "JWT_SECRET=default_jwt_secret" > ./src/frontend/.env
+          else
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > ./src/frontend/.env
+          fi
+      
+          # Kiểm tra và ghi SIGN_UP_SECRET
+          if [ -z "${{ secrets.SIGN_UP_SECRET }}" ]; then
+            echo "SIGN_UP_SECRET không có giá trị, sử dụng giá trị mặc định"
+            echo "SIGN_UP_SECRET=default_sign_up_secret" >> ./src/frontend/.env
+          else
+            echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET }}" >> ./src/frontend/.env
+          fi
+      
+          # Kiểm tra và ghi NEXT_PUBLIC_API_URL
+          if [ -z "${{ secrets.NEXT_PUBLIC_API_URL }}" ]; then
+            echo "NEXT_PUBLIC_API_URL không có giá trị, sử dụng giá trị mặc định"
+            echo "NEXT_PUBLIC_API_URL=http://localhost:3000/api" >> ./src/frontend/.env
+          else
+            echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> ./src/frontend/.env
+          fi
+      
+          # Kiểm tra và ghi API_DESTINATION
+          if [ -z "${{ secrets.API_DESTINATION }}" ]; then
+            echo "API_DESTINATION không có giá trị, sử dụng giá trị mặc định"
+            echo "API_DESTINATION=http://localhost:3123" >> ./src/frontend/.env
+          else
+            echo "API_DESTINATION=${{ secrets.API_DESTINATION }}" >> ./src/frontend/.env
+          fi
+      
+          # Kiểm tra và ghi CYPRESS_BASE_URL
+          if [ -z "${{ secrets.CYPRESS_BASE_URL }}" ]; then
+            echo "CYPRESS_BASE_URL không có giá trị, sử dụng giá trị mặc định"
+            echo "CYPRESS_BASE_URL=http://localhost:3000" >> ./src/frontend/.env
+          else
+            echo "CYPRESS_BASE_URL=${{ secrets.CYPRESS_BASE_URL }}" >> ./src/frontend/.env
+          fi
 
       # Tạo file .env cho backend
       - name: Create Backend .env
         run: |
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > ./src/backend/.env
-          echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET }}" >> ./src/backend/.env
+          # Kiểm tra và ghi JWT_SECRET
+          if [ -z "${{ secrets.JWT_SECRET }}" ]; then
+            echo "JWT_SECRET không có giá trị, sử dụng giá trị mặc định"
+            echo "JWT_SECRET=default_jwt_secret" > ./src/backend/.env
+          else
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > ./src/backend/.env
+          fi
+      
+          # Kiểm tra và ghi SIGN_UP_SECRET
+          if [ -z "${{ secrets.SIGN_UP_SECRET }}" ]; then
+            echo "SIGN_UP_SECRET không có giá trị, sử dụng giá trị mặc định"
+            echo "SIGN_UP_SECRET=default_sign_up_secret" >> ./src/backend/.env
+          else
+            echo "SIGN_UP_SECRET=${{ secrets.SIGN_UP_SECRET }}" >> ./src/backend/.env
+          fi
+      
+          # Ghi DATABASE_URL với giá trị mặc định nếu không có
           echo "DATABASE_URL=postgresql://username:password@db:5432/db" >> ./src/backend/.env
-          echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> ./src/backend/.env
-          echo "CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}" >> ./src/backend/.env
-          echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> ./src/backend/.env
+      
+          # Kiểm tra và ghi CLOUDINARY_API_KEY
+          if [ -z "${{ secrets.CLOUDINARY_API_KEY }}" ]; then
+            echo "CLOUDINARY_API_KEY không có giá trị, sử dụng giá trị mặc định"
+            echo "CLOUDINARY_API_KEY=default_cloudinary_api_key" >> ./src/backend/.env
+          else
+            echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> ./src/backend/.env
+          fi
+      
+          # Kiểm tra và ghi CLOUDINARY_API_SECRET
+          if [ -z "${{ secrets.CLOUDINARY_API_SECRET }}" ]; then
+            echo "CLOUDINARY_API_SECRET không có giá trị, sử dụng giá trị mặc định"
+            echo "CLOUDINARY_API_SECRET=default_cloudinary_api_secret" >> ./src/backend/.env
+          else
+            echo "CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}" >> ./src/backend/.env
+          fi
+      
+          # Kiểm tra và ghi CLOUDINARY_CLOUD_NAME
+          if [ -z "${{ secrets.CLOUDINARY_CLOUD_NAME }}" ]; then
+            echo "CLOUDINARY_CLOUD_NAME không có giá trị, sử dụng giá trị mặc định"
+            echo "CLOUDINARY_CLOUD_NAME=default_cloudinary_cloud_name" >> ./src/backend/.env
+          else
+            echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> ./src/backend/.env
+          fi
 
       # Cài đặt Docker Compose
       - name: Install Docker Compose
