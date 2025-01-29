@@ -70,7 +70,7 @@ jobs:
       - name: Set up Docker Compose
         run: |
           cd src
-          docker-compose up -d
+          docker-compose up
 
       # Chờ ứng dụng sẵn sàng
       - name: Wait for app to be ready
