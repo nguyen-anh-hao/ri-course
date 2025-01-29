@@ -140,7 +140,7 @@ jobs:
       - name: Set up Docker Compose
         run: |
           cd src
-          docker-compose up -d
+          docker-compose up 
 
       # Wait for the app to be ready
       - name: Wait for app to be ready
