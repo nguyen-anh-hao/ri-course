@@ -28,7 +28,7 @@ The project also involved implementing DevOps practices to ensure continuous int
 - Responsive layout (Mobile & Desktop)
 - Light/Dark Mode
 
-## Techstack
+## Tech Stack
 | Category        | Tools / Frameworks                                          |
 |-----------------|-------------------------------------------------------------|
 | Frontend        | React, Next.js (App Router), TypeScript, Material UI        |
