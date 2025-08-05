@@ -18,7 +18,7 @@ The project also involved implementing DevOps practices to ensure continuous int
   - Exams Management
     <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/8d5d8571-a420-434f-ba17-d3be6e748b23" />
 
-  _More details on Behance (coming soon)_
+  _More details on Behance: https://www.behance.net/gallery/231744163/RiCourse-Teaching-and-learning-management-application_
 
 
 ## Key Features
